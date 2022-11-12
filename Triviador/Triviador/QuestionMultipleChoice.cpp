@@ -1,6 +1,15 @@
 #include "QuestionMultipleChoice.h"
 
-QuestionMultipleChoice::QuestionMultipleChoice(std::string question, std::array<std::string, 5> answers) 
+QuestionMultipleChoice::QuestionMultipleChoice()
+{
+	m_question = "None";
+	for (int i = 0; i < 5; i++)
+	{
+		m_answers[i] = "None";
+	}
+}
+
+QuestionMultipleChoice::QuestionMultipleChoice(std::string question, std::array<std::string, 5> answers)
 	: m_question(question),
 	m_answers(answers)
 {
@@ -27,6 +36,30 @@ bool QuestionMultipleChoice::operator==(const QuestionMultipleChoice& object)
 			return false;
 
 	return true;
+}
+
+QuestionMultipleChoice& QuestionMultipleChoice::operator=(const QuestionMultipleChoice& object)
+{
+	m_question = object.m_question;
+	for (int i = 0; i < 5; i++)
+	{
+		m_answers[i] = object.m_answers[i];
+	}
+
+	return *this;
+}
+
+QuestionMultipleChoice& QuestionMultipleChoice::operator=(QuestionMultipleChoice&& object)
+{
+	m_question = object.m_question;
+	for (int i = 0; i < 5; i++)
+	{
+		m_answers[i] = object.m_answers[i];
+	}
+
+	new(&object)QuestionMultipleChoice;
+
+	return *this;
 }
 
 std::ostream& operator<<(std::ostream& out, const QuestionMultipleChoice& qmc)
