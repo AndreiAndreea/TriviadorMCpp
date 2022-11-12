@@ -13,6 +13,8 @@ public:
 
 	friend std::ostream& operator << (std::ostream& out, const QuestionMultipleChoice& qmc);
 
+	bool operator == (const QuestionMultipleChoice& object);
+
 private:
 	std::string m_question;
 	std::array<std::string, 5> m_answers;

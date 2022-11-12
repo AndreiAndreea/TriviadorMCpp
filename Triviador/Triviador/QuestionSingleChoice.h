@@ -14,6 +14,8 @@ public:
 
 	friend std::ostream& operator << (std::ostream& out, const QuestionSingleChoice& qsc);
 
+	bool operator == (const QuestionSingleChoice& object);
+
 private:
 	std::string m_question;
 	uint16_t m_answer;

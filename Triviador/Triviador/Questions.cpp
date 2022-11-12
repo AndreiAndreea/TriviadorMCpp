@@ -98,6 +98,18 @@ void Questions::RemoveMCQuestionByIndex(const uint8_t& index)
 	}
 }
 
+void Questions::RemoveSCQuestionByObject(QuestionSingleChoice& object)
+{
+	if(std::find(m_questionsSC.begin(), m_questionsSC.end(), object) == m_questionsSC.end())
+		m_questionsSC.erase(std::find(m_questionsSC.begin(), m_questionsSC.end(), object));
+}
+
+void Questions::RemoveMCQuestionByObject(QuestionMultipleChoice& object)
+{
+	if (std::find(m_questionsMC.begin(), m_questionsMC.end(), object) == m_questionsMC.end())
+		m_questionsMC.erase(std::find(m_questionsMC.begin(), m_questionsMC.end(), object));
+}
+
 uint8_t Questions::GenerateRandomNumber(const uint8_t& size)
 {
 	srand((int)time(0));

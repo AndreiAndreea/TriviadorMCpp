@@ -19,6 +19,9 @@ public:
 	void RemoveSCQuestionByIndex(const uint8_t& index);
 	void RemoveMCQuestionByIndex(const uint8_t& index);
 
+	void RemoveSCQuestionByObject(QuestionSingleChoice& object);
+	void RemoveMCQuestionByObject(QuestionMultipleChoice& object);
+
 	uint8_t GenerateRandomNumber(const uint8_t& size);
 
 	const QuestionSingleChoice& GetRandomSCQuestion();

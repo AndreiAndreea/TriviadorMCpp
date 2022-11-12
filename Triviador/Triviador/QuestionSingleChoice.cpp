@@ -17,6 +17,14 @@ const uint16_t& QuestionSingleChoice::GetAnswer()
 	return m_answer;
 }
 
+bool QuestionSingleChoice::operator==(const QuestionSingleChoice& object)
+{
+	if (this->m_answer == object.m_answer && this->m_question == object.m_question)
+		return true;
+
+    return false;
+}
+
 std::ostream& operator<<(std::ostream& out, const QuestionSingleChoice& qsc)
 {
 	out << qsc.m_question << std::endl;
