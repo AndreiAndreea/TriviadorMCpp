@@ -12,6 +12,7 @@ public:
 
 private: 
 	void GenerateSCQuestions();
+	void GenerateMCQuestions();
 
 private:
 	std::vector<QuestionSingleChoice> m_questionsSC;

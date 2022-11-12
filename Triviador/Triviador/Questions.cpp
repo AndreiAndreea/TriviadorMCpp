@@ -25,3 +25,27 @@ void Questions::GenerateSCQuestions()
 
 	finSC.close();
 }
+
+void Questions::GenerateMCQuestions()
+{
+	std::string question;
+	std::array<std::string, 5> answers;
+	std::string answer;
+
+	std::ifstream finMC("MultipleChoiceQuestions.txt");
+
+	while (!finMC.eof())
+	{
+		std::getline(finMC, question);
+
+		for (int index = 0; index < 5; index++)
+		{
+			std::getline(finMC, answer);
+			answers[index] = answer;
+		}
+
+		m_questionsMC.push_back(QuestionMultipleChoice(question, answers));
+	}
+
+	finMC.close();
+}
