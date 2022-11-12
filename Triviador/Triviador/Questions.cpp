@@ -52,12 +52,30 @@ void Questions::GenerateMCQuestions()
 	finMC.close();
 }
 
-std::vector<QuestionSingleChoice> Questions::GetQuestionsSC()
+std::vector<QuestionSingleChoice> Questions::GetQuestionsSC() const
 {
 	return m_questionsSC;
 }
 
-std::vector<QuestionMultipleChoice> Questions::GetQuestionsMC()
+std::vector<QuestionMultipleChoice> Questions::GetQuestionsMC() const
 {
 	return m_questionsMC;
+}
+
+void Questions::RemoveSCQuestion(const uint8_t& index)
+{
+	try {
+		if (index < m_questionsSC.size())
+		{
+			std::vector<QuestionSingleChoice>::iterator it = m_questionsSC.begin() + index;
+			m_questionsSC.erase(it);
+		}
+		else
+		{
+			throw 1;
+		}
+	}
+	catch(int errorValue) {
+			std::cout<< "Error #" << errorValue << ". Invalid index at RemoveSCQuestion method." << std::endl;
+	}
 }

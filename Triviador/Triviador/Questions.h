@@ -10,8 +10,11 @@ class Questions
 public:
 	Questions();
 
-	std::vector<QuestionSingleChoice> GetQuestionsSC();
-	std::vector<QuestionMultipleChoice> GetQuestionsMC();
+	std::vector<QuestionSingleChoice> GetQuestionsSC() const;
+	std::vector<QuestionMultipleChoice> GetQuestionsMC() const;
+
+public:
+	void RemoveSCQuestion(const uint8_t& index);
 
 private: 
 	void GenerateSCQuestions();
