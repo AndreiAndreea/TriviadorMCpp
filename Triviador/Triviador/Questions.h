@@ -15,6 +15,7 @@ public:
 
 public:
 	void RemoveSCQuestion(const uint8_t& index);
+	void RemoveMCQuestion(const uint8_t& index);
 
 private: 
 	void GenerateSCQuestions();

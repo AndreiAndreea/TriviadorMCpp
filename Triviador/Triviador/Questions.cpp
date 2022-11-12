@@ -76,6 +76,24 @@ void Questions::RemoveSCQuestion(const uint8_t& index)
 		}
 	}
 	catch(int errorValue) {
-			std::cout<< "Error #" << errorValue << ". Invalid index at RemoveSCQuestion method." << std::endl;
+			std::cout<< "Error #" << errorValue << ". Invalid index at RemoveSCQuestion method from Questions class." << std::endl;
+	}
+}
+
+void Questions::RemoveMCQuestion(const uint8_t& index)
+{
+	try {
+		if (index < m_questionsMC.size())
+		{
+			std::vector<QuestionMultipleChoice>::iterator it = m_questionsMC.begin() + index;
+			m_questionsMC.erase(it);
+		}
+		else
+		{
+			throw 2;
+		}
+	}
+	catch (int errorValue) {
+		std::cout << "Error #" << errorValue << ". Invalid index at RemoveMCQuestion method from Questions class." << std::endl;
 	}
 }
