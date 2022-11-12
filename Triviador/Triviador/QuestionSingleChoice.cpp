@@ -1,5 +1,11 @@
 #include "QuestionSingleChoice.h"
 
+QuestionSingleChoice::QuestionSingleChoice()
+{
+	m_question = "None";
+	m_answer = 0;
+}
+
 QuestionSingleChoice::QuestionSingleChoice(std::string question, uint16_t answer)
 	: m_question(question),
 	m_answer(answer)
@@ -23,6 +29,24 @@ bool QuestionSingleChoice::operator==(const QuestionSingleChoice& object)
 		return true;
 
     return false;
+}
+
+QuestionSingleChoice& QuestionSingleChoice::operator=(const QuestionSingleChoice& object)
+{
+	m_question = object.m_question;
+	m_answer = object.m_answer;
+
+	return *this;
+}
+
+QuestionSingleChoice& QuestionSingleChoice::operator=(QuestionSingleChoice&& object)
+{
+	m_question = object.m_question;
+	m_answer = object.m_answer;
+	
+	new(&object)QuestionSingleChoice;
+
+	return *this;
 }
 
 std::ostream& operator<<(std::ostream& out, const QuestionSingleChoice& qsc)
