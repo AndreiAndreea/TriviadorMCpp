@@ -10,6 +10,9 @@ class Questions
 public:
 	Questions();
 
+	std::vector<QuestionSingleChoice> GetQuestionsSC();
+	std::vector<QuestionMultipleChoice> GetQuestionsMC();
+
 private: 
 	void GenerateSCQuestions();
 	void GenerateMCQuestions();

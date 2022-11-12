@@ -16,3 +16,10 @@ const uint16_t& QuestionSingleChoice::GetAnswer()
 {
 	return m_answer;
 }
+
+std::ostream& operator<<(std::ostream& out, const QuestionSingleChoice& qsc)
+{
+	out << qsc.m_question << std::endl;
+
+	return out;
+}

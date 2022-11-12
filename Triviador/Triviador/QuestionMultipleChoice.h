@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <array>
+#include <iostream>
 
 class QuestionMultipleChoice
 {
@@ -9,6 +10,8 @@ public:
 
 	const std::string& GetQuestion();
 	const std::array<std::string, 5>&  GetAnswers();
+
+	friend std::ostream& operator << (std::ostream& out, const QuestionMultipleChoice& qmc);
 
 private:
 	std::string m_question;

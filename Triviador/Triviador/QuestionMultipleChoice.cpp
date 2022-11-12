@@ -16,3 +16,13 @@ const std::array<std::string, 5>& QuestionMultipleChoice::GetAnswers()
 {
 	return m_answers;
 }
+
+std::ostream& operator<<(std::ostream& out, const QuestionMultipleChoice& qmc)
+{
+	out << qmc.m_question << std::endl;
+
+	for (int index = 1; index < 5; index++)
+		out << qmc.m_answers[index] << std::endl;
+
+	return out;
+}

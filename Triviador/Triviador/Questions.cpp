@@ -2,7 +2,9 @@
 
 Questions::Questions()
 {
+	GenerateSCQuestions();
 
+	GenerateMCQuestions();
 }
 
 void Questions::GenerateSCQuestions()
@@ -48,4 +50,14 @@ void Questions::GenerateMCQuestions()
 	}
 
 	finMC.close();
+}
+
+std::vector<QuestionSingleChoice> Questions::GetQuestionsSC()
+{
+	return m_questionsSC;
+}
+
+std::vector<QuestionMultipleChoice> Questions::GetQuestionsMC()
+{
+	return m_questionsMC;
 }

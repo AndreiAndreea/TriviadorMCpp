@@ -2,6 +2,7 @@
 #include <string>
 #include <array>
 #include <cstdint>
+#include <iostream>
 
 class QuestionSingleChoice
 {
@@ -10,6 +11,8 @@ public:
 
 	const std::string& GetQuestion();
 	const uint16_t& GetAnswer();
+
+	friend std::ostream& operator << (std::ostream& out, const QuestionSingleChoice& qsc);
 
 private:
 	std::string m_question;
