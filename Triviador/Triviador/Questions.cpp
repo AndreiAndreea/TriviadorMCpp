@@ -62,7 +62,7 @@ std::vector<QuestionMultipleChoice> Questions::GetQuestionsMC() const
 	return m_questionsMC;
 }
 
-void Questions::RemoveSCQuestion(const uint8_t& index)
+void Questions::RemoveSCQuestionByIndex(const uint8_t& index)
 {
 	try {
 		if (index < m_questionsSC.size())
@@ -80,7 +80,7 @@ void Questions::RemoveSCQuestion(const uint8_t& index)
 	}
 }
 
-void Questions::RemoveMCQuestion(const uint8_t& index)
+void Questions::RemoveMCQuestionByIndex(const uint8_t& index)
 {
 	try {
 		if (index < m_questionsMC.size())
@@ -96,4 +96,33 @@ void Questions::RemoveMCQuestion(const uint8_t& index)
 	catch (int errorValue) {
 		std::cout << "Error #" << errorValue << ". Invalid index at RemoveMCQuestion method from Questions class." << std::endl;
 	}
+}
+
+uint8_t Questions::GenerateRandomNumber(const uint8_t& size)
+{
+	srand((int)time(0));
+
+	try {
+		if (size > 0)
+			return (rand() % size) + 0;
+		else
+			throw 3;
+	}
+	catch (int errorValue) {
+		std::cout << "Error #" << errorValue << ". Invalid size at GenerateRandomNumber method from Questions class." << std::endl;
+	}
+}
+
+const QuestionSingleChoice& Questions::GetRandomSCQuestion()
+{
+	uint8_t randomIndex = GenerateRandomNumber(m_questionsSC.size());
+
+	return m_questionsSC[randomIndex];
+}
+
+const QuestionMultipleChoice& Questions::GetRandomMCQuestion()
+{
+	uint8_t randomIndex = GenerateRandomNumber(m_questionsMC.size());
+
+	return m_questionsMC[randomIndex];
 }
