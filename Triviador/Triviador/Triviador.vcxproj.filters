@@ -24,6 +24,9 @@
     <ClCompile Include="QuestionSingleChoice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Questions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QuestionMultipleChoice.h">
@@ -32,5 +35,16 @@
     <ClInclude Include="QuestionSingleChoice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Questions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="MultipleChoiceQuestions.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="SingleChoiceQuestions.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

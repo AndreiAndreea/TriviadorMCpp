@@ -140,12 +140,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="QuestionMultipleChoice.cpp" />
+    <ClCompile Include="Questions.cpp" />
     <ClCompile Include="QuestionSingleChoice.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QuestionMultipleChoice.h" />
+    <ClInclude Include="Questions.h" />
     <ClInclude Include="QuestionSingleChoice.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="MultipleChoiceQuestions.txt" />
+    <Text Include="SingleChoiceQuestions.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
