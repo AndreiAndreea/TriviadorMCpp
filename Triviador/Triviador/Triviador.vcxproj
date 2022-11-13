@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="QuestionMultipleChoice.cpp" />
     <ClCompile Include="Questions.cpp" />
     <ClCompile Include="QuestionSingleChoice.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Player.h" />
     <ClInclude Include="QuestionMultipleChoice.h" />
     <ClInclude Include="Questions.h" />
     <ClInclude Include="QuestionSingleChoice.h" />
