@@ -10,7 +10,7 @@ bool Map::IsRegionAvailable(Coords coords)
 
 		if (coords == pos)
 		{
-			RemoveRegion(counter - 1);
+			RemoveUnusedRegion(counter - 1);
 
 			return true;
 		}
@@ -19,7 +19,7 @@ bool Map::IsRegionAvailable(Coords coords)
 	return false;
 }
 
-void Map::RemoveRegion(uint8_t position)
+void Map::RemoveUnusedRegion(uint8_t position)
 {
 	m_unusedRegions.erase(m_unusedRegions.begin() + position);
 }

@@ -8,7 +8,7 @@ public:
 
 public:
 	bool IsRegionAvailable(Coords coords);
-	void RemoveRegion(uint8_t position);
+	void RemoveUnusedRegion(uint8_t position);
 	
 private:
 	std::vector<Coords> m_unusedRegions;
