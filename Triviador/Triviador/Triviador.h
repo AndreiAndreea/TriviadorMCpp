@@ -23,6 +23,7 @@ private slots:
     void on_pushButton_2_clicked();
 
 private:
-    Questions questions;
+    Questions m_questions;
+    std::string m_currentAnswer;
     Ui::TriviadorClass ui;
 };
