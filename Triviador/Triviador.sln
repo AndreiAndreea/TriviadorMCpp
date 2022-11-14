@@ -1,31 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32413.511
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Triviador", "Triviador\Triviador.vcxproj", "{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Triviador", "Triviador\Triviador.vcxproj", "{A93721BC-6749-4407-8A83-0507FF1738D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Debug|x64.ActiveCfg = Debug|x64
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Debug|x64.Build.0 = Debug|x64
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Debug|x86.ActiveCfg = Debug|Win32
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Debug|x86.Build.0 = Debug|Win32
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Release|x64.ActiveCfg = Release|x64
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Release|x64.Build.0 = Release|x64
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Release|x86.ActiveCfg = Release|Win32
-		{A537E6A2-8C68-4551-9753-F52CBF1CB9F6}.Release|x86.Build.0 = Release|Win32
+		{A93721BC-6749-4407-8A83-0507FF1738D6}.Debug|x64.ActiveCfg = Debug|x64
+		{A93721BC-6749-4407-8A83-0507FF1738D6}.Debug|x64.Build.0 = Debug|x64
+		{A93721BC-6749-4407-8A83-0507FF1738D6}.Release|x64.ActiveCfg = Release|x64
+		{A93721BC-6749-4407-8A83-0507FF1738D6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {443B62E3-4762-4DB8-AF3A-1A6B1DF4D024}
+		SolutionGuid = {99D01A9B-07EA-4921-9EB3-6369CC2C41BC}
 	EndGlobalSection
 EndGlobal
