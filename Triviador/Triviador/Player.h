@@ -24,7 +24,10 @@ public:
 	
 	void AddRegion(Coords coords);
 	void RemoveLostRegion(Coords coords);
-	
+
+	void AddTerritory(std::vector<Coords> newTerritory);
+	void RemoveTerritory();
+
 	bool IsBase(Coords coords);
 	void LoseLife();
 	bool IsDead();

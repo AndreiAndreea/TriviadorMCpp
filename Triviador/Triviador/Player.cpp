@@ -66,6 +66,17 @@ void Player::RemoveLostRegion(Coords coords)
 	}
 }
 
+void Player::AddTerritory(std::vector<Coords> newTerritory)
+{
+	for (auto& newRegion : newTerritory)
+		m_territory.push_back(newRegion);
+}
+
+void Player::RemoveTerritory()
+{
+	m_territory.clear();
+}
+
 bool Player::IsBase(Coords coords)
 {
 	if (m_territory[0] == coords)
