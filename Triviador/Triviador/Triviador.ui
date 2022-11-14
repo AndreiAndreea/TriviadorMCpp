@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
+    <width>1014</width>
     <height>452</height>
    </rect>
   </property>
@@ -37,13 +37,39 @@
      <string>Display questions in file</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>131</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GenerateQuestion</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>601</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Aici va fi generata intrebarea!</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1024</width>
+     <width>1014</width>
      <height>22</height>
     </rect>
    </property>

@@ -13,11 +13,14 @@ public:
     ~Triviador();
 
 private:
+    void setLabelText(QString& text);
+
     void DisplaySCQuestionsInFile(QString fileName);
     void DisplayMCQuestionsInFile(QString fileName);
 
 private slots:
     void on_checkToDisplayQuestionsInFile_released();
+    void on_pushButton_clicked();
 
 private:
     Questions questions;

@@ -2,6 +2,8 @@
 #include "Questions.h"
 
 #include<QDebug>
+#include <ctime>
+#include <cstdlib>
 
 Triviador::Triviador(QWidget *parent)
     : QMainWindow(parent)
@@ -12,6 +14,11 @@ Triviador::Triviador(QWidget *parent)
 
 Triviador::~Triviador()
 {}
+
+void Triviador::setLabelText(QString& text)
+{
+    ui.label->setText(text);
+}
 
 void Triviador::DisplaySCQuestionsInFile(QString fileName)
 {
@@ -47,6 +54,27 @@ void Triviador::DisplayMCQuestionsInFile(QString fileName)
         }
 
         file.close();
+    }
+}
+
+void Triviador::on_pushButton_clicked()
+{
+    if (ui.pushButton->isEnabled())
+    {
+        srand(time(0));
+        int randomval = rand() % 2;
+        if (randomval == 1)
+        {
+            QuestionSingleChoice SCQuestion = questions.GetRandomSCQuestion();
+            QString scq = QString::fromStdString(SCQuestion.GetQuestion());
+            setLabelText(scq);
+        }
+        else
+        {
+            QuestionMultipleChoice MCQuestion = questions.GetRandomMCQuestion();
+            QString mcq = QString::fromStdString(MCQuestion.GetQuestion());
+            setLabelText(mcq);
+        }
     }
 }
 
