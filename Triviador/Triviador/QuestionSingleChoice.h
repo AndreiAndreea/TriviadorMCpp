@@ -18,9 +18,11 @@ public:
 	QuestionSingleChoice(const QuestionSingleChoice& object); //copy constructor
 	QuestionSingleChoice(QuestionSingleChoice&& object); //move constructor
 
+public:
 	std::string& GetQuestion();
 	const uint16_t& GetAnswer();
 
+public:
 	friend std::ostream& operator << (std::ostream& out, const QuestionSingleChoice& qsc);
 
 	bool operator == (const QuestionSingleChoice& object);

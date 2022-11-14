@@ -13,6 +13,16 @@ Player::Player(const std::string& username, uint16_t score)
 
 }
 
+Player::Player(const Player& player)
+{
+	*this = player;
+}
+
+Player::Player(Player&& player)
+{
+	*this = std::move(player);
+}
+
 void Player::SetScore(uint16_t score)
 {
 	m_score = score;
@@ -96,6 +106,28 @@ bool Player::IsDead()
 		return true;
 
 	return false;
+}
+
+Player& Player::operator=(const Player& player)
+{
+	m_username = player.m_username;
+	m_score = player.m_score;
+	m_territory = player.m_territory;
+	m_lives = player.m_lives;
+
+	return *this;
+}
+
+Player& Player::operator=(Player&& player)
+{
+	m_username = player.m_username;
+	m_score = player.m_score;
+	m_territory = player.m_territory;
+	m_lives = player.m_lives;
+
+	new(&player)Player;
+
+	return *this;
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& player)

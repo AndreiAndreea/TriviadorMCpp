@@ -12,9 +12,11 @@ public:
 	QuestionMultipleChoice(const QuestionMultipleChoice& object); //copy constructor
 	QuestionMultipleChoice(QuestionMultipleChoice&& object); //move constructor
 
+public:
 	const std::string& GetQuestion();
 	const std::array<std::string, 5>&  GetAnswers();
 
+public:
 	friend std::ostream& operator << (std::ostream& out, const QuestionMultipleChoice& qmc);
 
 	bool operator == (const QuestionMultipleChoice& object);

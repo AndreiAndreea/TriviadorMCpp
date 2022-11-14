@@ -10,6 +10,9 @@ public:
 	Player();
 	Player(const std::string& username, uint16_t score);
 
+	Player(const Player& player); //copy constructor
+	Player(Player&& player); //move constructor
+
 public:
 	using Coords = std::pair<uint8_t, uint8_t>;
 
@@ -34,6 +37,9 @@ public:
 
 public:
 	friend std::ostream& operator<<(std::ostream& os, const Player& player);
+
+	Player& operator=(const Player& player);
+	Player& operator=(Player&& player);
 
 private:
 	std::string m_username;
