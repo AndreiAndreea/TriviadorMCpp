@@ -4,13 +4,21 @@
 #include <cstdint>
 #include <iostream>
 
+#include <QString>
+#include <QDebug>
+#include <QTextStream>
+#include <QFile>
+
 class QuestionSingleChoice
 {
 public:
 	QuestionSingleChoice();
 	QuestionSingleChoice(std::string question, uint16_t answer);
 
-	const std::string& GetQuestion();
+	QuestionSingleChoice(const QuestionSingleChoice& object); //copy constructor
+	QuestionSingleChoice(QuestionSingleChoice&& object); //move constructor
+
+	std::string& GetQuestion();
 	const uint16_t& GetAnswer();
 
 	friend std::ostream& operator << (std::ostream& out, const QuestionSingleChoice& qsc);

@@ -9,6 +9,9 @@ public:
 	QuestionMultipleChoice();
 	QuestionMultipleChoice(std::string question, std::array<std::string, 5> answers);
 
+	QuestionMultipleChoice(const QuestionMultipleChoice& object); //copy constructor
+	QuestionMultipleChoice(QuestionMultipleChoice&& object); //move constructor
+
 	const std::string& GetQuestion();
 	const std::array<std::string, 5>&  GetAnswers();
 

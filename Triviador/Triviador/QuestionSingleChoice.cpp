@@ -13,7 +13,17 @@ QuestionSingleChoice::QuestionSingleChoice(std::string question, uint16_t answer
 
 }
 
-const std::string& QuestionSingleChoice::GetQuestion()
+QuestionSingleChoice::QuestionSingleChoice(const QuestionSingleChoice& object)
+{
+	*this = object;
+}
+
+QuestionSingleChoice::QuestionSingleChoice(QuestionSingleChoice&& object)
+{
+	*this = std::move(object);
+}
+
+std::string& QuestionSingleChoice::GetQuestion()
 {
 	return m_question;
 }
@@ -28,7 +38,7 @@ bool QuestionSingleChoice::operator==(const QuestionSingleChoice& object)
 	if (this->m_answer == object.m_answer && this->m_question == object.m_question)
 		return true;
 
-    return false;
+	return false;
 }
 
 QuestionSingleChoice& QuestionSingleChoice::operator=(const QuestionSingleChoice& object)
@@ -43,7 +53,7 @@ QuestionSingleChoice& QuestionSingleChoice::operator=(QuestionSingleChoice&& obj
 {
 	m_question = object.m_question;
 	m_answer = object.m_answer;
-	
+
 	new(&object)QuestionSingleChoice;
 
 	return *this;

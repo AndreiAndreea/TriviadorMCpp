@@ -16,6 +16,16 @@ QuestionMultipleChoice::QuestionMultipleChoice(std::string question, std::array<
 
 }
 
+QuestionMultipleChoice::QuestionMultipleChoice(const QuestionMultipleChoice& object)
+{
+	*this = object;
+}
+
+QuestionMultipleChoice::QuestionMultipleChoice(QuestionMultipleChoice&& object)
+{
+	*this = std::move(object);
+}
+
 const std::string& QuestionMultipleChoice::GetQuestion()
 {
 	return m_question;
