@@ -20,9 +20,14 @@ public:
 	void SetUsername(const std::string& username);
 	const std::string GetUsername() const;
 
-public:
+	std::vector<Coords> GetTerritory() const;
+	
 	void AddRegion(Coords coords);
 	void RemoveLostRegion(Coords coords);
+	
+	bool IsBase(Coords coords);
+	void LoseLife();
+	bool IsDead();
 
 public:
 	friend std::ostream& operator<<(std::ostream& os, const Player& player);
@@ -31,4 +36,5 @@ private:
 	std::string m_username;
 	uint16_t m_score;
 	std::vector<Coords> m_territory;
+	uint8_t m_lives = 3;
 };

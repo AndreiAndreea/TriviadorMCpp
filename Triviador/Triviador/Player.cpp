@@ -33,6 +33,11 @@ const std::string Player::GetUsername() const
 	return m_username;
 }
 
+std::vector<std::pair<uint8_t, uint8_t>> Player::GetTerritory() const
+{
+	return m_territory;
+}
+
 void Player::AddRegion(Coords coords)
 {
 	if (m_territory.size() == 0)
@@ -59,6 +64,27 @@ void Player::RemoveLostRegion(Coords coords)
 				m_territory.erase(m_territory.begin() + counter - 1);
 		}
 	}
+}
+
+bool Player::IsBase(Coords coords)
+{
+	if (m_territory[0] == coords)
+		return true;
+
+	return false;
+}
+
+void Player::LoseLife()
+{
+	m_lives--;
+}
+
+bool Player::IsDead()
+{
+	if (m_lives == 0)
+		return true;
+
+	return false;
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& player)
