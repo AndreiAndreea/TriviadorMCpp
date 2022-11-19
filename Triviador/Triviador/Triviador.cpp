@@ -61,13 +61,20 @@ void Triviador::DisplayMCQuestionsInFile(QString fileName)
 	}
 }
 
-void Triviador::CheckMultipleChoiceAnswer(QString chosenAnswer)
+void Triviador::CheckMultipleChoiceAnswer(QString chosenAnswer, bool& answer)
 {
 	std::string correctAnswer = chosenAnswer.toStdString();
 	QString text = QString::fromStdString(m_currentAnswer);
 	if (correctAnswer == m_currentAnswer)
+	{
 		ui.mc_answerVerdict->setText("The answer is correct!");
-	else ui.mc_answerVerdict->setText("The correct answer is: "+text);
+		answer = 1;
+	}
+	else
+	{
+		ui.mc_answerVerdict->setText("The correct answer is: " + text);
+		answer = 0;
+	}
 	ui.mc_answerVerdict->show();
 }
 
@@ -107,18 +114,23 @@ void Triviador::on_pushButton_clicked()
 			ui.label_2->show();
 			ui.label_3->hide();
 			ui.label_4->hide();
+			ui.mc_answerVerdict->hide();
 
 			ui.mc_ans1->show();
 			ui.mc_ans2->show();
 			ui.mc_ans3->show();
 			ui.mc_ans4->show();
 			QuestionMultipleChoice MCQuestion = m_questions.GetRandomMCQuestion();
-			m_currentAnswer= MCQuestion.GetAnswers()[0];
+			m_currentAnswer = MCQuestion.GetAnswers()[0];
 
 			QString mcq = QString::fromStdString(MCQuestion.GetQuestion());
 			ui.label->setText(mcq);
 
 			std::stringstream ss;
+			ui.mc_ans1->setStyleSheet("background-color:light;");
+			ui.mc_ans2->setStyleSheet("background-color:light;");
+			ui.mc_ans3->setStyleSheet("background-color:light;");
+			ui.mc_ans4->setStyleSheet("background-color:light;");
 			ui.mc_ans1->setText(QString::fromStdString(MCQuestion.GetAnswers()[1]));
 			ui.mc_ans2->setText(QString::fromStdString(MCQuestion.GetAnswers()[2]));
 			ui.mc_ans3->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
@@ -173,31 +185,68 @@ void Triviador::on_mc_ans1_released()
 {
 	if (ui.mc_ans1->isEnabled())
 	{
-		CheckMultipleChoiceAnswer(ui.mc_ans1->text());
+		bool answer;
+		CheckMultipleChoiceAnswer(ui.mc_ans1->text(), answer);
+		if (answer)
+		{
+			ui.mc_ans1->setStyleSheet("background-color:green;");
+		}
+		else
+		{
+			ui.mc_ans1->setStyleSheet("background-color:red;");
+		}
 	}
+
 }
 
 void Triviador::on_mc_ans2_released()
 {
+	bool answer;
 	if (ui.mc_ans2->isEnabled())
 	{
-		CheckMultipleChoiceAnswer(ui.mc_ans2->text());
+		CheckMultipleChoiceAnswer(ui.mc_ans2->text(), answer);
+		if (answer)
+		{
+			ui.mc_ans2->setStyleSheet("background-color:green;");
+		}
+		else
+		{
+			ui.mc_ans2->setStyleSheet("background-color:red;");
+		}
 	}
 }
 
 void Triviador::on_mc_ans3_released()
 {
+	bool answer = 0;
 	if (ui.mc_ans3->isEnabled())
 	{
-		CheckMultipleChoiceAnswer(ui.mc_ans3->text());
+		CheckMultipleChoiceAnswer(ui.mc_ans3->text(), answer);
+		if (answer)
+		{
+			ui.mc_ans3->setStyleSheet("background-color:green;");
+		}
+		else
+		{
+			ui.mc_ans3->setStyleSheet("background-color:red;");
+		}
 	}
 }
 
 void Triviador::on_mc_ans4_released()
 {
+	bool answer;
 	if (ui.mc_ans4->isEnabled())
 	{
-		CheckMultipleChoiceAnswer(ui.mc_ans4->text());
+		CheckMultipleChoiceAnswer(ui.mc_ans4->text(), answer);
+		if (answer)
+		{
+			ui.mc_ans4->setStyleSheet("background-color:green;");
+		}
+		else
+		{
+			ui.mc_ans4->setStyleSheet("background-color:red;");
+		}
 	}
 }
 

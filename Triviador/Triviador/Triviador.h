@@ -17,7 +17,7 @@ private:
     void DisplaySCQuestionsInFile(QString fileName);
     void DisplayMCQuestionsInFile(QString fileName);
 
-    void CheckMultipleChoiceAnswer(QString chosenAnswer);
+    void CheckMultipleChoiceAnswer(QString chosenAnswer,bool & answer);
 
 private slots:
     void on_checkToDisplayQuestionsInFile_released();
