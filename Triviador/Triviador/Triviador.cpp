@@ -15,6 +15,10 @@ Triviador::Triviador(QWidget* parent)
 	ui.label_4->hide();
 	ui.pushButton_2->hide();
 	ui.lineEdit->hide();
+	ui.mc_ans1->hide();
+	ui.mc_ans2->hide();
+	ui.mc_ans3->hide();
+	ui.mc_ans4->hide();
 }
 
 Triviador::~Triviador()
@@ -52,7 +56,6 @@ void Triviador::DisplayMCQuestionsInFile(QString fileName)
 
 			ostream << "\n";
 		}
-
 		file.close();
 	}
 }
@@ -72,7 +75,11 @@ void Triviador::on_pushButton_clicked()
 			ui.lineEdit->show();
 			ui.label_2->hide();
 
-
+			//radio buttons from mc choice are hidden
+			ui.mc_ans1->hide();
+			ui.mc_ans2->hide();
+			ui.mc_ans3->hide();
+			ui.mc_ans4->hide();
 			QuestionSingleChoice SCQuestion = m_questions.GetRandomSCQuestion();
 			m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
@@ -87,7 +94,12 @@ void Triviador::on_pushButton_clicked()
 			ui.lineEdit->hide();
 			ui.label_2->show();
 			ui.label_3->hide();
+			ui.label_4->hide();
 
+			ui.mc_ans1->show();
+			ui.mc_ans2->show();
+			ui.mc_ans3->show();
+			ui.mc_ans4->show();
 			QuestionMultipleChoice MCQuestion = m_questions.GetRandomMCQuestion();
 			m_currentAnswer = MCQuestion.GetAnswers()[0];
 
@@ -95,9 +107,10 @@ void Triviador::on_pushButton_clicked()
 			ui.label->setText(mcq);
 
 			std::stringstream ss;
-			for (int i = 1; i < 5; i++)
-				ss << MCQuestion.GetAnswers()[i] << "\n";
-
+				ui.mc_ans1->setText(QString::fromStdString(MCQuestion.GetAnswers()[1]));
+				ui.mc_ans2->setText(QString::fromStdString(MCQuestion.GetAnswers()[2]));
+				ui.mc_ans3->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
+				ui.mc_ans4->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
 			QString answers = QString::fromStdString(ss.str());
 			ui.label_2->setText(answers);
 
@@ -128,7 +141,9 @@ void Triviador::on_pushButton_2_clicked()
 
 			std::stringstream ss;
 			ss << "Correct answer is: " << m_currentAnswer << "\n" 
-				<< "close by: "<< abs(currentAnswer-inputAnswer);
+				<< "close by: "<< abs(currentAnswer-inputAnswer)<<"\n";
+			if (abs(currentAnswer - inputAnswer) == 0)
+				ss << "Raspunsul este corect!";
 
 			QString displayAnswer = QString::fromStdString(ss.str());
 			ui.label_4->setText(displayAnswer);
