@@ -19,11 +19,12 @@ Triviador::Triviador(QWidget* parent)
 	ui.mc_ans2->hide();
 	ui.mc_ans3->hide();
 	ui.mc_ans4->hide();
+	ui.mc_answerVerdict->hide();
+	ui.mc_ans1->setChecked(false);
 }
 
 Triviador::~Triviador()
 {}
-
 void Triviador::DisplaySCQuestionsInFile(QString fileName)
 {
 	QFile file(QString("%1").arg(fileName));
@@ -60,6 +61,16 @@ void Triviador::DisplayMCQuestionsInFile(QString fileName)
 	}
 }
 
+void Triviador::CheckMultipleChoiceAnswer(QString chosenAnswer)
+{
+	std::string correctAnswer = chosenAnswer.toStdString();
+	QString text = QString::fromStdString(m_currentAnswer);
+	if (correctAnswer == m_currentAnswer)
+		ui.mc_answerVerdict->setText("The answer is correct!");
+	else ui.mc_answerVerdict->setText("The correct answer is: "+text);
+	ui.mc_answerVerdict->show();
+}
+
 void Triviador::on_pushButton_clicked()
 {
 	if (ui.pushButton->isEnabled())
@@ -80,6 +91,7 @@ void Triviador::on_pushButton_clicked()
 			ui.mc_ans2->hide();
 			ui.mc_ans3->hide();
 			ui.mc_ans4->hide();
+			ui.mc_answerVerdict->hide();
 			QuestionSingleChoice SCQuestion = m_questions.GetRandomSCQuestion();
 			m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
@@ -101,16 +113,16 @@ void Triviador::on_pushButton_clicked()
 			ui.mc_ans3->show();
 			ui.mc_ans4->show();
 			QuestionMultipleChoice MCQuestion = m_questions.GetRandomMCQuestion();
-			m_currentAnswer = MCQuestion.GetAnswers()[0];
+			m_currentAnswer= MCQuestion.GetAnswers()[0];
 
 			QString mcq = QString::fromStdString(MCQuestion.GetQuestion());
 			ui.label->setText(mcq);
 
 			std::stringstream ss;
-				ui.mc_ans1->setText(QString::fromStdString(MCQuestion.GetAnswers()[1]));
-				ui.mc_ans2->setText(QString::fromStdString(MCQuestion.GetAnswers()[2]));
-				ui.mc_ans3->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
-				ui.mc_ans4->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
+			ui.mc_ans1->setText(QString::fromStdString(MCQuestion.GetAnswers()[1]));
+			ui.mc_ans2->setText(QString::fromStdString(MCQuestion.GetAnswers()[2]));
+			ui.mc_ans3->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
+			ui.mc_ans4->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
 			QString answers = QString::fromStdString(ss.str());
 			ui.label_2->setText(answers);
 
@@ -140,8 +152,8 @@ void Triviador::on_pushButton_2_clicked()
 			uint16_t currentAnswer = std::stoi(m_currentAnswer);
 
 			std::stringstream ss;
-			ss << "Correct answer is: " << m_currentAnswer << "\n" 
-				<< "close by: "<< abs(currentAnswer-inputAnswer)<<"\n";
+			ss << "Correct answer is: " << m_currentAnswer << "\n"
+				<< "close by: " << abs(currentAnswer - inputAnswer) << "\n";
 			if (abs(currentAnswer - inputAnswer) == 0)
 				ss << "Raspunsul este corect!";
 
@@ -156,6 +168,39 @@ void Triviador::on_pushButton_2_clicked()
 		}
 	}
 }
+
+void Triviador::on_mc_ans1_released()
+{
+	if (ui.mc_ans1->isEnabled())
+	{
+		CheckMultipleChoiceAnswer(ui.mc_ans1->text());
+	}
+}
+
+void Triviador::on_mc_ans2_released()
+{
+	if (ui.mc_ans2->isEnabled())
+	{
+		CheckMultipleChoiceAnswer(ui.mc_ans2->text());
+	}
+}
+
+void Triviador::on_mc_ans3_released()
+{
+	if (ui.mc_ans3->isEnabled())
+	{
+		CheckMultipleChoiceAnswer(ui.mc_ans3->text());
+	}
+}
+
+void Triviador::on_mc_ans4_released()
+{
+	if (ui.mc_ans4->isEnabled())
+	{
+		CheckMultipleChoiceAnswer(ui.mc_ans4->text());
+	}
+}
+
 void Triviador::on_checkToDisplayQuestionsInFile_released()
 {
 	if (ui.checkToDisplayQuestionsInFile->isChecked())
