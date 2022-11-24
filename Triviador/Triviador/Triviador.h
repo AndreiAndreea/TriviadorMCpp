@@ -31,6 +31,7 @@ private slots:
     void on_mc_ans4_released();
 
 private:
+    bool answerHasBeenSelected;
     Questions m_questions;
     std::string m_currentAnswer;
     Ui::TriviadorClass ui;

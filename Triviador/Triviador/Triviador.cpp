@@ -19,8 +19,10 @@ Triviador::Triviador(QWidget* parent)
 	ui.mc_ans2->hide();
 	ui.mc_ans3->hide();
 	ui.mc_ans4->hide();
+	ui.checkAnswerSelection->hide();
 	ui.mc_answerVerdict->hide();
 	ui.mc_ans1->setChecked(false);
+	answerHasBeenSelected = false;
 }
 
 Triviador::~Triviador()
@@ -67,12 +69,18 @@ void Triviador::CheckMultipleChoiceAnswer(QString chosenAnswer, bool& answer)
 	QString text = QString::fromStdString(m_currentAnswer);
 	if (correctAnswer == m_currentAnswer)
 	{
-		ui.mc_answerVerdict->setText("The answer is correct!");
+		if (!answerHasBeenSelected)
+			ui.mc_answerVerdict->setText("The answer is correct!");
+		else
+			ui.mc_answerVerdict->setText("");
 		answer = 1;
 	}
 	else
 	{
-		ui.mc_answerVerdict->setText("The correct answer is: " + text);
+		if (!answerHasBeenSelected)
+			ui.mc_answerVerdict->setText("The correct answer is: " + text);
+		else
+			ui.mc_answerVerdict->setText("");
 		answer = 0;
 	}
 	ui.mc_answerVerdict->show();
@@ -99,6 +107,7 @@ void Triviador::on_pushButton_clicked()
 			ui.mc_ans3->hide();
 			ui.mc_ans4->hide();
 			ui.mc_answerVerdict->hide();
+			ui.checkAnswerSelection->hide();
 			QuestionSingleChoice SCQuestion = m_questions.GetRandomSCQuestion();
 			m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
@@ -120,6 +129,9 @@ void Triviador::on_pushButton_clicked()
 			ui.mc_ans2->show();
 			ui.mc_ans3->show();
 			ui.mc_ans4->show();
+			ui.checkAnswerSelection->setText("");
+			ui.checkAnswerSelection->show();
+			answerHasBeenSelected = false;
 			QuestionMultipleChoice MCQuestion = m_questions.GetRandomMCQuestion();
 			m_currentAnswer = MCQuestion.GetAnswers()[0];
 
@@ -187,14 +199,20 @@ void Triviador::on_mc_ans1_released()
 	{
 		bool answer;
 		CheckMultipleChoiceAnswer(ui.mc_ans1->text(), answer);
-		if (answer)
+		if (answerHasBeenSelected == false)
 		{
-			ui.mc_ans1->setStyleSheet("background-color:green;");
+			if (answer)
+			{
+				ui.mc_ans1->setStyleSheet("background-color:green;");
+			}
+			else
+			{
+				ui.mc_ans1->setStyleSheet("background-color:red;");
+			}
+			answerHasBeenSelected = true;
 		}
 		else
-		{
-			ui.mc_ans1->setStyleSheet("background-color:red;");
-		}
+			ui.checkAnswerSelection->setText("You have already chosen an answer!");
 	}
 
 }
@@ -205,14 +223,20 @@ void Triviador::on_mc_ans2_released()
 	if (ui.mc_ans2->isEnabled())
 	{
 		CheckMultipleChoiceAnswer(ui.mc_ans2->text(), answer);
-		if (answer)
+		if (answerHasBeenSelected == false)
 		{
-			ui.mc_ans2->setStyleSheet("background-color:green;");
+			if (answer)
+			{
+				ui.mc_ans2->setStyleSheet("background-color:green;");
+			}
+			else
+			{
+				ui.mc_ans2->setStyleSheet("background-color:red;");
+			}
+			answerHasBeenSelected = true;
 		}
 		else
-		{
-			ui.mc_ans2->setStyleSheet("background-color:red;");
-		}
+			ui.checkAnswerSelection->setText("You have already chosen an answer!");
 	}
 }
 
@@ -222,14 +246,20 @@ void Triviador::on_mc_ans3_released()
 	if (ui.mc_ans3->isEnabled())
 	{
 		CheckMultipleChoiceAnswer(ui.mc_ans3->text(), answer);
-		if (answer)
+		if (answerHasBeenSelected == false)
 		{
-			ui.mc_ans3->setStyleSheet("background-color:green;");
+			if (answer)
+			{
+				ui.mc_ans3->setStyleSheet("background-color:green;");
+			}
+			else
+			{
+				ui.mc_ans3->setStyleSheet("background-color:red;");
+			}
+			answerHasBeenSelected = true;
 		}
 		else
-		{
-			ui.mc_ans3->setStyleSheet("background-color:red;");
-		}
+			ui.checkAnswerSelection->setText("You have already chosen an answer!");
 	}
 }
 
@@ -239,14 +269,20 @@ void Triviador::on_mc_ans4_released()
 	if (ui.mc_ans4->isEnabled())
 	{
 		CheckMultipleChoiceAnswer(ui.mc_ans4->text(), answer);
-		if (answer)
+		if (answerHasBeenSelected == false)
 		{
-			ui.mc_ans4->setStyleSheet("background-color:green;");
+			if (answer)
+			{
+				ui.mc_ans4->setStyleSheet("background-color:green;");
+			}
+			else
+			{
+				ui.mc_ans4->setStyleSheet("background-color:red;");
+			}
+			answerHasBeenSelected = true;
 		}
 		else
-		{
-			ui.mc_ans4->setStyleSheet("background-color:red;");
-		}
+			ui.checkAnswerSelection->setText("You have already chosen an answer!");
 	}
 }
 
