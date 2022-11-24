@@ -60,12 +60,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -95,9 +97,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Utils.cpp" />
     <QtRcc Include="Triviador.qrc" />
     <QtUic Include="Triviador.ui" />
     <QtMoc Include="Triviador.h" />
+    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Duel.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="QuestionMultipleChoice.cpp" />
@@ -108,12 +112,14 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataBase.h" />
     <ClInclude Include="Duel.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuestionMultipleChoice.h" />
     <ClInclude Include="Questions.h" />
     <ClInclude Include="QuestionSingleChoice.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="MultipleChoiceQuestions.txt" />
