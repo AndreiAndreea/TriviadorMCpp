@@ -5,6 +5,8 @@ DatabaseStorage::DatabaseStorage(const std::string& filePathForSingleChoiceQuest
 	m_filePathForMultipeChoiceQuestion { filePathForMultipeChoiceQuestion }
 {
 	m_questions.GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestion);
+
+	m_questions.GetMultipleChoiceQuestionsFromFile(m_filePathForMultipeChoiceQuestion);
 }
 
 bool DatabaseStorage::Initialize()
@@ -23,6 +25,9 @@ bool DatabaseStorage::Initialize()
 void DatabaseStorage::PopulateDatabaseWithQuestions()
 {
 	std::vector<SingleChoiceQuestionWrapper> singleChoiceQuestionsVector; //save the questions for exporting them to database
+	std::vector<MultipleChoiceQuestionWrapper> multipleChoiceQuestionsVector; //save the questions for exporting them to database
+
+	std::array<std::string, m_numberOfAnswers> multipleChoiceAnswersArray;
 
 	std::string currentQuestionText;
 	std::string currentAnswer;
@@ -31,6 +36,11 @@ void DatabaseStorage::PopulateDatabaseWithQuestions()
 		singleChoiceQuestionsVector.emplace_back(SingleChoiceQuestionWrapper{ 0, question.GetQuestionText(), question.GetAnswer() });
 
 	m_db.insert_range(singleChoiceQuestionsVector.begin(), singleChoiceQuestionsVector.end());
+
+	for (const auto& question : m_questions.GetMultipleChoiceQuestionsVector())
+		multipleChoiceQuestionsVector.emplace_back(MultipleChoiceQuestionWrapper{ 0, question.GetQuestionText(), question.GetAnswers()[0], question.GetAnswers()[1], question.GetAnswers()[2], question.GetAnswers()[3], question.GetAnswers()[4] });
+
+	m_db.insert_range(multipleChoiceQuestionsVector.begin(), multipleChoiceQuestionsVector.end());
 
 	std::vector<User> users = {
 		User{ 0, "Sm0k3", "csm1245@", "cosmyn_dobre@yahoo.com", "2022-08-10","39893","5", "2"},

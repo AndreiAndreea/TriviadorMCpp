@@ -39,6 +39,19 @@ struct SingleChoiceQuestionWrapper
 	uint16_t correctAnswer;
 };
 
+struct MultipleChoiceQuestionWrapper
+{
+	uint32_t id;
+
+	std::string questionText;
+	std::string correctAnswer;
+
+	std::string answer1;
+	std::string answer2;
+	std::string answer3;
+	std::string answer4;
+};
+
 inline auto createStorage(const std::string& filename)
 {
 	return sql::make_storage(
@@ -59,6 +72,16 @@ inline auto createStorage(const std::string& filename)
 			sql::make_column("id", &SingleChoiceQuestionWrapper::id, sql::autoincrement(), sql::primary_key()),
 			sql::make_column("title", &SingleChoiceQuestionWrapper::questionText),
 			sql::make_column("correct_answer", &SingleChoiceQuestionWrapper::correctAnswer)
+		),
+		sql::make_table(
+			"MultipleChoiceQuestions",
+			sql::make_column("id", &MultipleChoiceQuestionWrapper::id, sql::autoincrement(), sql::primary_key()),
+			sql::make_column("title", &MultipleChoiceQuestionWrapper::questionText),
+			sql::make_column("correct_answer", &MultipleChoiceQuestionWrapper::correctAnswer),
+			sql::make_column("answer_1", &MultipleChoiceQuestionWrapper::answer1),
+			sql::make_column("answer_2", &MultipleChoiceQuestionWrapper::answer2),
+			sql::make_column("answer_3", &MultipleChoiceQuestionWrapper::answer3),
+			sql::make_column("answer_4", &MultipleChoiceQuestionWrapper::answer4)
 		)
 	);
 }
