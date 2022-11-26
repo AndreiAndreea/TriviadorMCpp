@@ -3,18 +3,20 @@
 #include <array>
 #include <iostream>
 
+#define m_numberOfAnswers 5
+
 class QuestionMultipleChoice
 {
 public:
 	QuestionMultipleChoice();
-	QuestionMultipleChoice(std::string question, std::array<std::string, 5> answers);
+	QuestionMultipleChoice(const std::string& questionText, std::array<std::string, m_numberOfAnswers> answers);
 
 	QuestionMultipleChoice(const QuestionMultipleChoice& object); //copy constructor
 	QuestionMultipleChoice(QuestionMultipleChoice&& object); //move constructor
 
 public:
-	const std::string& GetQuestion();
-	const std::array<std::string, 5>&  GetAnswers();
+	const std::string& GetQuestionText() const;
+	const std::array<std::string, m_numberOfAnswers>& GetAnswers() const;
 
 public:
 	friend std::ostream& operator << (std::ostream& out, const QuestionMultipleChoice& qmc);
@@ -25,7 +27,7 @@ public:
 	QuestionMultipleChoice& operator=(QuestionMultipleChoice&& object);
 
 private:
-	std::string m_question;
-	std::array<std::string, 5> m_answers;
+	std::string m_questionText;
+	std::array<std::string, m_numberOfAnswers> m_answers;
 };
 

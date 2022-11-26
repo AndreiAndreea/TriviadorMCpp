@@ -13,14 +13,14 @@ class QuestionSingleChoice
 {
 public:
 	QuestionSingleChoice();
-	QuestionSingleChoice(std::string question, uint16_t answer);
+	QuestionSingleChoice(const std::string& question, uint16_t answer);
 
 	QuestionSingleChoice(const QuestionSingleChoice& object); //copy constructor
 	QuestionSingleChoice(QuestionSingleChoice&& object); //move constructor
 
 public:
-	std::string& GetQuestion();
-	const uint16_t& GetAnswer();
+	const std::string& GetQuestionText() const;
+	const uint16_t& GetAnswer() const;
 
 public:
 	friend std::ostream& operator << (std::ostream& out, const QuestionSingleChoice& qsc);
@@ -31,7 +31,7 @@ public:
 	QuestionSingleChoice& operator=(QuestionSingleChoice&& object);
 
 private:
-	std::string m_question;
+	std::string m_questionText;
 	uint16_t m_answer;
 	
 };

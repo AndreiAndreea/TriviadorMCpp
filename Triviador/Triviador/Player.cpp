@@ -28,7 +28,7 @@ void Player::SetScore(uint16_t score)
 	m_score = score;
 }
 
-const uint16_t Player::GetScore() const
+uint16_t Player::GetScore() const
 {
 	return m_score;
 }
@@ -38,7 +38,7 @@ void Player::SetUsername(const std::string& username)
 	m_username = username;
 }
 
-const std::string Player::GetUsername() const
+const std::string& Player::GetUsername() const
 {
 	return m_username;
 }

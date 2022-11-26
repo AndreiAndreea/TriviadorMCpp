@@ -14,7 +14,7 @@
    <string>Triviador</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QRadioButton" name="checkToDisplayQuestionsInFile">
+   <widget class="QRadioButton" name="saveQuestionsInFileButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -24,26 +24,26 @@
      </rect>
     </property>
     <property name="text">
-     <string>Display questions in file</string>
+     <string>Save questions in file</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="getRandomQuestionButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>40</y>
       <width>131</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>GenerateQuestion</string>
+     <string>Get Random Question</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="titleLabel">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>90</y>
       <width>231</width>
       <height>81</height>
@@ -56,20 +56,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>150</y>
-      <width>151</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Aici for fi raspunsurile</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="inputAnswerLineEdit">
     <property name="geometry">
      <rect>
       <x>290</x>
@@ -79,7 +66,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="submitAnswerButton">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -93,7 +80,7 @@
 Answer</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="errorLabel">
     <property name="geometry">
      <rect>
       <x>310</x>
@@ -109,7 +96,7 @@ Answer</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="displayCorrectAnswerSingleChoiceQuestionAndProximityLabel">
     <property name="geometry">
      <rect>
       <x>420</x>
@@ -125,7 +112,7 @@ Answer</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="mc_answerVerdict">
+   <widget class="QLabel" name="displayAnswerVerdictMultipleChoiceQuestionLabel">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -138,10 +125,10 @@ Answer</string>
      <string>corect/incorect</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="mc_ans1">
+   <widget class="QPushButton" name="multipleChoiceAnswer1Button">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>190</y>
       <width>221</width>
       <height>24</height>
@@ -151,10 +138,10 @@ Answer</string>
      <string>ans1</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="mc_ans2">
+   <widget class="QPushButton" name="multipleChoiceAnswer2Button">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>220</y>
       <width>221</width>
       <height>24</height>
@@ -164,10 +151,10 @@ Answer</string>
      <string>ans2</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="mc_ans3">
+   <widget class="QPushButton" name="multipleChoiceAnswer3Button">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>250</y>
       <width>221</width>
       <height>24</height>
@@ -177,10 +164,10 @@ Answer</string>
      <string>ans3</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="mc_ans4">
+   <widget class="QPushButton" name="multipleChoiceAnswer4Button">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>280</y>
       <width>221</width>
       <height>24</height>
@@ -193,14 +180,17 @@ Answer</string>
    <widget class="QLabel" name="checkAnswerSelection">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>280</y>
+      <x>10</x>
+      <y>320</y>
       <width>251</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

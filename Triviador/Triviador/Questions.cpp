@@ -2,73 +2,73 @@
 
 Questions::Questions()
 {
-	GenerateSCQuestions();
+	GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions);
 
-	GenerateMCQuestions();
+	GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions);
 }
 
-void Questions::GenerateSCQuestions()
+void Questions::GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions)
 {
-	std::string question;
+	std::string title;
 	uint16_t answer;
 
-	std::ifstream finSC("SingleChoiceQuestions.txt");
+	std::ifstream inputStream(filePathSingleChoiceQuestions);
 
-	while (!finSC.eof())
+	while (!inputStream.eof())
 	{
-		std::getline(finSC, question);
+		std::getline(inputStream, title);
 		
-		finSC >> answer;
+		inputStream >> answer;
 
-		finSC.get();
+		inputStream.get();
 
-		m_questionsSC.push_back(QuestionSingleChoice(question, answer));
+		m_singleChoiceQuestions.push_back(QuestionSingleChoice(title, answer));
 	}
 
-	finSC.close();
+	inputStream.close();
 }
 
-void Questions::GenerateMCQuestions()
+void Questions::GetMultipleChoiceQuestionsFromFile(const std::string& filePathMultipleChoiceQuestions)
 {
-	std::string question;
-	std::array<std::string, 5> answers;
-	std::string answer;
+	std::string title;
+	std::array<std::string, m_numberOfAnswers> answers;
+	std::string currentAnswer;
 
-	std::ifstream finMC("MultipleChoiceQuestions.txt");
+	std::ifstream inputStream(filePathMultipleChoiceQuestions);
 
-	while (!finMC.eof())
+	while (!inputStream.eof())
 	{
-		std::getline(finMC, question);
+		std::getline(inputStream, title);
 
-		for (int index = 0; index < 5; index++)
+		for (int index = 0; index < m_numberOfAnswers; index++)
 		{
-			std::getline(finMC, answer);
-			answers[index] = answer;
+			std::getline(inputStream, currentAnswer);
+			answers[index] = currentAnswer;
 		}
 
-		m_questionsMC.push_back(QuestionMultipleChoice(question, answers));
+		m_multipleChoiceQuestions.push_back(QuestionMultipleChoice(title, answers));
 	}
 
-	finMC.close();
+	inputStream.close();
 }
 
-std::vector<QuestionSingleChoice> Questions::GetQuestionsSC() const
+std::vector<QuestionSingleChoice> Questions::GetSingleChoiceQuestions() const
 {
-	return m_questionsSC;
+	return m_singleChoiceQuestions;
 }
 
-std::vector<QuestionMultipleChoice> Questions::GetQuestionsMC() const
+std::vector<QuestionMultipleChoice> Questions::GetMultipleChoiceQuestions() const
 {
-	return m_questionsMC;
+	return m_multipleChoiceQuestions;
 }
 
-void Questions::RemoveSCQuestionByIndex(const uint8_t& index)
+void Questions::RemoveSingleChoiceQuestionByIndex(const uint8_t& index)
 {
 	try {
-		if (index < m_questionsSC.size())
+		if (index < m_singleChoiceQuestions.size())
 		{
-			std::vector<QuestionSingleChoice>::iterator it = m_questionsSC.begin() + index;
-			m_questionsSC.erase(it);
+			std::vector<QuestionSingleChoice>::iterator it = m_singleChoiceQuestions.begin() + index;
+			m_singleChoiceQuestions.erase(it);
 		}
 		else
 		{
@@ -80,13 +80,13 @@ void Questions::RemoveSCQuestionByIndex(const uint8_t& index)
 	}
 }
 
-void Questions::RemoveMCQuestionByIndex(const uint8_t& index)
+void Questions::RemoveMultipleChoiceQuestionByIndex(const uint8_t& index)
 {
 	try {
-		if (index < m_questionsMC.size())
+		if (index < m_multipleChoiceQuestions.size())
 		{
-			std::vector<QuestionMultipleChoice>::iterator it = m_questionsMC.begin() + index;
-			m_questionsMC.erase(it);
+			std::vector<QuestionMultipleChoice>::iterator it = m_multipleChoiceQuestions.begin() + index;
+			m_multipleChoiceQuestions.erase(it);
 		}
 		else
 		{
@@ -98,16 +98,16 @@ void Questions::RemoveMCQuestionByIndex(const uint8_t& index)
 	}
 }
 
-void Questions::RemoveSCQuestionByObject(QuestionSingleChoice& object)
+void Questions::RemoveSingleChoiceQuestionByObject(QuestionSingleChoice& object)
 {
-	if(std::find(m_questionsSC.begin(), m_questionsSC.end(), object) == m_questionsSC.end())
-		m_questionsSC.erase(std::find(m_questionsSC.begin(), m_questionsSC.end(), object));
+	if(std::find(m_singleChoiceQuestions.begin(), m_singleChoiceQuestions.end(), object) == m_singleChoiceQuestions.end())
+		m_singleChoiceQuestions.erase(std::find(m_singleChoiceQuestions.begin(), m_singleChoiceQuestions.end(), object));
 }
 
-void Questions::RemoveMCQuestionByObject(QuestionMultipleChoice& object)
+void Questions::RemoveMultipleChoiceQuestionByObject(QuestionMultipleChoice& object)
 {
-	if (std::find(m_questionsMC.begin(), m_questionsMC.end(), object) == m_questionsMC.end())
-		m_questionsMC.erase(std::find(m_questionsMC.begin(), m_questionsMC.end(), object));
+	if (std::find(m_multipleChoiceQuestions.begin(), m_multipleChoiceQuestions.end(), object) == m_multipleChoiceQuestions.end())
+		m_multipleChoiceQuestions.erase(std::find(m_multipleChoiceQuestions.begin(), m_multipleChoiceQuestions.end(), object));
 }
 
 uint8_t Questions::GenerateRandomNumber(const uint8_t& size)
@@ -125,16 +125,16 @@ uint8_t Questions::GenerateRandomNumber(const uint8_t& size)
 	}
 }
 
-const QuestionSingleChoice& Questions::GetRandomSCQuestion()
+const QuestionSingleChoice& Questions::GetRandomSingleChoiceQuestion()
 {
-	uint8_t randomIndex = GenerateRandomNumber(m_questionsSC.size());
+	uint8_t randomIndex = GenerateRandomNumber(m_singleChoiceQuestions.size());
 
-	return m_questionsSC[randomIndex];
+	return m_singleChoiceQuestions[randomIndex];
 }
 
-const QuestionMultipleChoice& Questions::GetRandomMCQuestion()
+const QuestionMultipleChoice& Questions::GetRandomMultipleChoiceQuestion()
 {
-	uint8_t randomIndex = GenerateRandomNumber(m_questionsMC.size());
+	uint8_t randomIndex = GenerateRandomNumber(m_multipleChoiceQuestions.size());
 
-	return m_questionsMC[randomIndex];
+	return m_multipleChoiceQuestions[randomIndex];
 }

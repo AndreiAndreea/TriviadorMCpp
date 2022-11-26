@@ -14,25 +14,27 @@ public:
     ~Triviador();
 
 private:
-    void DisplaySCQuestionsInFile(QString fileName);
-    void DisplayMCQuestionsInFile(QString fileName);
+    void SaveSingleChoiceQuestionsToFile(const QString fileName);
+    void SaveMultipleChoiceQuestionsToFile(const QString fileName);
 
-    void CheckMultipleChoiceAnswer(QString chosenAnswer,bool & answer);
+    void CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& answer);
 
 private slots:
-    void on_checkToDisplayQuestionsInFile_released();
-    void on_pushButton_clicked();
+    void on_saveQuestionsInFileButton_released();
+    void on_getRandomQuestionButton_released();
 
-    void on_pushButton_2_clicked();
+    void on_submitAnswerButton_released();
 
-    void on_mc_ans1_released();
-    void on_mc_ans2_released();
-    void on_mc_ans3_released();
-    void on_mc_ans4_released();
+    void on_multipleChoiceAnswer1Button_released();
+    void on_multipleChoiceAnswer2Button_released();
+    void on_multipleChoiceAnswer3Button_released();
+    void on_multipleChoiceAnswer4Button_released();
 
 private:
-    bool answerHasBeenSelected;
+    bool m_answerHasBeenSelected;
+
     Questions m_questions;
     std::string m_currentAnswer;
+
     Ui::TriviadorClass ui;
 };

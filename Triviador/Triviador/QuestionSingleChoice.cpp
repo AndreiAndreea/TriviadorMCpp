@@ -2,12 +2,12 @@
 
 QuestionSingleChoice::QuestionSingleChoice()
 {
-	m_question = "None";
+	m_questionText = "None";
 	m_answer = 0;
 }
 
-QuestionSingleChoice::QuestionSingleChoice(std::string question, uint16_t answer)
-	: m_question(question),
+QuestionSingleChoice::QuestionSingleChoice(const std::string& question, uint16_t answer)
+	: m_questionText(question),
 	m_answer(answer)
 {
 
@@ -23,19 +23,19 @@ QuestionSingleChoice::QuestionSingleChoice(QuestionSingleChoice&& object)
 	*this = std::move(object);
 }
 
-std::string& QuestionSingleChoice::GetQuestion()
+const std::string& QuestionSingleChoice::GetQuestionText() const
 {
-	return m_question;
+	return m_questionText;
 }
 
-const uint16_t& QuestionSingleChoice::GetAnswer()
+const uint16_t& QuestionSingleChoice::GetAnswer() const
 {
 	return m_answer;
 }
 
 bool QuestionSingleChoice::operator==(const QuestionSingleChoice& object)
 {
-	if (this->m_answer == object.m_answer && this->m_question == object.m_question)
+	if (this->m_answer == object.m_answer && this->m_questionText == object.m_questionText)
 		return true;
 
 	return false;
@@ -43,7 +43,7 @@ bool QuestionSingleChoice::operator==(const QuestionSingleChoice& object)
 
 QuestionSingleChoice& QuestionSingleChoice::operator=(const QuestionSingleChoice& object)
 {
-	m_question = object.m_question;
+	m_questionText = object.m_questionText;
 	m_answer = object.m_answer;
 
 	return *this;
@@ -51,7 +51,7 @@ QuestionSingleChoice& QuestionSingleChoice::operator=(const QuestionSingleChoice
 
 QuestionSingleChoice& QuestionSingleChoice::operator=(QuestionSingleChoice&& object)
 {
-	m_question = object.m_question;
+	m_questionText = object.m_questionText;
 	m_answer = object.m_answer;
 
 	new(&object)QuestionSingleChoice;
@@ -61,7 +61,7 @@ QuestionSingleChoice& QuestionSingleChoice::operator=(QuestionSingleChoice&& obj
 
 std::ostream& operator<<(std::ostream& out, const QuestionSingleChoice& qsc)
 {
-	out << qsc.m_question << std::endl;
+	out << qsc.m_questionText << std::endl;
 
 	return out;
 }

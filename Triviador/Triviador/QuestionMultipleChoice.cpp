@@ -2,15 +2,15 @@
 
 QuestionMultipleChoice::QuestionMultipleChoice()
 {
-	m_question = "None";
-	for (int i = 0; i < 5; i++)
+	m_questionText = "None";
+	for (int i = 0; i < m_numberOfAnswers; i++)
 	{
 		m_answers[i] = "None";
 	}
 }
 
-QuestionMultipleChoice::QuestionMultipleChoice(std::string question, std::array<std::string, 5> answers)
-	: m_question(question),
+QuestionMultipleChoice::QuestionMultipleChoice(const std::string& questionText, std::array<std::string, m_numberOfAnswers> answers)
+	: m_questionText(questionText),
 	m_answers(answers)
 {
 
@@ -26,22 +26,22 @@ QuestionMultipleChoice::QuestionMultipleChoice(QuestionMultipleChoice&& object)
 	*this = std::move(object);
 }
 
-const std::string& QuestionMultipleChoice::GetQuestion()
+const std::string& QuestionMultipleChoice::GetQuestionText() const
 {
-	return m_question;
+	return m_questionText;
 }
 
-const std::array<std::string, 5>& QuestionMultipleChoice::GetAnswers()
+const std::array<std::string, m_numberOfAnswers>& QuestionMultipleChoice::GetAnswers() const
 {
 	return m_answers;
 }
 
 bool QuestionMultipleChoice::operator==(const QuestionMultipleChoice& object)
 {
-	if (this->m_question != object.m_question)
+	if (this->m_questionText != object.m_questionText)
 		return false;
 
-	for (int index = 0; index < 5; index++)
+	for (int index = 0; index < m_numberOfAnswers; index++)
 		if (this->m_answers[index] != object.m_answers[index])
 			return false;
 
@@ -50,8 +50,8 @@ bool QuestionMultipleChoice::operator==(const QuestionMultipleChoice& object)
 
 QuestionMultipleChoice& QuestionMultipleChoice::operator=(const QuestionMultipleChoice& object)
 {
-	m_question = object.m_question;
-	for (int i = 0; i < 5; i++)
+	m_questionText = object.m_questionText;
+	for (int i = 0; i < m_numberOfAnswers; i++)
 	{
 		m_answers[i] = object.m_answers[i];
 	}
@@ -61,8 +61,8 @@ QuestionMultipleChoice& QuestionMultipleChoice::operator=(const QuestionMultiple
 
 QuestionMultipleChoice& QuestionMultipleChoice::operator=(QuestionMultipleChoice&& object)
 {
-	m_question = object.m_question;
-	for (int i = 0; i < 5; i++)
+	m_questionText = object.m_questionText;
+	for (int i = 0; i < m_numberOfAnswers; i++)
 	{
 		m_answers[i] = object.m_answers[i];
 	}
@@ -74,9 +74,9 @@ QuestionMultipleChoice& QuestionMultipleChoice::operator=(QuestionMultipleChoice
 
 std::ostream& operator<<(std::ostream& out, const QuestionMultipleChoice& qmc)
 {
-	out << qmc.m_question << std::endl;
+	out << qmc.m_questionText << std::endl;
 
-	for (int index = 1; index < 5; index++)
+	for (int index = 1; index < m_numberOfAnswers; index++)
 		out << qmc.m_answers[index] << std::endl;
 
 	return out;

@@ -18,10 +18,10 @@ public:
 
 public:
 	void SetScore(uint16_t score);
-	const uint16_t GetScore() const;
+	uint16_t GetScore() const;
 
 	void SetUsername(const std::string& username);
-	const std::string GetUsername() const;
+	const std::string& GetUsername() const;
 
 	std::vector<Coords> GetTerritory() const;
 	

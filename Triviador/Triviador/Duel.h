@@ -3,12 +3,12 @@
 class Duel
 {
 public:
-	Duel(Player player1, Player player2);
+	Duel(Player& player1, Player& player2);
 
 	void SetWinner(Player& winner);
-	const Player GetWinner() const;
+	const Player& GetWinner() const;
 
-	void TransferTerritory(Player& winner, Player& loser);
+	void TransferTerritoryFromPlayer2ToPlayer1(Player& winner, Player& loser);
 	
 private:
 	Player m_player1;

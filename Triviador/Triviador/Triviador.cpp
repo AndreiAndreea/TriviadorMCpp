@@ -11,23 +11,29 @@ Triviador::Triviador(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	ui.label_3->hide();
-	ui.label_4->hide();
-	ui.pushButton_2->hide();
-	ui.lineEdit->hide();
-	ui.mc_ans1->hide();
-	ui.mc_ans2->hide();
-	ui.mc_ans3->hide();
-	ui.mc_ans4->hide();
+
+	ui.titleLabel->setText(" ");
+
+	ui.errorLabel->hide();
+	ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
+	ui.submitAnswerButton->hide();
+	ui.inputAnswerLineEdit->hide();
+
+	ui.multipleChoiceAnswer1Button->hide();
+	ui.multipleChoiceAnswer2Button->hide();
+	ui.multipleChoiceAnswer3Button->hide();
+	ui.multipleChoiceAnswer4Button->hide();
+
 	ui.checkAnswerSelection->hide();
-	ui.mc_answerVerdict->hide();
-	ui.mc_ans1->setChecked(false);
-	answerHasBeenSelected = false;
+	ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
+	ui.multipleChoiceAnswer1Button->setChecked(false);
+
+	m_answerHasBeenSelected = false;
 }
 
 Triviador::~Triviador()
 {}
-void Triviador::DisplaySCQuestionsInFile(QString fileName)
+void Triviador::SaveSingleChoiceQuestionsToFile(const QString fileName)
 {
 	QFile file(QString("%1").arg(fileName));
 
@@ -35,14 +41,14 @@ void Triviador::DisplaySCQuestionsInFile(QString fileName)
 	{
 		QTextStream ostream(&file);
 
-		for (auto& question : m_questions.GetQuestionsSC())
-			ostream << QString::fromStdString(question.GetQuestion()) << "\n" << question.GetAnswer() << "\n\n";
+		for (const auto& question : m_questions.GetSingleChoiceQuestions())
+			ostream << QString::fromStdString(question.GetQuestionText()) << "\n" << question.GetAnswer() << "\n\n";
 
 		file.close();
 	}
 }
 
-void Triviador::DisplayMCQuestionsInFile(QString fileName)
+void Triviador::SaveMultipleChoiceQuestionsToFile(const QString fileName)
 {
 	QFile file(QString("%1").arg(fileName));
 
@@ -50,11 +56,11 @@ void Triviador::DisplayMCQuestionsInFile(QString fileName)
 	{
 		QTextStream ostream(&file);
 
-		for (auto& question : m_questions.GetQuestionsMC())
+		for (const auto& question : m_questions.GetMultipleChoiceQuestions())
 		{
-			ostream << QString::fromStdString(question.GetQuestion()) << "\n";
+			ostream << QString::fromStdString(question.GetQuestionText()) << "\n";
 
-			for (auto& answer : question.GetAnswers())
+			for (const auto& answer : question.GetAnswers())
 				ostream << QString::fromStdString(answer) << "\n";
 
 			ostream << "\n";
@@ -63,104 +69,103 @@ void Triviador::DisplayMCQuestionsInFile(QString fileName)
 	}
 }
 
-void Triviador::CheckMultipleChoiceAnswer(QString chosenAnswer, bool& answer)
+void Triviador::CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& isCorrectAnswer)
 {
 	std::string correctAnswer = chosenAnswer.toStdString();
 	QString text = QString::fromStdString(m_currentAnswer);
 	if (correctAnswer == m_currentAnswer)
 	{
-		if (!answerHasBeenSelected)
-			ui.mc_answerVerdict->setText("The answer is correct!");
+		if (!m_answerHasBeenSelected)
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("The answer is correct!");
 		else
-			ui.mc_answerVerdict->setText("");
-		answer = 1;
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("");
+		isCorrectAnswer = 1;
 	}
 	else
 	{
-		if (!answerHasBeenSelected)
-			ui.mc_answerVerdict->setText("The correct answer is: " + text);
+		if (!m_answerHasBeenSelected)
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("The correct answer is: " + text);
 		else
-			ui.mc_answerVerdict->setText("");
-		answer = 0;
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("");
+		isCorrectAnswer = 0;
 	}
-	ui.mc_answerVerdict->show();
+	ui.displayAnswerVerdictMultipleChoiceQuestionLabel->show();
 }
 
-void Triviador::on_pushButton_clicked()
+void Triviador::on_getRandomQuestionButton_released()
 {
-	if (ui.pushButton->isEnabled())
+	if (ui.getRandomQuestionButton->isEnabled())
 	{
 		srand(time(0));
-		int randomval = rand() % 2;
-		if (randomval == 1)
-		{
-			ui.lineEdit->clear();
-			ui.label_4->clear();
 
-			ui.pushButton_2->show();
-			ui.lineEdit->show();
-			ui.label_2->hide();
+		uint8_t randomValue = rand() % 2;
+
+		if (randomValue == 1)
+		{
+			ui.inputAnswerLineEdit->clear();
+			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->clear();
+
+			ui.submitAnswerButton->show();
+			ui.inputAnswerLineEdit->show();
 
 			//radio buttons from mc choice are hidden
-			ui.mc_ans1->hide();
-			ui.mc_ans2->hide();
-			ui.mc_ans3->hide();
-			ui.mc_ans4->hide();
-			ui.mc_answerVerdict->hide();
+			ui.multipleChoiceAnswer1Button->hide();
+			ui.multipleChoiceAnswer2Button->hide();
+			ui.multipleChoiceAnswer3Button->hide();
+			ui.multipleChoiceAnswer4Button->hide();
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 			ui.checkAnswerSelection->hide();
-			QuestionSingleChoice SCQuestion = m_questions.GetRandomSCQuestion();
+			QuestionSingleChoice SCQuestion = m_questions.GetRandomSingleChoiceQuestion();
 			m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
-			QString scq = QString::fromStdString(SCQuestion.GetQuestion());
-			ui.label->setText(scq);
+			QString scq = QString::fromStdString(SCQuestion.GetQuestionText());
+			ui.titleLabel->setText(scq);
 
 			update();
 		}
 		else
 		{
-			ui.pushButton_2->hide();
-			ui.lineEdit->hide();
-			ui.label_2->show();
-			ui.label_3->hide();
-			ui.label_4->hide();
-			ui.mc_answerVerdict->hide();
+			ui.submitAnswerButton->hide();
+			ui.inputAnswerLineEdit->hide();
+			ui.errorLabel->hide();
+			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 
-			ui.mc_ans1->show();
-			ui.mc_ans2->show();
-			ui.mc_ans3->show();
-			ui.mc_ans4->show();
+			ui.multipleChoiceAnswer1Button->show();
+			ui.multipleChoiceAnswer2Button->show();
+			ui.multipleChoiceAnswer3Button->show();
+			ui.multipleChoiceAnswer4Button->show();
 			ui.checkAnswerSelection->setText("");
 			ui.checkAnswerSelection->show();
-			answerHasBeenSelected = false;
-			QuestionMultipleChoice MCQuestion = m_questions.GetRandomMCQuestion();
+			m_answerHasBeenSelected = false;
+			QuestionMultipleChoice MCQuestion = m_questions.GetRandomMultipleChoiceQuestion();
 			m_currentAnswer = MCQuestion.GetAnswers()[0];
 
-			QString mcq = QString::fromStdString(MCQuestion.GetQuestion());
-			ui.label->setText(mcq);
+			QString mcq = QString::fromStdString(MCQuestion.GetQuestionText());
+			ui.titleLabel->setText(mcq);
 
 			std::stringstream ss;
-			ui.mc_ans1->setStyleSheet("background-color:light;");
-			ui.mc_ans2->setStyleSheet("background-color:light;");
-			ui.mc_ans3->setStyleSheet("background-color:light;");
-			ui.mc_ans4->setStyleSheet("background-color:light;");
-			ui.mc_ans1->setText(QString::fromStdString(MCQuestion.GetAnswers()[1]));
-			ui.mc_ans2->setText(QString::fromStdString(MCQuestion.GetAnswers()[2]));
-			ui.mc_ans3->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
-			ui.mc_ans4->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
+			ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:light;");
+			ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:light;");
+			ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:light;");
+			ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:light;");
+			ui.multipleChoiceAnswer1Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[1]));
+			ui.multipleChoiceAnswer2Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[2]));
+			ui.multipleChoiceAnswer3Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
+			ui.multipleChoiceAnswer4Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
 			QString answers = QString::fromStdString(ss.str());
-			ui.label_2->setText(answers);
 
 			update();
 		}
 	}
 }
 
-void Triviador::on_pushButton_2_clicked()
+void Triviador::on_submitAnswerButton_released()
 {
-	ui.label_3->hide();
-	if (ui.pushButton_2->isEnabled())
+	ui.errorLabel->hide();
+	if (ui.submitAnswerButton->isEnabled())
 	{
-		QString text = ui.lineEdit->text();
+		QString text = ui.inputAnswerLineEdit->text();
 
 		int ok = 1;
 		for (int c = 0; c < text.length() && ok == 1; c++)
@@ -182,115 +187,122 @@ void Triviador::on_pushButton_2_clicked()
 				ss << "Raspunsul este corect!";
 
 			QString displayAnswer = QString::fromStdString(ss.str());
-			ui.label_4->setText(displayAnswer);
-			ui.label_4->show();
+			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->setText(displayAnswer);
+			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->show();
 		}
 		else
 		{
-			ui.label_3->show();
-			ui.label_4->hide();
+			ui.errorLabel->show();
+			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
 		}
 	}
 }
 
-void Triviador::on_mc_ans1_released()
+void Triviador::on_multipleChoiceAnswer1Button_released()
 {
-	if (ui.mc_ans1->isEnabled())
+	bool isCorrectAnswer = false;
+
+	if (ui.multipleChoiceAnswer1Button->isEnabled())
 	{
-		bool answer;
-		CheckMultipleChoiceAnswer(ui.mc_ans1->text(), answer);
-		if (answerHasBeenSelected == false)
+		CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer1Button->text(), isCorrectAnswer);
+
+		if (m_answerHasBeenSelected == false)
 		{
-			if (answer)
+			if (isCorrectAnswer)
 			{
-				ui.mc_ans1->setStyleSheet("background-color:green;");
+				ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:green;");
 			}
 			else
 			{
-				ui.mc_ans1->setStyleSheet("background-color:red;");
+				ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:red;");
 			}
-			answerHasBeenSelected = true;
-		}
-		else
-			ui.checkAnswerSelection->setText("You have already chosen an answer!");
-	}
-
-}
-
-void Triviador::on_mc_ans2_released()
-{
-	bool answer;
-	if (ui.mc_ans2->isEnabled())
-	{
-		CheckMultipleChoiceAnswer(ui.mc_ans2->text(), answer);
-		if (answerHasBeenSelected == false)
-		{
-			if (answer)
-			{
-				ui.mc_ans2->setStyleSheet("background-color:green;");
-			}
-			else
-			{
-				ui.mc_ans2->setStyleSheet("background-color:red;");
-			}
-			answerHasBeenSelected = true;
+			m_answerHasBeenSelected = true;
 		}
 		else
 			ui.checkAnswerSelection->setText("You have already chosen an answer!");
 	}
 }
 
-void Triviador::on_mc_ans3_released()
+void Triviador::on_multipleChoiceAnswer2Button_released()
 {
-	bool answer = 0;
-	if (ui.mc_ans3->isEnabled())
+	bool isCorrectAnswer = false;
+
+	if (ui.multipleChoiceAnswer2Button->isEnabled())
 	{
-		CheckMultipleChoiceAnswer(ui.mc_ans3->text(), answer);
-		if (answerHasBeenSelected == false)
+		CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer2Button->text(), isCorrectAnswer);
+
+		if (m_answerHasBeenSelected == false)
 		{
-			if (answer)
+			if (isCorrectAnswer)
 			{
-				ui.mc_ans3->setStyleSheet("background-color:green;");
+				ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:green;");
 			}
 			else
 			{
-				ui.mc_ans3->setStyleSheet("background-color:red;");
+				ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:red;");
 			}
-			answerHasBeenSelected = true;
+			m_answerHasBeenSelected = true;
 		}
 		else
 			ui.checkAnswerSelection->setText("You have already chosen an answer!");
 	}
 }
 
-void Triviador::on_mc_ans4_released()
+void Triviador::on_multipleChoiceAnswer3Button_released()
 {
-	bool answer;
-	if (ui.mc_ans4->isEnabled())
+	bool isCorrectAnswer = false;
+
+	if (ui.multipleChoiceAnswer3Button->isEnabled())
 	{
-		CheckMultipleChoiceAnswer(ui.mc_ans4->text(), answer);
-		if (answerHasBeenSelected == false)
+		CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer3Button->text(), isCorrectAnswer);
+
+		if (m_answerHasBeenSelected == false)
 		{
-			if (answer)
+			if (isCorrectAnswer)
 			{
-				ui.mc_ans4->setStyleSheet("background-color:green;");
+				ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:green;");
 			}
 			else
 			{
-				ui.mc_ans4->setStyleSheet("background-color:red;");
+				ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:red;");
 			}
-			answerHasBeenSelected = true;
+			m_answerHasBeenSelected = true;
 		}
 		else
 			ui.checkAnswerSelection->setText("You have already chosen an answer!");
 	}
 }
 
-void Triviador::on_checkToDisplayQuestionsInFile_released()
+void Triviador::on_multipleChoiceAnswer4Button_released()
 {
-	if (ui.checkToDisplayQuestionsInFile->isChecked())
+	bool isCorrectAnswer = false;
+
+	if (ui.multipleChoiceAnswer4Button->isEnabled())
 	{
-		DisplaySCQuestionsInFile("outputSCQuestions.txt");
-		DisplayMCQuestionsInFile("outputMCQuestions.txt");
+		CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer4Button->text(), isCorrectAnswer);
+
+		if (m_answerHasBeenSelected == false)
+		{
+			if (isCorrectAnswer)
+			{
+				ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:green;");
+			}
+			else
+			{
+				ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:red;");
+			}
+			m_answerHasBeenSelected = true;
+		}
+		else
+			ui.checkAnswerSelection->setText("You have already chosen an answer!");
+	}
+}
+
+void Triviador::on_saveQuestionsInFileButton_released()
+{
+	if (ui.saveQuestionsInFileButton->isChecked())
+	{
+		SaveSingleChoiceQuestionsToFile("outputSCQuestions.txt");
+		SaveMultipleChoiceQuestionsToFile("outputMCQuestions.txt");
 	}
 }

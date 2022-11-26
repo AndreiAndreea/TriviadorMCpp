@@ -7,33 +7,38 @@
 #include <cstdlib>
 #include <ctime>
 
+
 class Questions
 {
 public:
 	Questions();
 
-	std::vector<QuestionSingleChoice> GetQuestionsSC() const;
-	std::vector<QuestionMultipleChoice> GetQuestionsMC() const;
+	std::vector<QuestionSingleChoice> GetSingleChoiceQuestions() const;
+	std::vector<QuestionMultipleChoice> GetMultipleChoiceQuestions() const;
 
 public:
-	void RemoveSCQuestionByIndex(const uint8_t& index);
-	void RemoveMCQuestionByIndex(const uint8_t& index);
+	void RemoveSingleChoiceQuestionByIndex(const uint8_t& index);
+	void RemoveMultipleChoiceQuestionByIndex(const uint8_t& index);
 
-	void RemoveSCQuestionByObject(QuestionSingleChoice& object);
-	void RemoveMCQuestionByObject(QuestionMultipleChoice& object);
+	void RemoveSingleChoiceQuestionByObject(QuestionSingleChoice& object);
+	void RemoveMultipleChoiceQuestionByObject(QuestionMultipleChoice& object);
 
 	uint8_t GenerateRandomNumber(const uint8_t& size);
 
-	const QuestionSingleChoice& GetRandomSCQuestion();
-	const QuestionMultipleChoice& GetRandomMCQuestion();
+	const QuestionSingleChoice& GetRandomSingleChoiceQuestion();
+	const QuestionMultipleChoice& GetRandomMultipleChoiceQuestion();
 
 private: 
-	void GenerateSCQuestions();
-	void GenerateMCQuestions();
+	std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt";
+	std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt";
 
 private:
-	std::vector<QuestionSingleChoice> m_questionsSC;
-	std::vector<QuestionMultipleChoice> m_questionsMC;
+	void GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions);
+	void GetMultipleChoiceQuestionsFromFile(const std::string& filePathMultipleChoiceQuestions);
+
+private:
+	std::vector<QuestionSingleChoice> m_singleChoiceQuestions;
+	std::vector<QuestionMultipleChoice> m_multipleChoiceQuestions;
 	
 
 };
