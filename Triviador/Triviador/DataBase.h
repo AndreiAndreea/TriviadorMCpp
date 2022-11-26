@@ -6,52 +6,66 @@
 #include <sqlite_orm/sqlite_orm.h>
 
 #include "Utils.h"
+
 #include "Player.h"
+#include "Questions.h"
+
+#include <fstream>
 
 namespace sql = sqlite_orm;
 
-using Coords = std::pair<uint8_t, uint8_t>;
+const std::string dbFile = "triviador.sqlite";
 
 struct User
 {
-	int id;
+	uint32_t id;
+
 	std::string username;
 	std::string password;
+	std::string email;
+
 	std::string accountCreationDate;
+
 	std::string score;
-	std::string playedGames, wonGames;
+	std::string playedGames;
+	std::string wonGames;
 };
 
 inline auto createStorage(const std::string& filename)
 {
 	return sql::make_storage(
-		//returneaza un obiect specific acestei biblioteci
-		//- obiectul este un template -> se va crea de fiecare data un obiect special
 		filename,
 		sql::make_table(
 			"Users",
 			sql::make_column("id", &User::id, sql::autoincrement(), sql::primary_key()),
-			sql::make_column("name", &User::username),
+			sql::make_column("username", &User::username),
 			sql::make_column("password", &User::password),
+			sql::make_column("email", &User::email),
+			sql::make_column("accountCreationDate", &User::accountCreationDate),
 			sql::make_column("score", &User::score),
 			sql::make_column("playedGames", &User::playedGames),
-			sql::make_column("wonGames", &User::wonGames),
-			sql::make_column("accountCreationDate", &User::accountCreationDate)
+			sql::make_column("wonGames", &User::wonGames)
 		)
 	);
 }
 
 using Storage = decltype(createStorage(""));
 
-void populateStorage(Storage& storage);
-
-class DataBase
+class DatabaseStorage
 {
+
 public:
-	DataBase(Storage& storage);
+	DatabaseStorage(const std::string& filePathForSingleChoiceQuestion, const std::string& filePathForMultipeChoiceQuestion);
+
+public:
+	bool Initialize();
 
 private:
-	std::string m_IP;
+	void PopulateDatabaseWithQuestions();
 
-	Storage& m_db;
+private:
+	Storage m_db = createStorage(dbFile);
+
+	std::string m_filePathForSingleChoiceQuestion;
+	std::string m_filePathForMultipeChoiceQuestion;
 };

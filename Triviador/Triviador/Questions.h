@@ -13,8 +13,8 @@ class Questions
 public:
 	Questions();
 
-	std::vector<QuestionSingleChoice> GetSingleChoiceQuestions() const;
-	std::vector<QuestionMultipleChoice> GetMultipleChoiceQuestions() const;
+	std::vector<QuestionSingleChoice> GetSingleChoiceQuestionsVector() const;
+	std::vector<QuestionMultipleChoice> GetMultipleChoiceQuestionsVector() const;
 
 public:
 	void RemoveSingleChoiceQuestionByIndex(const uint8_t& index);
@@ -29,10 +29,10 @@ public:
 	const QuestionMultipleChoice& GetRandomMultipleChoiceQuestion();
 
 private: 
-	std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt";
-	std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt";
+	//std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt";
+	//std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt";
 
-private:
+public:
 	void GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions);
 	void GetMultipleChoiceQuestionsFromFile(const std::string& filePathMultipleChoiceQuestions);
 

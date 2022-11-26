@@ -3,6 +3,9 @@
 #include <QtWidgets/QMainWindow>
 #include<array>
 #include "ui_Triviador.h"
+#include "DataBase.h"
+
+//need to be deleted in future
 #include "Questions.h"
 
 class Triviador : public QMainWindow

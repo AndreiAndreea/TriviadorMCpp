@@ -7,10 +7,18 @@
 #include <ctime>
 #include <cstdlib>
 
+#include "DataBase.h"
+
 Triviador::Triviador(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+
+	DatabaseStorage storage("SingleChoiceQuestions.txt", "MultipleChoiceQuestions.txt");
+	if (!storage.Initialize())
+	{
+		std::cout << "Failed to initialize the database!";
+	}
 
 	ui.titleLabel->setText(" ");
 
@@ -41,7 +49,7 @@ void Triviador::SaveSingleChoiceQuestionsToFile(const QString fileName)
 	{
 		QTextStream ostream(&file);
 
-		for (const auto& question : m_questions.GetSingleChoiceQuestions())
+		for (const auto& question : m_questions.GetSingleChoiceQuestionsVector())
 			ostream << QString::fromStdString(question.GetQuestionText()) << "\n" << question.GetAnswer() << "\n\n";
 
 		file.close();
@@ -56,7 +64,7 @@ void Triviador::SaveMultipleChoiceQuestionsToFile(const QString fileName)
 	{
 		QTextStream ostream(&file);
 
-		for (const auto& question : m_questions.GetMultipleChoiceQuestions())
+		for (const auto& question : m_questions.GetMultipleChoiceQuestionsVector())
 		{
 			ostream << QString::fromStdString(question.GetQuestionText()) << "\n";
 

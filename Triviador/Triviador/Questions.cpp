@@ -2,9 +2,9 @@
 
 Questions::Questions()
 {
-	GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions);
+	//GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions);
 
-	GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions);
+	//GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions);
 }
 
 void Questions::GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions)
@@ -52,12 +52,12 @@ void Questions::GetMultipleChoiceQuestionsFromFile(const std::string& filePathMu
 	inputStream.close();
 }
 
-std::vector<QuestionSingleChoice> Questions::GetSingleChoiceQuestions() const
+std::vector<QuestionSingleChoice> Questions::GetSingleChoiceQuestionsVector() const
 {
 	return m_singleChoiceQuestions;
 }
 
-std::vector<QuestionMultipleChoice> Questions::GetMultipleChoiceQuestions() const
+std::vector<QuestionMultipleChoice> Questions::GetMultipleChoiceQuestionsVector() const
 {
 	return m_multipleChoiceQuestions;
 }
