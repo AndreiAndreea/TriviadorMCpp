@@ -31,6 +31,14 @@ struct User
 	std::string wonGames;
 };
 
+struct SingleChoiceQuestionWrapper
+{
+	uint32_t id;
+
+	std::string questionText;
+	uint16_t correctAnswer;
+};
+
 inline auto createStorage(const std::string& filename)
 {
 	return sql::make_storage(
@@ -45,6 +53,12 @@ inline auto createStorage(const std::string& filename)
 			sql::make_column("score", &User::score),
 			sql::make_column("playedGames", &User::playedGames),
 			sql::make_column("wonGames", &User::wonGames)
+		),
+		sql::make_table(
+			"SingleChoiceQuestions",
+			sql::make_column("id", &SingleChoiceQuestionWrapper::id, sql::autoincrement(), sql::primary_key()),
+			sql::make_column("title", &SingleChoiceQuestionWrapper::questionText),
+			sql::make_column("correct_answer", &SingleChoiceQuestionWrapper::correctAnswer)
 		)
 	);
 }
@@ -68,4 +82,6 @@ private:
 
 	std::string m_filePathForSingleChoiceQuestion;
 	std::string m_filePathForMultipeChoiceQuestion;
+
+	Questions m_questions;
 };
