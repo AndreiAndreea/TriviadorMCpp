@@ -3,12 +3,20 @@
 Player::Player()
 {
 	m_username = "null";
+	m_password = "null";
+	m_email = "null";
+	m_accountCreationDate = "null";
+
+	m_totalScore = "0";
 	m_currentGameScore = 0;
+
+	m_playedGames = "0";
+	m_wonGames = "0";
 }
 
-Player::Player(const std::string& username, uint16_t score)
+Player::Player(const std::string& username, uint16_t currentGameScore)
 	:m_username(username),
-	m_currentGameScore(score)
+	m_currentGameScore(currentGameScore)
 {
 
 }

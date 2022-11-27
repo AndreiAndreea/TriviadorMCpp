@@ -8,7 +8,7 @@ class Player
 {
 public:
 	Player();
-	Player(const std::string& username, uint16_t score);
+	Player(const std::string& username, uint16_t currentGameScore);
 
 	Player(const Player& player); //copy constructor
 	Player(Player&& player); //move constructor

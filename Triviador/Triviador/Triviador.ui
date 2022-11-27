@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
+    <width>857</width>
     <height>452</height>
    </rect>
   </property>
@@ -199,8 +199,8 @@ Answer</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>860</width>
-     <height>22</height>
+     <width>857</width>
+     <height>30</height>
     </rect>
    </property>
   </widget>
