@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>605</width>
+    <width>603</width>
     <height>422</height>
    </rect>
   </property>
@@ -210,6 +210,58 @@
    </property>
    <property name="text">
     <string>display password</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="submitDataPushButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>280</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Submit Data</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="submitDataErrorLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>320</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Error: The data entered is not valid!</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="incompleteFieldsErrorLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>340</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>All fields must be completed!</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="invalidDataErrorLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>360</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Check that the entered data is valid!</string>
    </property>
   </widget>
  </widget>
