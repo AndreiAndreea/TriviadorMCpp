@@ -1,4 +1,5 @@
 #include "LoginRegister.h"
+#include <regex>
 
 LoginRegister::LoginRegister()
 {
@@ -80,6 +81,12 @@ std::string LoginRegister::GetCurrentDate()
 	currentDate += std::to_string(now->tm_mday);
 
 	return currentDate;
+}
+
+bool CheckEmail(const std::string& email)
+{
+	std::regex pattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
+	return regex_match(email, pattern);
 }
 
 std::vector<Player> LoginRegister::GetPlayers()
@@ -180,23 +187,33 @@ void LoginRegister::on_emailPushButton_released()
 		QString text = ui.emailLineEdit->text();
 		std::string email = text.toStdString();
 
-		//check if the email is unique
-		bool isUniqueEmail = true;
-
-		for (const auto& player : m_players)
-			if (email == player.GetEmail())
-				bool isUniqueEmail = false;
-
-		if (isUniqueEmail)
+		//check email valid format
+		if (CheckEmail(email))
 		{
-			m_currentPlayer.SetEmail(email);
-			newEmailIsValid = true;
+			//check if the email is unique
+			bool isUniqueEmail = true;
+
+			for (const auto& player : m_players)
+				if (email == player.GetEmail())
+					bool isUniqueEmail = false;
+
+			if (isUniqueEmail)
+			{
+				m_currentPlayer.SetEmail(email);
+				newEmailIsValid = true;
+			}
+			else
+			{
+				ui.emailErrorLabel->show();
+				newEmailIsValid = false;
+			}
 		}
 		else
 		{
 			ui.emailErrorLabel->show();
 			newEmailIsValid = false;
 		}
+		
 	}
 }
 
