@@ -29,8 +29,8 @@ public:
 	const QuestionMultipleChoice& GetRandomMultipleChoiceQuestion();
 
 private: 
-	//std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt";
-	//std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt";
+	std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt";
+	std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt";
 
 public:
 	void GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions);

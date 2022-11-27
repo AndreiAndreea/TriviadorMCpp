@@ -1,6 +1,8 @@
 #include "Triviador.h"
 #include "Questions.h"
 
+#include "LoginRegister.h"
+
 #include<QDebug>
 
 #include <sstream>
@@ -37,6 +39,9 @@ Triviador::Triviador(QWidget* parent)
 	ui.multipleChoiceAnswer1Button->setChecked(false);
 
 	m_answerHasBeenSelected = false;
+
+	LoginRegister* loginRegisterWindow = new LoginRegister();
+	loginRegisterWindow->show();
 }
 
 Triviador::~Triviador()

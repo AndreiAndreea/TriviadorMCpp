@@ -3,12 +3,12 @@
 Player::Player()
 {
 	m_username = "null";
-	m_score = 0;
+	m_currentGameScore = 0;
 }
 
 Player::Player(const std::string& username, uint16_t score)
 	:m_username(username),
-	m_score(score)
+	m_currentGameScore(score)
 {
 
 }
@@ -23,14 +23,14 @@ Player::Player(Player&& player)
 	*this = std::move(player);
 }
 
-void Player::SetScore(uint16_t score)
+void Player::SetCurrentGameScore(uint16_t score)
 {
-	m_score = score;
+	m_currentGameScore = score;
 }
 
-uint16_t Player::GetScore() const
+uint16_t Player::GetCurrentGameScore() const
 {
-	return m_score;
+	return m_currentGameScore;
 }
 
 void Player::SetUsername(const std::string& username)
@@ -43,6 +43,66 @@ const std::string& Player::GetUsername() const
 	return m_username;
 }
 
+void Player::SetPassword(const std::string& password)
+{
+	m_password = password;
+}
+
+const std::string& Player::GetPassword() const
+{
+	return m_password;
+}
+
+void Player::SetEmail(const std::string& email)
+{
+	m_email = email;
+}
+
+const std::string& Player::GetEmail() const
+{
+	return m_email;
+}
+
+void Player::SetAccountCreationDate(const std::string& accountCreationDate)
+{
+	m_accountCreationDate = accountCreationDate;
+}
+
+const std::string& Player::GetAccountCreationDate() const
+{
+	return m_accountCreationDate;
+}
+
+void Player::SetTotalScore(const std::string& totalScore)
+{
+	m_totalScore = totalScore;
+}
+
+const std::string& Player::GetTotalScore() const
+{
+	return m_totalScore;
+}
+
+void Player::SetPlayedGames(const std::string& playedGames)
+{
+	m_playedGames = playedGames;
+}
+
+const std::string& Player::GetPlayedGames() const
+{
+	return m_playedGames;
+}
+
+void Player::SetWonGames(const std::string& wonGames)
+{
+	m_wonGames = wonGames;
+}
+
+const std::string& Player::GetWonGames() const
+{
+	return m_wonGames;
+}
+
 std::vector<std::pair<uint8_t, uint8_t>> Player::GetTerritory() const
 {
 	return m_territory;
@@ -51,9 +111,9 @@ std::vector<std::pair<uint8_t, uint8_t>> Player::GetTerritory() const
 void Player::AddRegion(Coords coords)
 {
 	if (m_territory.size() == 0)
-		m_score += 300;
+		m_currentGameScore += 300;
 	else
-		m_score += 100;
+		m_currentGameScore += 100;
 
 	m_territory.push_back(coords);
 }
@@ -68,7 +128,7 @@ void Player::RemoveLostRegion(Coords coords)
 
 		if (region == coords)
 		{
-			m_score -= 100;
+			m_currentGameScore -= 100;
 			
 			if(m_territory.size() > 1)
 				m_territory.erase(m_territory.begin() + counter - 1);
@@ -111,7 +171,7 @@ bool Player::IsDead()
 Player& Player::operator=(const Player& player)
 {
 	m_username = player.m_username;
-	m_score = player.m_score;
+	m_currentGameScore = player.m_currentGameScore;
 	m_territory = player.m_territory;
 	m_lives = player.m_lives;
 
@@ -121,7 +181,7 @@ Player& Player::operator=(const Player& player)
 Player& Player::operator=(Player&& player)
 {
 	m_username = player.m_username;
-	m_score = player.m_score;
+	m_currentGameScore = player.m_currentGameScore;
 	m_territory = player.m_territory;
 	m_lives = player.m_lives;
 
@@ -133,5 +193,5 @@ Player& Player::operator=(Player&& player)
 std::ostream& operator<<(std::ostream& os, const Player& player)
 {
 	return os << player.m_username << std::endl
-		<< player.m_score << std::endl;
+		<< player.m_currentGameScore << std::endl;
 }

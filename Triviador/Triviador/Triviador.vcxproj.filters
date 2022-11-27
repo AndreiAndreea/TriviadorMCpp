@@ -21,14 +21,14 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{b970ec3d-d204-4b99-89f2-be04eced4436}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Triviador.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="Triviador.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtMoc Include="Triviador.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -62,6 +62,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,5 +101,18 @@
     <Text Include="SingleChoiceQuestions.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="Triviador.ui">
+      <Filter>UI</Filter>
+    </QtUic>
+    <QtUic Include="LoginRegister.ui">
+      <Filter>UI</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="LoginRegister.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

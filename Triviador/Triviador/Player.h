@@ -17,14 +17,33 @@ public:
 	using Coords = std::pair<uint8_t, uint8_t>;
 
 public:
-	void SetScore(uint16_t score);
-	uint16_t GetScore() const;
-
 	void SetUsername(const std::string& username);
 	const std::string& GetUsername() const;
 
-	std::vector<Coords> GetTerritory() const;
+	void SetPassword(const std::string& password);
+	const std::string& GetPassword() const;
+
+	void SetEmail(const std::string& email);
+	const std::string& GetEmail() const;	
 	
+	void SetAccountCreationDate(const std::string& accountCreationDate);
+	const std::string& GetAccountCreationDate() const;
+
+	void SetTotalScore(const std::string& totalScore);
+	const std::string& GetTotalScore() const;
+
+	void SetPlayedGames(const std::string& playedGames);
+	const std::string& GetPlayedGames() const;
+
+	void SetWonGames(const std::string& wonGames);
+	const std::string& GetWonGames() const;
+
+	void SetCurrentGameScore(uint16_t currentGameScore);
+	uint16_t GetCurrentGameScore() const;
+
+	std::vector<Coords> GetTerritory() const;
+
+public:
 	void AddRegion(Coords coords);
 	void RemoveLostRegion(Coords coords);
 
@@ -43,7 +62,17 @@ public:
 
 private:
 	std::string m_username;
-	uint16_t m_score;
+	std::string m_password;
+	std::string m_email;
+	std::string m_accountCreationDate;
+
+	std::string m_totalScore;
+	uint16_t m_currentGameScore;
+
+	std::string m_playedGames;
+	std::string m_wonGames;
+
 	std::vector<Coords> m_territory;
+
 	uint8_t m_lives = 3;
 };

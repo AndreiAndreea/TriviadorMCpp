@@ -2,9 +2,9 @@
 
 Questions::Questions()
 {
-	//GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions);
+	GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions);
 
-	//GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions);
+	GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions);
 }
 
 void Questions::GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions)
