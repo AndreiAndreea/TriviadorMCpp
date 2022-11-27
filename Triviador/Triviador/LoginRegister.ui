@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="signInButton">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>40</y>
+     <x>90</x>
+     <y>180</y>
      <width>141</width>
      <height>31</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="signUpButton">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>40</y>
+     <x>380</x>
+     <y>180</y>
      <width>141</width>
      <height>31</height>
     </rect>
@@ -42,239 +42,26 @@
   <widget class="QLabel" name="greetingLabel">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>15</y>
-     <width>351</width>
-     <height>21</height>
+     <x>130</x>
+     <y>70</y>
+     <width>361</width>
+     <height>81</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe MDL2 Assets</family>
+     <pointsize>20</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Enjoy Triviador today! Create or sign in to your account!</string>
    </property>
-  </widget>
-  <widget class="QLabel" name="signInLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>75</y>
-     <width>381</width>
-     <height>21</height>
-    </rect>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
-   <property name="text">
-    <string>We're happy to see you again! Please enter your login data:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="singUpLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>100</y>
-     <width>221</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Let's get started with your account!</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="usernameLineEdit">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>150</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="usernameLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>130</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enter username:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="passwordLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>180</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enter password:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="passwordLineEdit">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>200</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="emailLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>230</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enter email:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="emailLineEdit">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>250</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="usernamePushButton">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>143</y>
-     <width>81</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>ok</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="passwordPushButton">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>193</y>
-     <width>81</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>ok</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="emailPushButton">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>243</y>
-     <width>81</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>ok</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="usernameErrorLabel">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>145</y>
-     <width>211</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Error: The username is not unique!</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="displayPasswordPushButton">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>193</y>
-     <width>131</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>display password</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="submitDataPushButton">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>280</y>
-     <width>101</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Submit Data</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="submitDataErrorLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>315</y>
-     <width>221</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Error: The data entered is not valid!</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="incompleteFieldsErrorLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>336</y>
-     <width>211</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>All fields must be completed!</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="invalidDataErrorLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>360</y>
-     <width>231</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Check that the entered data is valid!</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="emailErrorLabel">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>250</y>
-     <width>191</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Error: The email is not unique!</string>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

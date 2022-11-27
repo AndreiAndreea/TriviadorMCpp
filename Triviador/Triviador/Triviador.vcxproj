@@ -97,10 +97,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Login.cpp" />
     <ClCompile Include="LoginRegister.cpp" />
+    <ClCompile Include="Register.cpp" />
     <ClCompile Include="Utils.cpp" />
     <QtRcc Include="Triviador.qrc" />
+    <QtUic Include="Login.ui" />
     <QtUic Include="LoginRegister.ui" />
+    <QtUic Include="Register.ui" />
     <QtUic Include="Triviador.ui" />
     <QtMoc Include="Triviador.h" />
     <ClCompile Include="DataBase.cpp" />
@@ -117,11 +121,13 @@
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="Duel.h" />
     <QtMoc Include="LoginRegister.h" />
+    <QtMoc Include="Login.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuestionMultipleChoice.h" />
     <ClInclude Include="Questions.h" />
     <ClInclude Include="QuestionSingleChoice.h" />
     <ClInclude Include="Map.h" />
+    <QtMoc Include="Register.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>

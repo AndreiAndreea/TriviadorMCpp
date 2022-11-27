@@ -39,13 +39,12 @@ Triviador::Triviador(QWidget* parent)
 	ui.multipleChoiceAnswer1Button->setChecked(false);
 
 	m_answerHasBeenSelected = false;
-
-	LoginRegister* loginRegisterWindow = new LoginRegister();
-	loginRegisterWindow->show();
 }
 
 Triviador::~Triviador()
-{}
+{
+}
+
 void Triviador::SaveSingleChoiceQuestionsToFile(const QString fileName)
 {
 	QFile file(QString("%1").arg(fileName));
