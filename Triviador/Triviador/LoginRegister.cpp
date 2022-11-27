@@ -22,6 +22,7 @@ LoginRegister::LoginRegister()
 	ui.emailLabel->hide();
 	ui.emailLineEdit->hide();
 	ui.emailPushButton->hide();
+	ui.emailErrorLabel->hide();
 
 	ui.submitDataPushButton->hide();
 	ui.submitDataErrorLabel->hide();
@@ -95,11 +96,11 @@ void LoginRegister::showPlayersInFile()
 		for (const auto& player : m_players)
 		{
 			QTextStream stream(&file);
-			stream << "Player:\n"
-				<< QString::fromStdString(player.GetUsername()) << "\n"
-				<< QString::fromStdString(player.GetPassword()) << "\n"
-				<< QString::fromStdString(player.GetEmail()) << "\n"
-				<< QString::fromStdString(player.GetAccountCreationDate()) << "\n";
+			stream << "Player:\n";
+			stream << QString::fromStdString(player.GetUsername()) << "\n";
+			stream << QString::fromStdString(player.GetPassword()) << "\n";
+			stream << QString::fromStdString(player.GetEmail()) << "\n";
+			stream << QString::fromStdString(player.GetAccountCreationDate()) << "\n";
 		}
 	}
 	file.close();
@@ -155,6 +156,7 @@ void LoginRegister::on_usernamePushButton_released()
 		else
 		{
 			ui.usernameErrorLabel->show();
+			newUsernameIsValid = false;
 		}
 	}
 }
@@ -178,8 +180,23 @@ void LoginRegister::on_emailPushButton_released()
 		QString text = ui.emailLineEdit->text();
 		std::string email = text.toStdString();
 
-		m_currentPlayer.SetEmail(email);
-		newEmailIsValid = true;
+		//check if the email is unique
+		bool isUniqueEmail = true;
+
+		for (const auto& player : m_players)
+			if (email == player.GetEmail())
+				bool isUniqueEmail = false;
+
+		if (isUniqueEmail)
+		{
+			m_currentPlayer.SetEmail(email);
+			newEmailIsValid = true;
+		}
+		else
+		{
+			ui.emailErrorLabel->show();
+			newEmailIsValid = false;
+		}
 	}
 }
 

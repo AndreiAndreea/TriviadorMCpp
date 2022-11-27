@@ -47,6 +47,7 @@ private:
 	bool isUniqueUsername;
 	bool newUsernameIsValid;
 	bool newPasswordIsValid;
+	bool isUniqueEmail;
 	bool newEmailIsValid;
 };
 
