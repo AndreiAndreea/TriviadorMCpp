@@ -133,4 +133,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="triviador.sqlite">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
