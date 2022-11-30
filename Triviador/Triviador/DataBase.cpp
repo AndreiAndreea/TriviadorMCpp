@@ -43,8 +43,7 @@ void DatabaseStorage::PopulateDatabaseWithQuestions()
 	m_db.insert_range(multipleChoiceQuestionsVector.begin(), multipleChoiceQuestionsVector.end());
 
 	std::vector<User> users = {
-		User{ 0, "Sm0k3", "csm1245@", "cosmyn_dobre@yahoo.com", "2022-08-10","39893","5", "2"},
-		User{ 0, "MilkAna", "1234AnaLapte", "andreea_andrei@yahoo.com", "2022-11-15", "213131","3","1"}
+		User{ 0, "Admin", "Admin28!", "admin@blue-zone.ro", "2022-08-10","999999999","5", "2"}
 	};
 
 	m_db.insert_range(users.begin(), users.end());

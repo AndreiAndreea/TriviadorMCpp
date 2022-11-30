@@ -117,6 +117,8 @@ void Triviador::on_getRandomQuestionButton_released()
 			ui.inputAnswerLineEdit->clear();
 			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->clear();
 
+			ui.submitAnswerButton->setDisabled(false);
+
 			ui.submitAnswerButton->show();
 			ui.inputAnswerLineEdit->show();
 
@@ -175,37 +177,50 @@ void Triviador::on_getRandomQuestionButton_released()
 void Triviador::on_submitAnswerButton_released()
 {
 	ui.errorLabel->hide();
+	
 	if (ui.submitAnswerButton->isEnabled())
 	{
-		QString text = ui.inputAnswerLineEdit->text();
-
-		int ok = 1;
-		for (int c = 0; c < text.length() && ok == 1; c++)
+		if (ui.inputAnswerLineEdit->text().isEmpty())
 		{
-			if (!text[c].isDigit())
-			{
-				ok = 0;
-			}
-		}
-		if (ok == 1)
-		{
-			uint16_t inputAnswer = text.split(" ")[0].toInt();
-			uint16_t currentAnswer = std::stoi(m_currentAnswer);
-
-			std::stringstream ss;
-			ss << "Correct answer is: " << m_currentAnswer << "\n"
-				<< "close by: " << abs(currentAnswer - inputAnswer) << "\n";
-			if (abs(currentAnswer - inputAnswer) == 0)
-				ss << "Raspunsul este corect!";
-
-			QString displayAnswer = QString::fromStdString(ss.str());
-			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->setText(displayAnswer);
-			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->show();
+			ui.errorLabel->setText("Please enter an answer!");
+			ui.errorLabel->show();
 		}
 		else
 		{
-			ui.errorLabel->show();
-			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
+			QString text = ui.inputAnswerLineEdit->text();
+			
+			bool isValidAnswer = true;
+			
+			for (int c = 0; c < text.length() && isValidAnswer == true; c++)
+				if (!text[c].isDigit())
+					isValidAnswer = false;
+			
+			if (isValidAnswer == false)
+			{
+				ui.errorLabel->setText("Please enter a valid answer! (only digits)");
+				ui.errorLabel->show();
+				
+				ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
+			}
+			else
+			{
+				uint16_t inputAnswer = text.split(" ")[0].toInt();
+				uint16_t currentAnswer = std::stoi(m_currentAnswer);
+
+				std::stringstream ss;
+				ss << "Correct answer is: " << m_currentAnswer << "\n"
+					<< "close by: " << abs(currentAnswer - inputAnswer) << "\n";
+				if (abs(currentAnswer - inputAnswer) == 0)
+					ss << "Raspunsul este corect!";
+
+				QString displayAnswer = QString::fromStdString(ss.str());
+				ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->setText(displayAnswer);
+				ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->show();
+
+				ui.submitAnswerButton->setDisabled(true);
+
+				ui.inputAnswerLineEdit->setDisabled(true);	
+			}
 		}
 	}
 }

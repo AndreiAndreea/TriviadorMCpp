@@ -75,14 +75,17 @@
   <widget class="QPushButton" name="displayPasswordPushButton">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>193</y>
-     <width>131</width>
-     <height>31</height>
+     <x>190</x>
+     <y>190</y>
+     <width>21</width>
+     <height>41</height>
     </rect>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>display password</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="loginPushButton">

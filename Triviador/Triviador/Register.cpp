@@ -5,7 +5,7 @@
 Register::Register()
 {
 	ui.setupUi(this);
-	
+
 	ui.passwordLineEdit->setEchoMode(QLineEdit::Password);
 
 	ui.usernameErrorLabel->hide();
@@ -17,6 +17,11 @@ Register::Register()
 	newUsernameIsValid = false;
 	newPasswordIsValid = false;
 	newEmailIsValid = false;
+
+	ui.displayPasswordPushButton->setFlat(true);
+	ui.displayPasswordPushButton->setStyleSheet("QPushButton { background-color: transparent; }");
+
+	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
 }
 
 Register::~Register()
@@ -151,12 +156,18 @@ void Register::on_emailPushButton_released()
 	}
 }
 
+void Register::on_displayPasswordPushButton_pressed()
+{
+	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-on.png"));
+
+	ui.passwordLineEdit->setEchoMode(QLineEdit::Normal);
+}
+
 void Register::on_displayPasswordPushButton_released()
 {
-	if (ui.displayPasswordPushButton->isEnabled())
-	{
-		ui.passwordLineEdit->setEchoMode(QLineEdit::Normal);
-	}
+	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
+
+	ui.passwordLineEdit->setEchoMode(QLineEdit::Password);
 }
 
 void Register::on_submitDataPushButton_released()

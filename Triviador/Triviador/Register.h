@@ -30,12 +30,13 @@ private:
 	void showPlayersInFile(); //for test purposes only
 
 private slots:
-
 	void on_usernamePushButton_released();
 	void on_passwordPushButton_released();
 	void on_emailPushButton_released();
 
+	void on_displayPasswordPushButton_pressed();
 	void on_displayPasswordPushButton_released();
+
 	void on_submitDataPushButton_released();
 
 private:

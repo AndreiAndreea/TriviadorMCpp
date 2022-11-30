@@ -147,19 +147,6 @@
     <string>Error: The username is not unique!</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="displayPasswordPushButton">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>193</y>
-     <width>131</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>display password</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="submitDataPushButton">
    <property name="geometry">
     <rect>
@@ -223,6 +210,22 @@
    </property>
    <property name="text">
     <string>Error: The email is invalid!</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="displayPasswordPushButton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>190</y>
+     <width>21</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

@@ -59,9 +59,9 @@
    <widget class="QLineEdit" name="inputAnswerLineEdit">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>310</x>
       <y>120</y>
-      <width>101</width>
+      <width>121</width>
       <height>24</height>
      </rect>
     </property>
@@ -69,7 +69,7 @@
    <widget class="QPushButton" name="submitAnswerButton">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>330</x>
       <y>160</y>
       <width>81</width>
       <height>51</height>
@@ -83,23 +83,26 @@ Answer</string>
    <widget class="QLabel" name="errorLabel">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>90</y>
-      <width>58</width>
-      <height>19</height>
+      <x>260</x>
+      <y>80</y>
+      <width>221</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>error</string>
+     <string>Display error message</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="displayCorrectAnswerSingleChoiceQuestionAndProximityLabel">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>450</x>
       <y>80</y>
       <width>151</width>
       <height>101</height>
@@ -200,7 +203,7 @@ Answer</string>
      <x>0</x>
      <y>0</y>
      <width>857</width>
-     <height>30</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -24,80 +24,113 @@
     <Filter Include="UI">
       <UniqueIdentifier>{b970ec3d-d204-4b99-89f2-be04eced4436}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Question Form">
+      <UniqueIdentifier>{7690012f-69d1-4a26-8e6b-717784d1d940}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Question Form\Single Choice Question Form">
+      <UniqueIdentifier>{c4a6351d-62cd-44f5-9660-ddd1d7c53006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Question Form\Multiple Choice Question Form">
+      <UniqueIdentifier>{91dbf4a3-7b8d-4fd0-aa16-590871c3280b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{722d1f14-2a11-43b4-abdd-cba4cd268670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Login - Register form">
+      <UniqueIdentifier>{7ad083d3-2984-4a0a-9786-5a048c1f8ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Login - Register form\Login Form">
+      <UniqueIdentifier>{2807758e-0b15-466d-be56-af3070d4598d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Login - Register form\Register Form">
+      <UniqueIdentifier>{fa5d9b7d-b3fb-4e64-98fd-93a87dfdae11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{ebffe836-5005-4694-8f2c-b34b7e4aab52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Duel">
+      <UniqueIdentifier>{bac833c8-370f-4dc0-b12e-7a4cd9bacb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{a4f21332-a0aa-46a0-83e8-e1364187e617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataBase">
+      <UniqueIdentifier>{af537f92-50e0-452e-8e98-fe46e72349a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Triviador Form">
+      <UniqueIdentifier>{cc5d01d4-b422-49ca-b1a8-270ec9f93606}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Triviador.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtMoc Include="Triviador.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="Triviador.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Questions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuestionMultipleChoice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuestionSingleChoice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Duel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DataBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LoginRegister.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Register.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Login - Register form\Register Form</Filter>
     </ClCompile>
     <ClCompile Include="Login.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Login - Register form\Login Form</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionSingleChoice.cpp">
+      <Filter>Question Form\Single Choice Question Form</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionMultipleChoice.cpp">
+      <Filter>Question Form\Multiple Choice Question Form</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Questions.cpp">
+      <Filter>Question Form</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginRegister.cpp">
+      <Filter>Login - Register form</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Duel.cpp">
+      <Filter>Duel</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Triviador.cpp">
+      <Filter>Triviador Form</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Questions.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="QuestionSingleChoice.h">
+      <Filter>Question Form\Single Choice Question Form</Filter>
     </ClInclude>
     <ClInclude Include="QuestionMultipleChoice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuestionSingleChoice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Duel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DataBase.h">
-      <Filter>Header Files</Filter>
+      <Filter>Question Form\Multiple Choice Question Form</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Questions.h">
+      <Filter>Question Form</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Duel.h">
+      <Filter>Duel</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase.h">
+      <Filter>DataBase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,27 +143,30 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Register.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Login - Register form\Register Form</Filter>
     </QtUic>
     <QtUic Include="Login.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Login - Register form\Login Form</Filter>
     </QtUic>
     <QtUic Include="LoginRegister.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Login - Register form</Filter>
     </QtUic>
     <QtUic Include="Triviador.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Triviador Form</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="LoginRegister.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="Register.h">
-      <Filter>Header Files</Filter>
+      <Filter>Login - Register form\Register Form</Filter>
     </QtMoc>
     <QtMoc Include="Login.h">
-      <Filter>Header Files</Filter>
+      <Filter>Login - Register form\Login Form</Filter>
+    </QtMoc>
+    <QtMoc Include="LoginRegister.h">
+      <Filter>Login - Register form</Filter>
+    </QtMoc>
+    <QtMoc Include="Triviador.h">
+      <Filter>Triviador Form</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
