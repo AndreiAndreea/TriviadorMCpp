@@ -99,7 +99,7 @@ Answer</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="displayCorrectAnswerSingleChoiceQuestionAndProximityLabel">
+   <widget class="QLabel" name="displayProximityCorrectAnswerLabel">
     <property name="geometry">
      <rect>
       <x>450</x>
@@ -194,6 +194,22 @@ Answer</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="displayAnswerVerdictSingleChoiceQuestionLabel">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>70</y>
+      <width>151</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

@@ -25,7 +25,8 @@ Triviador::Triviador(QWidget* parent)
 	ui.titleLabel->setText(" ");
 
 	ui.errorLabel->hide();
-	ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
+	ui.displayProximityCorrectAnswerLabel->hide();
+	ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
 	ui.submitAnswerButton->hide();
 	ui.inputAnswerLineEdit->hide();
 
@@ -115,8 +116,9 @@ void Triviador::on_getRandomQuestionButton_released()
 		if (randomValue == 1)
 		{
 			ui.inputAnswerLineEdit->clear();
-			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->clear();
+			ui.displayProximityCorrectAnswerLabel->clear();
 
+			ui.inputAnswerLineEdit->setDisabled(false);
 			ui.submitAnswerButton->setDisabled(false);
 
 			ui.submitAnswerButton->show();
@@ -127,8 +129,12 @@ void Triviador::on_getRandomQuestionButton_released()
 			ui.multipleChoiceAnswer2Button->hide();
 			ui.multipleChoiceAnswer3Button->hide();
 			ui.multipleChoiceAnswer4Button->hide();
+
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
+
 			ui.checkAnswerSelection->hide();
+
 			QuestionSingleChoice SCQuestion = m_questions.GetRandomSingleChoiceQuestion();
 			m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
@@ -142,8 +148,9 @@ void Triviador::on_getRandomQuestionButton_released()
 			ui.submitAnswerButton->hide();
 			ui.inputAnswerLineEdit->hide();
 			ui.errorLabel->hide();
-			ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
+			ui.displayProximityCorrectAnswerLabel->hide();
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
 
 			ui.multipleChoiceAnswer1Button->show();
 			ui.multipleChoiceAnswer2Button->show();
@@ -200,7 +207,7 @@ void Triviador::on_submitAnswerButton_released()
 				ui.errorLabel->setText("Please enter a valid answer! (only digits)");
 				ui.errorLabel->show();
 				
-				ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->hide();
+				ui.displayProximityCorrectAnswerLabel->hide();
 			}
 			else
 			{
@@ -210,12 +217,21 @@ void Triviador::on_submitAnswerButton_released()
 				std::stringstream ss;
 				ss << "Correct answer is: " << m_currentAnswer << "\n"
 					<< "close by: " << abs(currentAnswer - inputAnswer) << "\n";
+
 				if (abs(currentAnswer - inputAnswer) == 0)
-					ss << "Raspunsul este corect!";
+				{
+					ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"green\">The answer is correct!</font></b>");
+					ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+				}
+				else
+				{
+					ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"red\">The answer is wrong!</font></b>");
+					ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+				}
 
 				QString displayAnswer = QString::fromStdString(ss.str());
-				ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->setText(displayAnswer);
-				ui.displayCorrectAnswerSingleChoiceQuestionAndProximityLabel->show();
+				ui.displayProximityCorrectAnswerLabel->setText(displayAnswer);
+				ui.displayProximityCorrectAnswerLabel->show();
 
 				ui.submitAnswerButton->setDisabled(true);
 
