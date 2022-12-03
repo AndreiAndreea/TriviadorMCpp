@@ -23,6 +23,10 @@ public:
 public:
 	uint16_t GetNumberOfPlayers();
 
+private:
+	void paintEvent(QPaintEvent*);
+	void DrawMap(QPainter& painter);
+
 private slots:
 	void on_numberOfPlayersLineEdit_textChanged(const QString& arg1);
 

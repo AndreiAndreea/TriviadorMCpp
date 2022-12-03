@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 
+#include <QPainter>
+#include <QPaintEvent>
+
 class Map
 {
 public: 
@@ -12,10 +15,14 @@ public:
 
 	bool IsRegionAvailable(Coords coords);
 	void RemoveUnusedRegion(uint8_t position);
+
+public:
+	std::pair<uint16_t, uint16_t> GetMapSize() const;
 	
 private:
 	uint16_t m_numberOfPlayers;
 	uint16_t m_numberOfRounds;
+	std::pair<uint16_t, uint16_t> m_mapSize;
 
 	std::vector<Coords> m_unusedRegions;
 };
