@@ -99,6 +99,12 @@
     <Filter Include="Header Files\Duel">
       <UniqueIdentifier>{bac833c8-370f-4dc0-b12e-7a4cd9bacb9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{354681b6-91bb-4ec9-a0ab-564d23a545be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Triviador.qrc">
@@ -144,6 +150,9 @@
     </ClCompile>
     <ClCompile Include="Duel.cpp">
       <Filter>Source Files\Duel</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +202,9 @@
     <QtUic Include="Triviador.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="Game.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Login.h">
@@ -206,6 +218,9 @@
     </QtMoc>
     <QtMoc Include="Register.h">
       <Filter>Header Files\Register</Filter>
+    </QtMoc>
+    <QtMoc Include="Game.h">
+      <Filter>Header Files\Game</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
