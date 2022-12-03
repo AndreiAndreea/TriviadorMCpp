@@ -16,6 +16,19 @@ uint16_t Game::GetNumberOfPlayers()
 	return static_cast<uint16_t>(numberOfPlayers.toInt());
 }
 
+bool Game::ClickedOnRegion(const QPointF& coordClick, const QPointF& coordRegion)
+{
+    if ((coordClick.x() > coordRegion.x()) && (coordClick.x() < coordRegion.x() + 50) &&
+        (coordClick.y() > coordRegion.y()) && (coordClick.y() < coordRegion.y() + 50))
+        return true;
+    return false;
+}
+
+void Game::AddNewSelectedRegion(const QPointF& coordPos)
+{
+    m_selectedRegions.push_back(coordPos);
+}
+
 void Game::paintEvent(QPaintEvent*)
 {    
 	QPainter painter(this); 
@@ -24,6 +37,13 @@ void Game::paintEvent(QPaintEvent*)
 
     DrawMap(painter);
 
+    //coloring the selected regions of the map
+    for (const auto& coordRegion : m_selectedRegions)
+    {
+        QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
+
+        painter.fillRect(square, Qt::cyan);
+    }
 }
 
 void Game::DrawMap(QPainter& painter)
@@ -46,6 +66,25 @@ void Game::DrawMap(QPainter& painter)
     update();
 }
 
+void Game::mouseReleaseEvent(QMouseEvent* ev)
+{
+    if (ev->button() == Qt::LeftButton)
+    {
+        QPointF clickPosition = ev->position();
+
+        for (size_t i = 0; i < m_map.GetMapSize().first; i++)
+        {
+            for (size_t j = 0; j < m_map.GetMapSize().second; j++)
+            {
+                QPointF regionCoordinates(300 + 50 * j, 70 + 50 * i);
+
+                if (ClickedOnRegion(clickPosition, regionCoordinates))
+                    AddNewSelectedRegion(regionCoordinates);
+            }
+        }
+    }
+}
+
 void Game::on_numberOfPlayersLineEdit_textChanged(const QString& arg1)
 {
 	/*QString test = QString("%1").arg(ui.numberOfPlayersLineEdit->text());
@@ -55,4 +94,6 @@ void Game::on_numberOfPlayersLineEdit_textChanged(const QString& arg1)
 
 	m_map.CreateMap();
 
+    //when a new map is created, we need to clear the colored regions of the previous map
+    m_selectedRegions.clear();
 }

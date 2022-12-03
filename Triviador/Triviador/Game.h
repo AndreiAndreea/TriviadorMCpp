@@ -22,10 +22,14 @@ public:
 
 public:
 	uint16_t GetNumberOfPlayers();
+	bool ClickedOnRegion(const QPointF& coordClick, const QPointF& coordRegion);
+	void AddNewSelectedRegion(const QPointF& coordPos);
 
 private:
 	void paintEvent(QPaintEvent*);
 	void DrawMap(QPainter& painter);
+
+	void mouseReleaseEvent(QMouseEvent* ev);
 
 private slots:
 	void on_numberOfPlayersLineEdit_textChanged(const QString& arg1);
@@ -33,5 +37,6 @@ private slots:
 private:
 	Map m_map;
 
+	std::vector<QPointF> m_selectedRegions;
 };
 
