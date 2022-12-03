@@ -5,10 +5,15 @@
 #include "ui_Register.h"
 #include "Player.h"
 
-#include<ctime>
+#include <ctime>
+#include <iomanip>
 
 #include <QFile>
 #include <QTextStream>
+
+#include <sqlite_orm/sqlite_orm.h>
+
+using namespace sqlite_orm;
 
 class Register : public QDialog
 {
@@ -25,14 +30,12 @@ public:
 
 private:
 	std::string GetCurrentDate();
-	std::vector<Player> GetPlayers();
 
-	void showPlayersInFile(); //for test purposes only
+	const std::string GetInputUsernameByPlayer() const;
+	const std::string GetInputPasswordByPlayer() const;
+	const std::string GetInputEmailByPlayer() const;
 
 private slots:
-	void on_usernamePushButton_released();
-	void on_passwordPushButton_released();
-	void on_emailPushButton_released();
 
 	void on_displayPasswordPushButton_pressed();
 	void on_displayPasswordPushButton_released();
@@ -40,13 +43,5 @@ private slots:
 	void on_submitDataPushButton_released();
 
 private:
-	std::vector<Player> m_players;
 	Player m_currentPlayer;
-
-	bool isUniqueUsername;
-	bool newUsernameIsValid;
-	bool newPasswordIsValid;
-	bool isUniqueEmail;
-	bool newEmailIsValid;
 };
-

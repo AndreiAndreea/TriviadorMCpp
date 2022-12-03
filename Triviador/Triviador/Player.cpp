@@ -21,6 +21,19 @@ Player::Player(const std::string& username, uint16_t currentGameScore)
 
 }
 
+Player::Player(uint32_t id, const std::string& username, const std::string& password, const std::string& email, const std::string& accountCreationDate, const std::string& totalScore, const std::string& playedGames, const std::string& wonGames)
+	: m_id(id),
+	m_username(username),
+	m_password(password),
+	m_email(email),
+	m_accountCreationDate(accountCreationDate),
+	m_totalScore(totalScore),
+	m_playedGames(playedGames),
+	m_wonGames(wonGames)
+{
+
+}
+
 Player::Player(const Player& player)
 {
 	*this = player;
@@ -39,6 +52,16 @@ void Player::SetCurrentGameScore(uint16_t score)
 uint16_t Player::GetCurrentGameScore() const
 {
 	return m_currentGameScore;
+}
+
+void Player::SetID(uint32_t id)
+{
+	m_id = id;
+}
+
+uint32_t Player::GetID() const
+{
+	return m_id;
 }
 
 void Player::SetUsername(const std::string& username)

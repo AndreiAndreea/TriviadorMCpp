@@ -52,12 +52,12 @@ void Questions::GetMultipleChoiceQuestionsFromFile(const std::string& filePathMu
 	inputStream.close();
 }
 
-std::vector<QuestionSingleChoice> Questions::GetSingleChoiceQuestionsVector() const
+const std::vector<QuestionSingleChoice>& Questions::GetSingleChoiceQuestionsVector() const
 {
 	return m_singleChoiceQuestions;
 }
 
-std::vector<QuestionMultipleChoice> Questions::GetMultipleChoiceQuestionsVector() const
+const std::vector<QuestionMultipleChoice>& Questions::GetMultipleChoiceQuestionsVector() const
 {
 	return m_multipleChoiceQuestions;
 }

@@ -13,8 +13,8 @@ class Questions
 public:
 	Questions();
 
-	std::vector<QuestionSingleChoice> GetSingleChoiceQuestionsVector() const;
-	std::vector<QuestionMultipleChoice> GetMultipleChoiceQuestionsVector() const;
+	const std::vector<QuestionSingleChoice>& GetSingleChoiceQuestionsVector() const;
+	const std::vector<QuestionMultipleChoice>& GetMultipleChoiceQuestionsVector() const;
 
 public:
 	void RemoveSingleChoiceQuestionByIndex(const uint8_t& index);

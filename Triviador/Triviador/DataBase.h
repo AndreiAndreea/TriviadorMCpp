@@ -16,21 +16,6 @@ namespace sql = sqlite_orm;
 
 const std::string dbFile = "triviador.sqlite";
 
-struct User
-{
-	uint32_t id;
-
-	std::string username;
-	std::string password;
-	std::string email;
-
-	std::string accountCreationDate;
-
-	std::string score;
-	std::string playedGames;
-	std::string wonGames;
-};
-
 struct SingleChoiceQuestionWrapper
 {
 	uint32_t id;
@@ -58,14 +43,14 @@ inline auto createStorage(const std::string& filename)
 		filename,
 		sql::make_table(
 			"Users",
-			sql::make_column("id", &User::id, sql::autoincrement(), sql::primary_key()),
-			sql::make_column("username", &User::username),
-			sql::make_column("password", &User::password),
-			sql::make_column("email", &User::email),
-			sql::make_column("accountCreationDate", &User::accountCreationDate),
-			sql::make_column("score", &User::score),
-			sql::make_column("playedGames", &User::playedGames),
-			sql::make_column("wonGames", &User::wonGames)
+			sql::make_column("id", &Player::GetID, &Player::SetID, sql::autoincrement(), sql::primary_key()),
+			sql::make_column("username", &Player::GetUsername, &Player::SetUsername),
+			sql::make_column("password", &Player::GetPassword, &Player::SetPassword),
+			sql::make_column("email", &Player::GetEmail, &Player::SetEmail),
+			sql::make_column("accountCreationDate", &Player::GetAccountCreationDate, &Player::SetAccountCreationDate),
+			sql::make_column("score", &Player::GetTotalScore, &Player::SetTotalScore),
+			sql::make_column("playedGames", &Player::GetPlayedGames, &Player::SetPlayedGames),
+			sql::make_column("wonGames", &Player::GetWonGames, &Player::SetWonGames)
 		),
 		sql::make_table(
 			"SingleChoiceQuestions",

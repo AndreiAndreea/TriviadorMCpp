@@ -12,12 +12,12 @@ DatabaseStorage::DatabaseStorage(const std::string& filePathForSingleChoiceQuest
 bool DatabaseStorage::Initialize()
 {
 	m_db.sync_schema();
-
-	auto initQuestionsCount = m_db.count<User>();
+	
+	auto initQuestionsCount = m_db.count<Player>();
 	if (initQuestionsCount == 0)
 		PopulateDatabaseWithQuestions();
 
-	auto questionsCount = m_db.count<User>();
+	auto questionsCount = m_db.count<Player>();
 
 	return questionsCount != 0;
 }
@@ -42,9 +42,5 @@ void DatabaseStorage::PopulateDatabaseWithQuestions()
 
 	m_db.insert_range(multipleChoiceQuestionsVector.begin(), multipleChoiceQuestionsVector.end());
 
-	std::vector<User> users = {
-		User{ 0, "Admin", "Admin28!", "admin@blue-zone.ro", "2022-08-10","999999999","5", "2"}
-	};
-
-	m_db.insert_range(users.begin(), users.end());
+	m_db.insert(Player(0, "Admin", "Admin28!", "admin@blue-zone.ro", "08/10/2022 at 00:00:00", "999999999", "5", "2"));
 }

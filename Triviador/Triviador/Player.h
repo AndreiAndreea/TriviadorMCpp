@@ -10,6 +10,8 @@ public:
 	Player();
 	Player(const std::string& username, uint16_t currentGameScore);
 
+	Player(uint32_t id, const std::string& username, const std::string& password, const std::string& email, const std::string& accountCreationDate, const std::string& totalScore, const std::string& playedGames, const std::string& wonGames);
+
 	Player(const Player& player); //copy constructor
 	Player(Player&& player); //move constructor
 
@@ -17,6 +19,9 @@ public:
 	using Coords = std::pair<uint8_t, uint8_t>;
 
 public:
+	void SetID(uint32_t id);
+	uint32_t GetID() const;
+
 	void SetUsername(const std::string& username);
 	const std::string& GetUsername() const;
 
@@ -61,6 +66,7 @@ public:
 	Player& operator=(Player&& player);
 
 private:
+	uint32_t m_id;
 	std::string m_username;
 	std::string m_password;
 	std::string m_email;

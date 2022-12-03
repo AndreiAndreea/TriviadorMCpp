@@ -52,24 +52,22 @@ void Login::on_loginPushButton_released()
 	auto storage = make_storage("triviador.sqlite",
 		make_table(
 			"Users",
-			make_column("id", &User::id, autoincrement(), primary_key()),
-			make_column("username", &User::username),
-			make_column("password", &User::password),
-			make_column("email", &User::email),
-			make_column("accountCreationDate", &User::accountCreationDate),
-			make_column("score", &User::score),
-			make_column("playedGames", &User::playedGames),
-			make_column("wonGames", &User::wonGames)
+			make_column("id", &Player::GetID, &Player::SetID, autoincrement(), primary_key()),
+			make_column("username", &Player::GetUsername, &Player::SetUsername),
+			make_column("password", &Player::GetPassword, &Player::SetPassword),
+			make_column("email", &Player::GetEmail, &Player::SetEmail),
+			make_column("accountCreationDate", &Player::GetAccountCreationDate, &Player::SetAccountCreationDate),
+			make_column("score", &Player::GetTotalScore, &Player::SetTotalScore),
+			make_column("playedGames", &Player::GetPlayedGames, &Player::SetPlayedGames),
+			make_column("wonGames", &Player::GetWonGames, &Player::SetWonGames)
 		));
 
 	storage.sync_schema();
 
-	auto player = storage.get_all<User>(where(c(&User::username) == GetUsername() && c(&User::password) == GetPassword()));
+	auto player = storage.get_all<Player>(where(c(&Player::GetUsername) == GetUsername() && c(&Player::GetUsername) == GetPassword()));
 
 	if (player.size() == 1)
 	{
-		isCorrectUsernameAndPassword = true;
-
 		Triviador* t = new Triviador;
 		t->show();
 	
