@@ -2,6 +2,8 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QTimer>
+#include <QTime>
+#include <QElapsedTimer>
 #include <array>
 
 #include "ui_Triviador.h"
@@ -30,6 +32,7 @@ private:
 
 private slots:
     void on_saveQuestionsInFileButton_released();
+
     void on_getRandomQuestionButton_released();
 
     void on_submitAnswerButton_released();
@@ -53,4 +56,5 @@ private:
     uint16_t m_numberOfPlayers=0;
     
     QTimer* timer;
+    QElapsedTimer elapsedTime;
 };

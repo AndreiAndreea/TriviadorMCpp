@@ -174,6 +174,8 @@ void Triviador::on_getRandomQuestionButton_released()
 
 		uint8_t randomValue = rand() % 2;
 
+		ui.elapsedTimeLabel->hide();
+
 		if (randomValue == 1)
 		{
 			ui.inputAnswerLineEdit->clear();
@@ -247,6 +249,8 @@ void Triviador::on_getRandomQuestionButton_released()
 
 		ui.getRandomQuestionButton->setDisabled(true);
 		ToggleAnswers(false);
+
+		elapsedTime.start();
 	}
 }
 
@@ -308,6 +312,9 @@ void Triviador::on_submitAnswerButton_released()
 				ui.submitAnswerButton->setDisabled(true);
 
 				ui.inputAnswerLineEdit->setDisabled(true);	
+
+				ui.elapsedTimeLabel->show();
+				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed()/1000) + "," + QString::number(elapsedTime.elapsed()%1000)+" s");
 			}
 		}
 	}
@@ -327,6 +334,9 @@ void Triviador::on_multipleChoiceAnswer1Button_released()
 			{
 				ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:green;");
 				m_canChooseTerritory = true;
+
+				ui.elapsedTimeLabel->show();
+				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
 			}
 			else
 			{
@@ -353,6 +363,9 @@ void Triviador::on_multipleChoiceAnswer2Button_released()
 			{
 				ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:green;");
 				m_canChooseTerritory = true;
+
+				ui.elapsedTimeLabel->show();
+				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed()/1000) + "," + QString::number(elapsedTime.elapsed()%1000)+" s");
 			}
 			else
 			{
@@ -379,6 +392,9 @@ void Triviador::on_multipleChoiceAnswer3Button_released()
 			{
 				ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:green;");
 				m_canChooseTerritory = true;
+
+				ui.elapsedTimeLabel->show();
+				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed()/1000) + "," + QString::number(elapsedTime.elapsed()%1000)+" s");
 			}
 			else
 			{
@@ -405,6 +421,9 @@ void Triviador::on_multipleChoiceAnswer4Button_released()
 			{
 				ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:green;");
 				m_canChooseTerritory = true;
+
+				ui.elapsedTimeLabel->show();
+				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed()/1000) + "," + QString::number(elapsedTime.elapsed()%1000)+" s");
 			}
 			else
 			{
