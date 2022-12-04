@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include<QTimer>
 #include<array>
 #include "ui_Triviador.h"
 #include "DataBase.h"
@@ -19,10 +20,13 @@ public:
     void SetCanChooseTerritory(bool canChooseTerritory);
     void SetNumberOfPlayers(uint16_t numberOfPlayers);
 
+public slots:
+    void OnTimerTick();
+
 private:
     void SaveSingleChoiceQuestionsToFile(const QString fileName);
     void SaveMultipleChoiceQuestionsToFile(const QString fileName);
-
+    void StartTimer();
     void CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& answer);
 
 private slots:
@@ -46,4 +50,6 @@ private:
 
     bool m_canChooseTerritory;
     uint16_t m_numberOfPlayers=0;
+    
+    QTimer* timer;
 };

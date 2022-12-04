@@ -47,6 +47,11 @@ Triviador::~Triviador()
 {
 }
 
+void OnTimerTick() 
+{
+	//to do progress bar on tick
+}
+
 bool Triviador::GetCanChooseTerritory()
 {
 	return m_canChooseTerritory;
@@ -96,6 +101,13 @@ void Triviador::SaveMultipleChoiceQuestionsToFile(const QString fileName)
 		}
 		file.close();
 	}
+}
+
+void Triviador::StartTimer()
+{
+	timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));
+	timer->start(100);
 }
 
 void Triviador::CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& isCorrectAnswer)
@@ -162,6 +174,8 @@ void Triviador::on_getRandomQuestionButton_released()
 
 			QString scq = QString::fromStdString(SCQuestion.GetQuestionText());
 			ui.titleLabel->setText(scq);
+			
+			StartTimer();
 
 			update();
 		}
@@ -199,6 +213,8 @@ void Triviador::on_getRandomQuestionButton_released()
 			ui.multipleChoiceAnswer4Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
 			QString answers = QString::fromStdString(ss.str());
 
+			StartTimer();
+			
 			update();
 		}
 	}
