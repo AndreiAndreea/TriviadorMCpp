@@ -36,6 +36,19 @@
     <string>Introduceti numarul de jucatori:</string>
    </property>
   </widget>
+  <widget class="QLabel" name="existingRegion">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>30</y>
+     <width>151</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Regiunea deja exista!</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
