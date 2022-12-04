@@ -46,6 +46,16 @@ Triviador::~Triviador()
 {
 }
 
+bool Triviador::GetCanChooseTerritory()
+{
+	return canChooseTerritory;
+}
+
+void Triviador::SetNumberOfPlayers(uint16_t numberOfPlayers)
+{
+	m_numberOfPlayers = numberOfPlayers;	
+}
+
 void Triviador::SaveSingleChoiceQuestionsToFile(const QString fileName)
 {
 	QFile file(QString("%1").arg(fileName));
@@ -107,6 +117,7 @@ void Triviador::CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& isCo
 
 void Triviador::on_getRandomQuestionButton_released()
 {
+	if(m_numberOfPlayers>=2 && m_numberOfPlayers<=4)
 	if (ui.getRandomQuestionButton->isEnabled())
 	{
 		srand(time(0));
@@ -222,6 +233,7 @@ void Triviador::on_submitAnswerButton_released()
 				{
 					ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"green\">The answer is correct!</font></b>");
 					ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+					canChooseTerritory = 1;
 				}
 				else
 				{
@@ -254,6 +266,7 @@ void Triviador::on_multipleChoiceAnswer1Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:green;");
+				canChooseTerritory = 1;
 			}
 			else
 			{
@@ -279,6 +292,7 @@ void Triviador::on_multipleChoiceAnswer2Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:green;");
+				canChooseTerritory = 1;
 			}
 			else
 			{
@@ -304,6 +318,7 @@ void Triviador::on_multipleChoiceAnswer3Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:green;");
+				canChooseTerritory = 1;
 			}
 			else
 			{
@@ -329,6 +344,7 @@ void Triviador::on_multipleChoiceAnswer4Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:green;");
+				canChooseTerritory = 1;
 			}
 			else
 			{

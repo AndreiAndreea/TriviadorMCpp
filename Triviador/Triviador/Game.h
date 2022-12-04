@@ -8,6 +8,7 @@
 #include <QTextStream>
 
 #include "Map.h"
+#include "Triviador.h"
 
 class Game : public QDialog
 {
@@ -15,6 +16,8 @@ class Game : public QDialog
 
 private:
 	Ui::Game ui;
+	Triviador w;
+
 
 public:
 	explicit Game();

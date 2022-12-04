@@ -3,6 +3,7 @@
 Game::Game()
 {
 	ui.setupUi(this);
+    w.show();
 }
 
 Game::~Game()
@@ -12,7 +13,6 @@ Game::~Game()
 uint16_t Game::GetNumberOfPlayers()
 {
 	QString numberOfPlayers = ui.numberOfPlayersLineEdit->text();
-
 	return static_cast<uint16_t>(numberOfPlayers.toInt());
 }
 
@@ -28,6 +28,7 @@ void Game::AddNewSelectedRegion(const QPointF& coordPos)
 {
     m_selectedRegions.push_back(coordPos);
 }
+
 
 void Game::paintEvent(QPaintEvent*)
 {    
@@ -68,7 +69,7 @@ void Game::DrawMap(QPainter& painter)
 
 void Game::mouseReleaseEvent(QMouseEvent* ev)
 {
-    if (ev->button() == Qt::LeftButton)
+    if (ev->button() == Qt::LeftButton && w.GetCanChooseTerritory())
     {
         QPointF clickPosition = ev->position();
 
@@ -91,6 +92,7 @@ void Game::on_numberOfPlayersLineEdit_textChanged(const QString& arg1)
 	ui.numberOfPlayersLabel->setText(test);*/
 
 	m_map.SetNumberOfPlayers(GetNumberOfPlayers());
+    w.SetNumberOfPlayers(GetNumberOfPlayers());
 
 	m_map.CreateMap();
 

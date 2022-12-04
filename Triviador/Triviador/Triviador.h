@@ -15,6 +15,8 @@ class Triviador : public QMainWindow
 public:
     Triviador(QWidget *parent = nullptr);
     ~Triviador();
+    bool GetCanChooseTerritory();
+    void SetNumberOfPlayers(uint16_t numberOfPlayers);
 
 private:
     void SaveSingleChoiceQuestionsToFile(const QString fileName);
@@ -40,4 +42,7 @@ private:
     std::string m_currentAnswer;
 
     Ui::TriviadorClass ui;
+
+    bool canChooseTerritory;
+    uint16_t m_numberOfPlayers=0;
 };
