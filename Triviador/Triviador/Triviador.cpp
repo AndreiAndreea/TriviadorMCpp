@@ -35,6 +35,7 @@ Triviador::Triviador(QWidget* parent)
 	ui.multipleChoiceAnswer3Button->hide();
 	ui.multipleChoiceAnswer4Button->hide();
 
+	ui.chooseTerritoryLabel->hide();
 	ui.checkAnswerSelection->hide();
 	ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 	ui.multipleChoiceAnswer1Button->setChecked(false);
@@ -48,7 +49,12 @@ Triviador::~Triviador()
 
 bool Triviador::GetCanChooseTerritory()
 {
-	return canChooseTerritory;
+	return m_canChooseTerritory;
+}
+
+void Triviador::SetCanChooseTerritory(bool canChooseTerritory)
+{
+	m_canChooseTerritory = canChooseTerritory;
 }
 
 void Triviador::SetNumberOfPlayers(uint16_t numberOfPlayers)
@@ -99,7 +105,12 @@ void Triviador::CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& isCo
 	if (correctAnswer == m_currentAnswer)
 	{
 		if (!m_answerHasBeenSelected)
+		{
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("The answer is correct!");
+			ui.chooseTerritoryLabel->setText("Now you can choose a territory!");
+			ui.chooseTerritoryLabel->show();
+		}
+
 		else
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("");
 		isCorrectAnswer = 1;
@@ -145,7 +156,7 @@ void Triviador::on_getRandomQuestionButton_released()
 			ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
 
 			ui.checkAnswerSelection->hide();
-
+			ui.chooseTerritoryLabel->hide();
 			QuestionSingleChoice SCQuestion = m_questions.GetRandomSingleChoiceQuestion();
 			m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
@@ -162,6 +173,7 @@ void Triviador::on_getRandomQuestionButton_released()
 			ui.displayProximityCorrectAnswerLabel->hide();
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 			ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
+			ui.chooseTerritoryLabel->hide();
 
 			ui.multipleChoiceAnswer1Button->show();
 			ui.multipleChoiceAnswer2Button->show();
@@ -233,7 +245,9 @@ void Triviador::on_submitAnswerButton_released()
 				{
 					ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"green\">The answer is correct!</font></b>");
 					ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
-					canChooseTerritory = 1;
+					m_canChooseTerritory = true;
+					ui.chooseTerritoryLabel->setText("Now you can choose a territory!");
+					ui.chooseTerritoryLabel->show();
 				}
 				else
 				{
@@ -266,7 +280,7 @@ void Triviador::on_multipleChoiceAnswer1Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:green;");
-				canChooseTerritory = 1;
+				m_canChooseTerritory = true;
 			}
 			else
 			{
@@ -292,7 +306,7 @@ void Triviador::on_multipleChoiceAnswer2Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:green;");
-				canChooseTerritory = 1;
+				m_canChooseTerritory = true;
 			}
 			else
 			{
@@ -318,7 +332,7 @@ void Triviador::on_multipleChoiceAnswer3Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:green;");
-				canChooseTerritory = 1;
+				m_canChooseTerritory = true;
 			}
 			else
 			{
@@ -344,7 +358,7 @@ void Triviador::on_multipleChoiceAnswer4Button_released()
 			if (isCorrectAnswer)
 			{
 				ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:green;");
-				canChooseTerritory = 1;
+				m_canChooseTerritory = true;
 			}
 			else
 			{

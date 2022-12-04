@@ -16,6 +16,7 @@ public:
     Triviador(QWidget *parent = nullptr);
     ~Triviador();
     bool GetCanChooseTerritory();
+    void SetCanChooseTerritory(bool canChooseTerritory);
     void SetNumberOfPlayers(uint16_t numberOfPlayers);
 
 private:
@@ -43,6 +44,6 @@ private:
 
     Ui::TriviadorClass ui;
 
-    bool canChooseTerritory;
+    bool m_canChooseTerritory;
     uint16_t m_numberOfPlayers=0;
 };

@@ -13,7 +13,6 @@ class LoginRegister : public QDialog
 
 private:
 	Ui::LoginRegister ui;
-
 public:
 	explicit LoginRegister();
 	~LoginRegister();

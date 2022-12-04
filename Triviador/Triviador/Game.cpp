@@ -42,7 +42,6 @@ void Game::paintEvent(QPaintEvent*)
     for (const auto& coordRegion : m_selectedRegions)
     {
         QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
-
         painter.fillRect(square, Qt::cyan);
     }
 }
@@ -84,6 +83,7 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
             }
         }
     }
+    w.SetCanChooseTerritory(false);
 }
 
 void Game::on_numberOfPlayersLineEdit_textChanged(const QString& arg1)

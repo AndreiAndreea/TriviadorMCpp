@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>857</width>
+    <width>838</width>
     <height>452</height>
    </rect>
   </property>
@@ -212,13 +212,26 @@ Answer</string>
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="chooseTerritoryLabel">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>280</y>
+      <width>201</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>chooseTerritory</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>857</width>
+     <width>838</width>
      <height>22</height>
     </rect>
    </property>
