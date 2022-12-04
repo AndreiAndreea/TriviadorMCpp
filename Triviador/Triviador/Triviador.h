@@ -1,13 +1,14 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include<QTimer>
-#include<array>
+#include <QTimer>
+#include <array>
+
 #include "ui_Triviador.h"
+
 #include "DataBase.h"
 
-//need to be deleted in future
-#include "Questions.h"
+#include "Questions.h" //need to be deleted in future
 
 class Triviador : public QMainWindow
 {
@@ -20,13 +21,11 @@ public:
     void SetCanChooseTerritory(bool canChooseTerritory);
     void SetNumberOfPlayers(uint16_t numberOfPlayers);
 
-public slots:
-    void OnTimerTick();
-
 private:
     void SaveSingleChoiceQuestionsToFile(const QString fileName);
     void SaveMultipleChoiceQuestionsToFile(const QString fileName);
     void StartTimer();
+    void ToggleAnswers(bool toggleAnswer);
     void CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& answer);
 
 private slots:
@@ -40,6 +39,8 @@ private slots:
     void on_multipleChoiceAnswer3Button_released();
     void on_multipleChoiceAnswer4Button_released();
 
+    void OnTimerTick();
+	
 private:
     bool m_answerHasBeenSelected;
 

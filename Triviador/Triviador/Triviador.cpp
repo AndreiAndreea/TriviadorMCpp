@@ -47,9 +47,29 @@ Triviador::~Triviador()
 {
 }
 
-void OnTimerTick() 
+void Triviador::OnTimerTick()
 {
-	//to do progress bar on tick
+	ui.progressBar->setValue(ui.progressBar->value() + 1);
+
+	if (ui.progressBar->value() >= 100)
+	{
+		ui.getRandomQuestionButton->setDisabled(false);
+
+		ToggleAnswers(true);
+
+		timer->disconnect();
+	}
+}
+
+void Triviador::ToggleAnswers(bool toggleAnswer)
+{
+	ui.multipleChoiceAnswer1Button->setDisabled(toggleAnswer);
+	ui.multipleChoiceAnswer2Button->setDisabled(toggleAnswer);
+	ui.multipleChoiceAnswer3Button->setDisabled(toggleAnswer);
+	ui.multipleChoiceAnswer4Button->setDisabled(toggleAnswer);
+
+	ui.inputAnswerLineEdit->setDisabled(toggleAnswer);
+	ui.submitAnswerButton->setDisabled(toggleAnswer);
 }
 
 bool Triviador::GetCanChooseTerritory()
@@ -105,9 +125,16 @@ void Triviador::SaveMultipleChoiceQuestionsToFile(const QString fileName)
 
 void Triviador::StartTimer()
 {
+	ui.progressBar->setValue(0);
+
 	timer = new QTimer(this);
+
+	timer->setInterval(100);
+	timer->setTimerType(Qt::PreciseTimer);
+
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));
-	timer->start(100);
+
+	timer->start();
 }
 
 void Triviador::CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& isCorrectAnswer)
@@ -217,6 +244,9 @@ void Triviador::on_getRandomQuestionButton_released()
 			
 			update();
 		}
+
+		ui.getRandomQuestionButton->setDisabled(true);
+		ToggleAnswers(false);
 	}
 }
 
