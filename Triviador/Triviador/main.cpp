@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     //Triviador w;
     //w.show();
 	
-    LoginRegister r;
-    r.show();
+    //LoginRegister r;
+    //r.show();
 	
     Game game;
     game.show();

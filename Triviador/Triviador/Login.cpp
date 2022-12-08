@@ -1,5 +1,5 @@
 #include "Login.h"
-#include "Triviador.h"
+#include "GameElementsGenerator.h"
 
 #include <sqlite_orm/sqlite_orm.h>
 
@@ -68,7 +68,7 @@ void Login::on_loginPushButton_released()
 
 	if (player.size() == 1)
 	{
-		Triviador* t = new Triviador;
+		GameElementsGenerator* t = new GameElementsGenerator;
 		t->show();
 	
 		this->close();
