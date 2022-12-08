@@ -29,6 +29,8 @@ GameElementsGenerator::GameElementsGenerator()
 	ui.multipleChoiceAnswer1Button->setChecked(false);
 
 	m_answerHasBeenSelected = false;
+
+	m_canChooseTerritory = false;
 }
 
 GameElementsGenerator::~GameElementsGenerator()
