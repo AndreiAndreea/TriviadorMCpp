@@ -1,5 +1,5 @@
 #include "Login.h"
-#include "GameElementsGenerator.h"
+#include "Game.h"
 
 #include <sqlite_orm/sqlite_orm.h>
 
@@ -64,12 +64,12 @@ void Login::on_loginPushButton_released()
 
 	storage.sync_schema();
 
-	auto player = storage.get_all<Player>(where(c(&Player::GetUsername) == GetUsername() && c(&Player::GetUsername) == GetPassword()));
+	auto player = storage.get_all<Player>(where(c(&Player::GetUsername) == GetUsername() && c(&Player::GetPassword) == GetPassword()));
 
 	if (player.size() == 1)
 	{
-		GameElementsGenerator* t = new GameElementsGenerator;
-		t->show();
+		Game* g = new Game;
+		g->show();
 	
 		this->close();
 	}
