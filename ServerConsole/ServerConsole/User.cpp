@@ -109,3 +109,29 @@ UserDatabaseControl::UserDatabaseControl(UsersStorage& storage)
 {
 
 }
+
+crow::response UserDatabaseControl::operator()(const crow::request& request) const
+{
+	auto bodyArgs = ParseUrlArgs(request.body); //id=2&quantity=3&...
+	auto end = bodyArgs.end();
+	
+	auto id = bodyArgs.find("id");
+	auto username = bodyArgs.find("username");
+	auto password = bodyArgs.find("password");
+	auto email = bodyArgs.find("email");
+	auto accountCreationDate = bodyArgs.find("accountCreationDate");
+	auto totalScore = bodyArgs.find("totalScore");
+	auto playedGames = bodyArgs.find("playedGames");
+	auto wonGames = bodyArgs.find("wonGames");
+
+	if (id != end && username != end && password != end && email != end && accountCreationDate != end && totalScore != end && playedGames != end && wonGames != end)
+	{
+		User user(std::stoi(id->second), username->second, password->second, email->second, accountCreationDate->second, totalScore->second, playedGames->second, wonGames->second);
+		database.update(user);
+		return crow::response(200);
+	}
+	else
+	{
+		return crow::response(400);
+	}
+}

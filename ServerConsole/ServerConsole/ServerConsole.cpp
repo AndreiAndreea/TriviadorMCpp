@@ -45,6 +45,35 @@ int main()
             return crow::json::wvalue{ usersJson };
         });
 
+    CROW_ROUTE(app, "/checkuser/")(
+        [&userDatabase]
+        (const crow::request& req)
+        {
+            std::string username = req.url_params.get("username");
+
+            if (username.empty() == false)
+            {
+                auto users = userDatabase.get_all<User>(where(c(&User::GetUsername) == username));
+
+                if (users.size() == 1)
+                {
+                    return crow::response(200);
+                }
+                else
+                {
+                    return crow::response(403);
+                }
+            }
+            else
+            {
+                return crow::response(401);
+            }
+        });
+
+    // https://stackoverflow.com/a/630475/12388382
+    auto& checkIfUserExistsInDatabase = CROW_ROUTE(app, "/checkuser").methods(crow::HTTPMethod::POST);
+    checkIfUserExistsInDatabase(UserDatabaseControl(userDatabase));
+
     app.port(18080).multithreaded().run();
 
     return 0;

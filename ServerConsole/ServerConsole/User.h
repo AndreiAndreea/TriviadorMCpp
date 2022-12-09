@@ -84,5 +84,7 @@ private:
 
 public:
 	UserDatabaseControl(UsersStorage& storage);
+
+	crow::response operator() (const crow::request& request) const;
 };
 
