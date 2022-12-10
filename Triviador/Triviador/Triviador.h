@@ -9,4 +9,12 @@ class Triviador : public QMainWindow
 public:
     Triviador(QWidget* parent = nullptr);
     ~Triviador();
+
+private:
+	Ui::TriviadorClass ui;
+
+private slots:
+    void on_profilePushButton_released();
+    void on_backToMenuPushButton_released();
+	void on_quitPushButton_released();
 };

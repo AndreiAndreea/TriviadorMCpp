@@ -105,6 +105,12 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameElementsGenerator">
+      <UniqueIdentifier>{feed2159-8efa-49a0-bac5-867b93c785ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameElementsGenerator">
+      <UniqueIdentifier>{d75d08b3-8629-4526-81a0-e1b122a2f4e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Triviador.qrc">
@@ -155,7 +161,7 @@
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="GameElementsGenerator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GameElementsGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,7 +235,7 @@
       <Filter>Header Files\Game</Filter>
     </QtMoc>
     <QtMoc Include="GameElementsGenerator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GameElementsGenerator</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
