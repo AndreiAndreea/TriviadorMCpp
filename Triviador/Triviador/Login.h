@@ -7,6 +7,11 @@
 #include <QFile>
 #include <QTextStream>
 
+#include <string>
+
+#include <curl/curl.h>
+#include <cpr/cpr.h>
+
 class Login : public QDialog
 {
 	Q_OBJECT
@@ -26,5 +31,5 @@ private slots:
 
 public:
 	const std::string GetUsername() const;
-	const std::string GetPassword() const;	
+	const std::string GetPassword() const;
 };

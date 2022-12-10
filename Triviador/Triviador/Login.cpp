@@ -1,10 +1,6 @@
 #include "Login.h"
 #include "Game.h"
 
-#include <sqlite_orm/sqlite_orm.h>
-
-using namespace sqlite_orm;
-
 Login::Login()
 {
 	ui.setupUi(this);
@@ -13,7 +9,7 @@ Login::Login()
 
 	ui.displayPasswordPushButton->setFlat(true);
 	ui.displayPasswordPushButton->setStyleSheet("QPushButton { background-color: transparent; }");
-	
+
 	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
 
 	ui.loginErrorLabel->hide();
@@ -36,46 +32,67 @@ const std::string Login::GetPassword() const
 void Login::on_displayPasswordPushButton_pressed()
 {
 	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-on.png"));
-	
+
 	ui.passwordLineEdit->setEchoMode(QLineEdit::Normal);
 }
 
 void Login::on_displayPasswordPushButton_released()
 {
 	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
-	
+
 	ui.passwordLineEdit->setEchoMode(QLineEdit::Password);
 }
 
 void Login::on_loginPushButton_released()
 {
-	auto storage = make_storage("triviador.sqlite",
-		make_table(
-			"Users",
-			make_column("id", &Player::GetID, &Player::SetID, autoincrement(), primary_key()),
-			make_column("username", &Player::GetUsername, &Player::SetUsername),
-			make_column("password", &Player::GetPassword, &Player::SetPassword),
-			make_column("email", &Player::GetEmail, &Player::SetEmail),
-			make_column("accountCreationDate", &Player::GetAccountCreationDate, &Player::SetAccountCreationDate),
-			make_column("score", &Player::GetTotalScore, &Player::SetTotalScore),
-			make_column("playedGames", &Player::GetPlayedGames, &Player::SetPlayedGames),
-			make_column("wonGames", &Player::GetWonGames, &Player::SetWonGames)
-		));
+	Player currentPlayer;
 
-	storage.sync_schema();
+	std::string usernameFromUser = ui.usernameLineEdit->text().toLocal8Bit().constData();
+	std::string passwordFromUser = ui.passwordLineEdit->text().toLocal8Bit().constData();
 
-	auto player = storage.get_all<Player>(where(c(&Player::GetUsername) == GetUsername() && c(&Player::GetPassword) == GetPassword()));
+	std::string link = "http://localhost:18080/checkuser/?username=" + usernameFromUser + "&password=" + passwordFromUser;
 
-	if (player.size() == 1)
+	cpr::Response responseFromServer = cpr::Get(cpr::Url{ link });
+
+	auto db_user = crow::json::load(responseFromServer.text);
+
+	if (db_user["Username"] == usernameFromUser && db_user["Password"] == passwordFromUser)
 	{
+		std::string idDecodedFromServer = db_user["ID"].s();
+		std::string usernameDecodedFromServer = db_user["Username"].s();
+		std::string passwordDecodedFromServer = db_user["Password"].s();
+		std::string emailDecodedFromServer = db_user["Email"].s();
+		std::string accountCreationDateDecodedFromServer = db_user["AccountCreationDate"].s();
+		std::string totalScoreDecodedFromServer = db_user["TotalScore"].s();
+		std::string playedGamesDecodedFromServer = db_user["PlayedGames"].s();
+		std::string wonGamesDecodedFromServer = db_user["WonGames"].s();
+
+		idDecodedFromServer = curl_unescape(idDecodedFromServer.c_str(), idDecodedFromServer.length());
+		usernameDecodedFromServer = curl_unescape(usernameDecodedFromServer.c_str(), usernameDecodedFromServer.length());
+		passwordDecodedFromServer = curl_unescape(passwordDecodedFromServer.c_str(), passwordDecodedFromServer.length());
+		emailDecodedFromServer = curl_unescape(emailDecodedFromServer.c_str(), emailDecodedFromServer.length());
+		accountCreationDateDecodedFromServer = curl_unescape(accountCreationDateDecodedFromServer.c_str(), accountCreationDateDecodedFromServer.length());
+		totalScoreDecodedFromServer = curl_unescape(totalScoreDecodedFromServer.c_str(), totalScoreDecodedFromServer.length());
+		playedGamesDecodedFromServer = curl_unescape(playedGamesDecodedFromServer.c_str(), playedGamesDecodedFromServer.length());
+		wonGamesDecodedFromServer = curl_unescape(wonGamesDecodedFromServer.c_str(), wonGamesDecodedFromServer.length());
+
+		currentPlayer.SetID(std::stoi(idDecodedFromServer));
+		currentPlayer.SetUsername(usernameDecodedFromServer);
+		currentPlayer.SetPassword(passwordDecodedFromServer);
+		currentPlayer.SetEmail(emailDecodedFromServer);
+		currentPlayer.SetAccountCreationDate(accountCreationDateDecodedFromServer);
+		currentPlayer.SetTotalScore(totalScoreDecodedFromServer);
+		currentPlayer.SetPlayedGames(playedGamesDecodedFromServer);
+		currentPlayer.SetWonGames(wonGamesDecodedFromServer);
+
 		Game* g = new Game;
 		g->show();
-	
-		this->close();
+
+		close();
 	}
-	else if (player.size() == 0)
+	else
 	{
-		ui.loginErrorLabel->setText("Username or password incorrect!");
+		ui.loginErrorLabel->setText(responseFromServer.text.c_str());
 		ui.loginErrorLabel->show();
 	}
 }

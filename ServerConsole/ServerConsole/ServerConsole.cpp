@@ -50,23 +50,37 @@ int main()
         (const crow::request& req)
         {
             std::string username = req.url_params.get("username");
+            std::string password = req.url_params.get("password");
 
-            if (username.empty() == false)
+            if (username.empty() == false && password.empty() == false)
             {
-                auto users = userDatabase.get_all<User>(where(c(&User::GetUsername) == username));
+                auto users = userDatabase.get_all<User>(where(c(&User::GetUsername) == username and c(&User::GetPassword) == password));
 
                 if (users.size() == 1)
                 {
-                    return crow::response(200);
+                    crow::json::wvalue user;
+                
+				    user["ID"] = users[0].GetID();
+				    user["Username"] = users[0].GetUsername();
+				    user["Password"] = users[0].GetPassword();
+				    user["Email"] = users[0].GetEmail();
+				    user["AccountCreationDate"] = users[0].GetAccountCreationDate();
+				    user["TotalScore"] = users[0].GetTotalScore();
+				    user["PlayedGames"] = users[0].GetPlayedGames();
+				    user["WonGames"] = users[0].GetWonGames();
+                
+                    return crow::json::wvalue{ user } ;
                 }
                 else
                 {
-                    return crow::response(403);
+				    return crow::json::wvalue { "Invalid username or password!" };
+                    //return crow::response(403);
                 }
             }
             else
             {
-                return crow::response(401);
+				return crow::json::wvalue { "Complete all fields and try again!" };
+                //return crow::response(401);
             }
         });
 
