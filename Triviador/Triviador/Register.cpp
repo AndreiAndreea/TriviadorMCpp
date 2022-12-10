@@ -73,67 +73,53 @@ void Register::on_displayPasswordPushButton_released()
 
 void Register::on_submitDataPushButton_released()
 {
-	ui.submitDataErrorLabel->hide();
-	ui.incompleteFieldsErrorLabel->hide();
-
-
-	if (GetInputUsernameByPlayer().empty() || GetInputPasswordByPlayer().empty() || GetInputEmailByPlayer().empty())
+	std::string usernameFromUser = ui.usernameLineEdit->text().toLocal8Bit().constData();
+	std::string passwordFromUser = ui.passwordLineEdit->text().toLocal8Bit().constData();
+	std::string emailFromUser = ui.emailLineEdit->text().toLocal8Bit().constData();
+	std::string currentDate = GetCurrentDate();
+	
+	if (usernameFromUser.empty() || passwordFromUser.empty() || emailFromUser.empty())
 	{
 		ui.incompleteFieldsErrorLabel->show();
+		ui.submitDataErrorLabel->hide();
+		ui.emailErrorLabel->hide();
+	}
+	else if (!isValidEmail(emailFromUser))
+	{
+		ui.emailErrorLabel->show();
+		ui.incompleteFieldsErrorLabel->hide();
+		ui.submitDataErrorLabel->hide();
 	}
 	else
 	{
-		ui.incompleteFieldsErrorLabel->hide();
+		auto currentDateEncoded = curl_easy_escape(nullptr, currentDate.c_str(), 0);
+		
+		std::string link = "http://localhost:18080/registeruser/?username=" + usernameFromUser + "&password=" + passwordFromUser + "&email=" + emailFromUser + "&accountCreationDate=" + currentDateEncoded;
 
-		if (isValidEmail(GetInputEmailByPlayer()) == false)
-			ui.emailErrorLabel->show();
+		cpr::Response responseFromServer = cpr::Get(cpr::Url{ link });
+
+		if (responseFromServer.status_code == 200)
+		{
+			ui.submitDataErrorLabel->setText("Your account has been created successfully. You will be send to login page in a few moments.");
+			ui.submitDataErrorLabel->show();
+
+			//TO-DO 
+			//Add a timer for a few seconds and after the timer is out, redirect the player to the login page.
+
+			Login* login = new Login();
+			login->show();
+			
+			close();
+		}
+		else if (responseFromServer.status_code == 400)
+		{
+			ui.submitDataErrorLabel->setText("The username or email you entered is already in use. Please try again.");
+			ui.submitDataErrorLabel->show();
+		}
 		else
 		{
-			ui.emailErrorLabel->hide();
-			
-			auto storage = make_storage("triviador.sqlite",
-				make_table(
-					"Users",
-					make_column("id", &Player::GetID, &Player::SetID, autoincrement(), primary_key()),
-					make_column("username", &Player::GetUsername, &Player::SetUsername),
-					make_column("password", &Player::GetPassword, &Player::SetUsername),
-					make_column("email", &Player::GetEmail, &Player::SetEmail),
-					make_column("accountCreationDate", &Player::GetAccountCreationDate, &Player::SetAccountCreationDate),
-					make_column("score", &Player::GetTotalScore, &Player::SetTotalScore),
-					make_column("playedGames", &Player::GetPlayedGames, &Player::SetPlayedGames),
-					make_column("wonGames", &Player::GetWonGames, &Player::SetWonGames)
-				));
-
-			storage.sync_schema();
-
-			auto players = storage.get_all<Player>(where(c(&Player::GetUsername) == GetInputUsernameByPlayer() || c(&Player::GetEmail) == GetInputEmailByPlayer()));
-
-			if (players.size() != 0)
-			{
-				ui.submitDataErrorLabel->setText("Error: An account was found with the same username or email. Change the username or the email and try again.");
-
-				ui.submitDataErrorLabel->show();
-			}
-			else
-			{
-				m_currentPlayer.SetUsername(GetInputUsernameByPlayer());
-				m_currentPlayer.SetPassword(GetInputPasswordByPlayer());
-				m_currentPlayer.SetEmail(GetInputEmailByPlayer());
-
-				m_currentPlayer.SetAccountCreationDate(GetCurrentDate());
-
-				storage.insert(m_currentPlayer);
-
-				ui.submitDataErrorLabel->setText("Your account has been created successfully. You will be send to login page in a few moments.");
-				ui.submitDataErrorLabel->show();
-
-				//TO-DO 
-				//Add a timer for a few seconds and after the timer is out, redirect the player to the login page.
-
-				Login* loginWindow = new Login();
-				loginWindow->show();
-				this->close();
-			}
+			ui.submitDataErrorLabel->setText("An error has occurred. Please try again.");
+			ui.submitDataErrorLabel->show();
 		}
 	}
 }

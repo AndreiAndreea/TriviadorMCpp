@@ -11,9 +11,9 @@
 #include <QFile>
 #include <QTextStream>
 
-#include <sqlite_orm/sqlite_orm.h>
-
-using namespace sqlite_orm;
+#include <curl/curl.h>
+#include <cpr/cpr.h>
+#include <crow.h>
 
 class Register : public QDialog
 {
