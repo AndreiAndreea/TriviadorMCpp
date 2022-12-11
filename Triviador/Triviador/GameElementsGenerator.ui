@@ -149,9 +149,9 @@ Answer</string>
   <widget class="QRadioButton" name="saveQuestionsInFileButton">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>10</y>
-     <width>201</width>
+     <width>151</width>
      <height>20</height>
     </rect>
    </property>
@@ -245,8 +245,8 @@ Answer</string>
     <rect>
      <x>20</x>
      <y>40</y>
-     <width>131</width>
-     <height>24</height>
+     <width>151</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">

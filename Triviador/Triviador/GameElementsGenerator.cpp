@@ -68,6 +68,14 @@ void GameElementsGenerator::ToggleAnswers(bool toggleAnswer)
 	ui.submitAnswerButton->setDisabled(toggleAnswer);
 }
 
+void GameElementsGenerator::DisableAdvantageOfferedAnswers(bool toggleAnswer)
+{
+	ui.offeredAnswer1Button->setDisabled(toggleAnswer);
+	ui.offeredAnswer2Button->setDisabled(toggleAnswer);
+	ui.offeredAnswer3Button->setDisabled(toggleAnswer);
+	ui.offeredAnswer4Button->setDisabled(toggleAnswer);
+}
+
 bool GameElementsGenerator::GetCanChooseTerritory()
 {
 	return m_canChooseTerritory;
@@ -276,6 +284,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 
 			ui.getRandomQuestionButton->setDisabled(true);
 			ToggleAnswers(false);
+			DisableAdvantageOfferedAnswers(false);
 
 			elapsedTime.start();
 		}
@@ -314,34 +323,7 @@ void GameElementsGenerator::on_submitAnswerButton_released()
 				uint16_t inputAnswer = text.split(" ")[0].toInt();
 				uint16_t currentAnswer = std::stoi(m_currentAnswer);
 
-				std::stringstream ss;
-				ss << "Correct answer is: " << m_currentAnswer << "\n"
-					<< "close by: " << abs(currentAnswer - inputAnswer) << "\n";
-
-				if (abs(currentAnswer - inputAnswer) == 0)
-				{
-					ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"green\">The answer is correct!</font></b>");
-					ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
-					m_canChooseTerritory = true;
-					ui.chooseTerritoryLabel->setText("Now you can choose a territory!");
-					ui.chooseTerritoryLabel->show();
-				}
-				else
-				{
-					ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"red\">The answer is wrong!</font></b>");
-					ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
-				}
-
-				QString displayAnswer = QString::fromStdString(ss.str());
-				ui.displayProximityCorrectAnswerLabel->setText(displayAnswer);
-				ui.displayProximityCorrectAnswerLabel->show();
-
-				ui.submitAnswerButton->setDisabled(true);
-
-				ui.inputAnswerLineEdit->setDisabled(true);
-
-				ui.elapsedTimeLabel->show();
-				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+				SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
 			}
 		}
 	}
@@ -532,20 +514,86 @@ void GameElementsGenerator::on_offerAnswersAdvantageButton_released()
 {
 	srand(time(0));
 	uint16_t randomValue;
-	
+
 	randomValue = std::stoi(m_currentAnswer) - rand() % 80;
 	ui.offeredAnswer1Button->setText(QString::number(randomValue));
-	
+
 	randomValue = std::stoi(m_currentAnswer) - rand() % 20;
 	ui.offeredAnswer1Button->setText(QString::number(randomValue));
-	
+
 	randomValue = std::stoi(m_currentAnswer) + rand() % 20;
 	ui.offeredAnswer1Button->setText(QString::number(randomValue));
-	
+
 	randomValue = std::stoi(m_currentAnswer) + rand() % 80;
 	ui.offeredAnswer1Button->setText(QString::number(randomValue));
-	
+
 	HideOfferedAnswers(false);
+}
+
+void GameElementsGenerator::on_offeredAnswer1Button_released()
+{
+	uint16_t inputAnswer = ui.offeredAnswer1Button->text().toInt();
+	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+
+	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	DisableAdvantageOfferedAnswers(true);
+}
+void GameElementsGenerator::on_offeredAnswer2Button_released()
+{
+	uint16_t inputAnswer = ui.offeredAnswer2Button->text().toInt();
+	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+
+	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	DisableAdvantageOfferedAnswers(true);
+}
+
+void GameElementsGenerator::on_offeredAnswer3Button_released()
+{
+	uint16_t inputAnswer = ui.offeredAnswer3Button->text().toInt();
+	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+
+	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	DisableAdvantageOfferedAnswers(true);
+}
+
+void GameElementsGenerator::on_offeredAnswer4Button_released()
+{
+	uint16_t inputAnswer = ui.offeredAnswer4Button->text().toInt();
+	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+
+	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	DisableAdvantageOfferedAnswers(true);
+}
+
+void GameElementsGenerator::SubmitSingleChoiceAnswer(uint16_t inputAnswer, uint16_t currentAnswer)
+{
+	std::stringstream ss;
+	ss << "Correct answer is: " << m_currentAnswer << "\n"
+		<< "close by: " << abs(currentAnswer - inputAnswer) << "\n";
+
+	if (abs(currentAnswer - inputAnswer) == 0)
+	{
+		ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"green\">The answer is correct!</font></b>");
+		ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+		m_canChooseTerritory = true;
+		ui.chooseTerritoryLabel->setText("Now you can choose a territory!");
+		ui.chooseTerritoryLabel->show();
+	}
+	else
+	{
+		ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"red\">The answer is wrong!</font></b>");
+		ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+	}
+
+	QString displayAnswer = QString::fromStdString(ss.str());
+	ui.displayProximityCorrectAnswerLabel->setText(displayAnswer);
+	ui.displayProximityCorrectAnswerLabel->show();
+
+	ui.submitAnswerButton->setDisabled(true);
+	ui.inputAnswerLineEdit->setDisabled(true);
+
+	ui.elapsedTimeLabel->show();
+	ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
 }
 
 void GameElementsGenerator::on_saveQuestionsInFileButton_released()

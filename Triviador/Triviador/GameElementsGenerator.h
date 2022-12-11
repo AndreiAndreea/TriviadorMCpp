@@ -44,7 +44,8 @@ private:
     
     void StartTimer();
     void ToggleAnswers(bool toggleAnswer);
-    
+    void DisableAdvantageOfferedAnswers(bool toggleAnswer);
+
     void CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& answer);
     
 	void HideOfferedAnswers(bool hide);
@@ -64,6 +65,13 @@ private slots:
     void on_fifty_fiftyAdvantageButton_released();
     void on_suggestAnswerAdvantageButton_released();
     void on_offerAnswersAdvantageButton_released();
+
+    void on_offeredAnswer1Button_released();
+    void on_offeredAnswer2Button_released();
+    void on_offeredAnswer3Button_released();
+    void on_offeredAnswer4Button_released();
+
+    void SubmitSingleChoiceAnswer(uint16_t inputAnswer, uint16_t currentAnswer);
 
     void OnTimerTick();
 
