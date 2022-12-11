@@ -101,7 +101,7 @@ void Register::on_submitDataPushButton_released()
 
 		if (responseFromServer.status_code == 200)
 		{
-			ui.submitDataErrorLabel->setText("Your account has been created successfully. You will be send to login page in a few moments.");
+			ui.submitDataErrorLabel->setText("Your account has been created successfully. You will be sent to login page in a few moments.");
 			ui.submitDataErrorLabel->show();
 
 			//TO-DO 

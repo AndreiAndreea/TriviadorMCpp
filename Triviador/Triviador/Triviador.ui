@@ -17,10 +17,10 @@
    <widget class="QWidget" name="menuWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>580</x>
       <y>10</y>
-      <width>221</width>
-      <height>241</height>
+      <width>171</width>
+      <height>191</height>
      </rect>
     </property>
     <widget class="QPushButton" name="quitPushButton">
@@ -66,10 +66,10 @@
    <widget class="QWidget" name="profileWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>30</y>
-      <width>421</width>
-      <height>301</height>
+      <x>20</x>
+      <y>10</y>
+      <width>341</width>
+      <height>181</height>
      </rect>
     </property>
     <widget class="QLabel" name="profileUsernameLabel">
@@ -78,7 +78,7 @@
        <x>30</x>
        <y>40</y>
        <width>101</width>
-       <height>31</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="text">
@@ -88,8 +88,8 @@
     <widget class="QPushButton" name="backToMenuPushButton">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>260</y>
+       <x>30</x>
+       <y>140</y>
        <width>131</width>
        <height>24</height>
       </rect>
@@ -102,9 +102,9 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>90</y>
+       <y>70</y>
        <width>121</width>
-       <height>31</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="text">
@@ -115,13 +115,105 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>140</y>
+       <y>100</y>
        <width>81</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
       <string>Won Games:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="profileSettingsPushButton">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>140</y>
+       <width>131</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Profile settings</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="profileSettingsWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>210</y>
+      <width>341</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <widget class="QPushButton" name="changeUsernamePushButton">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>10</y>
+       <width>131</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change username</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="changeUsernameLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>10</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="changePasswordLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>50</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="changeEmailLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>90</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="changePasswordPushButton">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>50</y>
+       <width>131</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change password</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="changeEmailPushButton">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>90</y>
+       <width>131</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change email</string>
      </property>
     </widget>
    </widget>
@@ -132,7 +224,7 @@
      <x>0</x>
      <y>0</y>
      <width>766</width>
-     <height>22</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>
