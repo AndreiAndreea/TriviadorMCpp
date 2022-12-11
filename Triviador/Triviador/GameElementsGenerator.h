@@ -14,6 +14,7 @@
 #include <array>
 #include <sstream>
 #include <ctime>
+#include <string>
 #include <cstdlib>
 
 #include "Questions.h"
@@ -55,7 +56,8 @@ private slots:
     void on_multipleChoiceAnswer2Button_released();
     void on_multipleChoiceAnswer3Button_released();
     void on_multipleChoiceAnswer4Button_released();
-    void on_fifty_fiftyAdvantagePushButton_released();
+    void on_fifty_fiftyAdvantageButton_released();
+    void on_suggestAnswerButton_released();
 
     void OnTimerTick();
 

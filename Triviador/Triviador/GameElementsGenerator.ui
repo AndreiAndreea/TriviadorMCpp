@@ -253,17 +253,43 @@ Answer</string>
     <string>Get Random Question</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="fifty_fiftyAdvantagePushButton">
+  <widget class="QPushButton" name="fifty_fiftyAdvantageButton">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>340</y>
      <width>221</width>
-     <height>24</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
     <string>Use 50-50 advantage</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="suggestAnswerButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>370</y>
+     <width>221</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Use suggest answer advantage</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="suggestAnswerLabel">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>378</y>
+     <width>131</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>suggestAnswerLabel</string>
    </property>
   </widget>
  </widget>

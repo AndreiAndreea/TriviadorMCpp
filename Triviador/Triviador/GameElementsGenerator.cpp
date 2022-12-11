@@ -22,7 +22,10 @@ GameElementsGenerator::GameElementsGenerator()
 	ui.multipleChoiceAnswer2Button->hide();
 	ui.multipleChoiceAnswer3Button->hide();
 	ui.multipleChoiceAnswer4Button->hide();
-	ui.fifty_fiftyAdvantagePushButton->hide();
+	
+	ui.fifty_fiftyAdvantageButton->hide();
+	ui.suggestAnswerButton->hide();
+	ui.suggestAnswerLabel->hide();
 
 	ui.chooseTerritoryLabel->hide();
 	ui.checkAnswerSelection->hide();
@@ -183,8 +186,11 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.multipleChoiceAnswer2Button->hide();
 				ui.multipleChoiceAnswer3Button->hide();
 				ui.multipleChoiceAnswer4Button->hide();
-				ui.fifty_fiftyAdvantagePushButton->hide();
-
+				
+				ui.fifty_fiftyAdvantageButton->hide();
+				ui.suggestAnswerButton->show();
+				ui.suggestAnswerLabel->hide();
+				
 				ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 				ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
 
@@ -214,7 +220,10 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.multipleChoiceAnswer2Button->show();
 				ui.multipleChoiceAnswer3Button->show();
 				ui.multipleChoiceAnswer4Button->show();
-				ui.fifty_fiftyAdvantagePushButton->show();
+				
+				ui.fifty_fiftyAdvantageButton->show();
+				ui.suggestAnswerButton->hide();
+				ui.suggestAnswerLabel->hide();
 
 				ui.checkAnswerSelection->setText("");
 				ui.checkAnswerSelection->show();
@@ -430,9 +439,9 @@ void GameElementsGenerator::on_multipleChoiceAnswer4Button_released()
 	}
 }
 
-void GameElementsGenerator::on_fifty_fiftyAdvantagePushButton_released()
+void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 {
-	if (ui.fifty_fiftyAdvantagePushButton->isEnabled())
+	if (ui.fifty_fiftyAdvantageButton->isEnabled())
 	{
 		srand(time(0));
 		int randomAnswerNumber = rand() % 4 + 1;
@@ -484,6 +493,15 @@ void GameElementsGenerator::on_fifty_fiftyAdvantagePushButton_released()
 		}
 		
 	}
+}
+
+void GameElementsGenerator::on_suggestAnswerButton_released()
+{
+	srand(time(0));
+	uint16_t randomValue = std::stoi(m_currentAnswer) + rand() % 20 - rand() % 20;
+	
+	ui.suggestAnswerLabel->setText(QString::number(randomValue));
+	ui.suggestAnswerLabel->show();
 }
 
 void GameElementsGenerator::on_saveQuestionsInFileButton_released()

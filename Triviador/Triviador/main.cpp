@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     //Triviador w;
     //w.show();
 	
-    ///LoginRegister r;
+    //LoginRegister r;
     //r.show();
 	
     Game game;
