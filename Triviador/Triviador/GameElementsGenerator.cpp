@@ -22,10 +22,12 @@ GameElementsGenerator::GameElementsGenerator()
 	ui.multipleChoiceAnswer2Button->hide();
 	ui.multipleChoiceAnswer3Button->hide();
 	ui.multipleChoiceAnswer4Button->hide();
-	
+
 	ui.fifty_fiftyAdvantageButton->hide();
-	ui.suggestAnswerButton->hide();
-	ui.suggestAnswerLabel->hide();
+	ui.suggestAnswerAdvantageButton->hide();
+	ui.suggestAnswerAdvantageLabel->hide();
+	ui.offerAnswersAdvantageButton->hide();
+	HideOfferedAnswers(true);
 
 	ui.chooseTerritoryLabel->hide();
 	ui.checkAnswerSelection->hide();
@@ -159,6 +161,24 @@ void GameElementsGenerator::CheckMultipleChoiceAnswer(const QString chosenAnswer
 	ui.displayAnswerVerdictMultipleChoiceQuestionLabel->show();
 }
 
+void GameElementsGenerator::HideOfferedAnswers(bool hide)
+{
+	if (hide == true)
+	{
+		ui.offeredAnswer1Button->hide();
+		ui.offeredAnswer2Button->hide();
+		ui.offeredAnswer3Button->hide();
+		ui.offeredAnswer4Button->hide();
+	}
+	else
+	{
+		ui.offeredAnswer1Button->show();
+		ui.offeredAnswer2Button->show();
+		ui.offeredAnswer3Button->show();
+		ui.offeredAnswer4Button->show();
+	}
+}
+
 void GameElementsGenerator::on_getRandomQuestionButton_released()
 {
 	if (m_numberOfPlayers >= 2 && m_numberOfPlayers <= 4)
@@ -186,11 +206,13 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.multipleChoiceAnswer2Button->hide();
 				ui.multipleChoiceAnswer3Button->hide();
 				ui.multipleChoiceAnswer4Button->hide();
-				
+
 				ui.fifty_fiftyAdvantageButton->hide();
-				ui.suggestAnswerButton->show();
-				ui.suggestAnswerLabel->hide();
-				
+				ui.suggestAnswerAdvantageButton->show();
+				ui.suggestAnswerAdvantageLabel->hide();
+				ui.offerAnswersAdvantageButton->show();
+				HideOfferedAnswers(true);
+
 				ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 				ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
 
@@ -220,10 +242,12 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.multipleChoiceAnswer2Button->show();
 				ui.multipleChoiceAnswer3Button->show();
 				ui.multipleChoiceAnswer4Button->show();
-				
+
 				ui.fifty_fiftyAdvantageButton->show();
-				ui.suggestAnswerButton->hide();
-				ui.suggestAnswerLabel->hide();
+				ui.suggestAnswerAdvantageButton->hide();
+				ui.suggestAnswerAdvantageLabel->hide();
+				ui.offerAnswersAdvantageButton->hide();
+				HideOfferedAnswers(true);
 
 				ui.checkAnswerSelection->setText("");
 				ui.checkAnswerSelection->show();
@@ -491,17 +515,37 @@ void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 				break;
 			}
 		}
-		
+
 	}
 }
 
-void GameElementsGenerator::on_suggestAnswerButton_released()
+void GameElementsGenerator::on_suggestAnswerAdvantageButton_released()
 {
 	srand(time(0));
 	uint16_t randomValue = std::stoi(m_currentAnswer) + rand() % 20 - rand() % 20;
+
+	ui.suggestAnswerAdvantageLabel->setText(QString::number(randomValue));
+	ui.suggestAnswerAdvantageLabel->show();
+}
+
+void GameElementsGenerator::on_offerAnswersAdvantageButton_released()
+{
+	srand(time(0));
+	uint16_t randomValue;
 	
-	ui.suggestAnswerLabel->setText(QString::number(randomValue));
-	ui.suggestAnswerLabel->show();
+	randomValue = std::stoi(m_currentAnswer) - rand() % 80;
+	ui.offeredAnswer1Button->setText(QString::number(randomValue));
+	
+	randomValue = std::stoi(m_currentAnswer) - rand() % 20;
+	ui.offeredAnswer1Button->setText(QString::number(randomValue));
+	
+	randomValue = std::stoi(m_currentAnswer) + rand() % 20;
+	ui.offeredAnswer1Button->setText(QString::number(randomValue));
+	
+	randomValue = std::stoi(m_currentAnswer) + rand() % 80;
+	ui.offeredAnswer1Button->setText(QString::number(randomValue));
+	
+	HideOfferedAnswers(false);
 }
 
 void GameElementsGenerator::on_saveQuestionsInFileButton_released()

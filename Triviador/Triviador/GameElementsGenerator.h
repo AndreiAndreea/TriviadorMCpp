@@ -41,9 +41,13 @@ public:
 private:
     void SaveSingleChoiceQuestionsToFile(const QString fileName);
     void SaveMultipleChoiceQuestionsToFile(const QString fileName);
+    
     void StartTimer();
     void ToggleAnswers(bool toggleAnswer);
+    
     void CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& answer);
+    
+	void HideOfferedAnswers(bool hide);
 
 private slots:
     void on_saveQuestionsInFileButton_released();
@@ -56,8 +60,10 @@ private slots:
     void on_multipleChoiceAnswer2Button_released();
     void on_multipleChoiceAnswer3Button_released();
     void on_multipleChoiceAnswer4Button_released();
+    
     void on_fifty_fiftyAdvantageButton_released();
-    void on_suggestAnswerButton_released();
+    void on_suggestAnswerAdvantageButton_released();
+    void on_offerAnswersAdvantageButton_released();
 
     void OnTimerTick();
 
