@@ -1,5 +1,6 @@
 #include "Login.h"
 #include "Game.h"
+#include "Triviador.h"
 
 Login::Login()
 {
@@ -11,6 +12,9 @@ Login::Login()
 	ui.displayPasswordPushButton->setStyleSheet("QPushButton { background-color: transparent; }");
 
 	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
+
+	ui.transferToTriviadorProgressBar->hide();
+	ui.transferToTriviadorProgressLabel->hide();
 
 	ui.loginErrorLabel->hide();
 }
@@ -27,6 +31,32 @@ const std::string Login::GetUsername() const
 const std::string Login::GetPassword() const
 {
 	return ui.passwordLineEdit->text().toStdString();
+}
+
+void Login::OnTimerTick()
+{
+	ui.transferToTriviadorProgressBar->setValue(ui.transferToTriviadorProgressBar->value() + 1);
+
+	if (ui.transferToTriviadorProgressBar->value() >= 100)
+	{
+		Triviador* t = new Triviador;
+		t->show();
+		timer->disconnect();
+	}
+}
+
+void Login::StartTimer()
+{
+	ui.transferToTriviadorProgressBar->setValue(0);
+
+	timer = new QTimer(this);
+
+	timer->setInterval(100);
+	timer->setTimerType(Qt::PreciseTimer);
+
+	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));
+
+	timer->start();
 }
 
 void Login::on_displayPasswordPushButton_pressed()
@@ -56,7 +86,7 @@ void Login::on_loginPushButton_released()
 
 	auto db_user = crow::json::load(responseFromServer.text);
 
-	if (db_user["Username"] == usernameFromUser && db_user["Password"] == passwordFromUser)
+	/*if (db_user["Username"] == usernameFromUser && db_user["Password"] == passwordFromUser)
 	{
 		std::string idDecodedFromServer = db_user["ID"].s();
 		std::string usernameDecodedFromServer = db_user["Username"].s();
@@ -85,8 +115,8 @@ void Login::on_loginPushButton_released()
 		currentPlayer.SetPlayedGames(playedGamesDecodedFromServer);
 		currentPlayer.SetWonGames(wonGamesDecodedFromServer);
 
-		Game* g = new Game;
-		g->show();
+		//Game* g = new Game;
+		//g->show();
 
 		close();
 	}
@@ -94,5 +124,23 @@ void Login::on_loginPushButton_released()
 	{
 		ui.loginErrorLabel->setText(responseFromServer.text.c_str());
 		ui.loginErrorLabel->show();
+	}*/
+
+	//to be moved in if after login server bug is resolved
+	ui.transferToTriviadorProgressLabel->setText("Login successful! You will be redirected to the game menu page in a few moments!");
+	ui.transferToTriviadorProgressLabel->show();
+
+	ui.transferToTriviadorProgressBar->show();
+	StartTimer();
+}
+
+void Login::on_loginBackPushButton_released()
+{
+	if (ui.loginBackPushButton->isEnabled())
+	{
+		LoginRegister* r = new LoginRegister;
+		r->show();
+
+		this->close();
 	}
 }

@@ -8,11 +8,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Triviador w;
-    w.show();
+    //Triviador w;
+    //w.show();
 	
-    //LoginRegister r;
-    //r.show();
+    LoginRegister r;
+    r.show();
 	
     //Game game;
     //game.show();

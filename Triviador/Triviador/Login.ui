@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
+    <width>796</width>
     <height>435</height>
    </rect>
   </property>
@@ -93,7 +93,7 @@
     <rect>
      <x>30</x>
      <y>240</y>
-     <width>101</width>
+     <width>141</width>
      <height>31</height>
     </rect>
    </property>
@@ -112,6 +112,45 @@
    </property>
    <property name="text">
     <string>Error at login invalid credenrtials</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="loginBackPushButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>320</y>
+     <width>141</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Back to main page</string>
+   </property>
+  </widget>
+  <widget class="QProgressBar" name="transferToTriviadorProgressBar">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>280</y>
+     <width>118</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="value">
+    <number>24</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="transferToTriviadorProgressLabel">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>250</y>
+     <width>581</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Transfer to Triviador progress label</string>
    </property>
   </widget>
  </widget>

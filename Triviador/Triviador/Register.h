@@ -41,6 +41,7 @@ private slots:
 	void on_displayPasswordPushButton_released();
 
 	void on_submitDataPushButton_released();
+	void on_registerBackPushButton_released();
 
 private:
 	Player m_currentPlayer;

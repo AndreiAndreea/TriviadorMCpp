@@ -24,12 +24,20 @@ public:
 	~Login();
 
 private slots:
-	void on_loginPushButton_released();
-
 	void on_displayPasswordPushButton_pressed();
 	void on_displayPasswordPushButton_released();
+	
+	void on_loginPushButton_released();
+	void on_loginBackPushButton_released();
+
+	void OnTimerTick();
 
 public:
 	const std::string GetUsername() const;
 	const std::string GetPassword() const;
+
+	void StartTimer();
+
+private:
+	QTimer* timer;
 };

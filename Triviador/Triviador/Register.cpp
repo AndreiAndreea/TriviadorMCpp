@@ -1,5 +1,6 @@
 #include "Register.h"
 #include "Login.h"
+#include "Game.h"
 
 #include <regex>
 
@@ -121,5 +122,16 @@ void Register::on_submitDataPushButton_released()
 			ui.submitDataErrorLabel->setText("An error has occurred. Please try again.");
 			ui.submitDataErrorLabel->show();
 		}
+	}
+}
+
+void Register::on_registerBackPushButton_released()
+{
+	if (ui.registerBackPushButton->isEnabled())
+	{
+		LoginRegister* r = new LoginRegister;
+		r->show();
+
+		this->close();
 	}
 }
