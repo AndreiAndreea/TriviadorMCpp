@@ -5,6 +5,8 @@ Game::Game()
 	ui.setupUi(this);
 	w.show();
 	ui.existingRegion->hide();
+
+	GenerateRandomColor();
 }
 
 Game::~Game()
@@ -31,6 +33,15 @@ void Game::AddNewSelectedRegion(const QPointF& coordPos)
 }
 
 
+void Game::GenerateRandomColor()
+{
+	srand(time(0));
+
+	int randomColorIndex = rand() % m_colorList.size();
+
+	m_usedColor = m_colorList[randomColorIndex];
+}
+
 void Game::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
@@ -43,7 +54,7 @@ void Game::paintEvent(QPaintEvent*)
 	for (const auto& coordRegion : m_selectedRegions)
 	{
 		QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
-		painter.fillRect(square, Qt::cyan);
+		painter.fillRect(square, m_usedColor);
 	}
 }
 

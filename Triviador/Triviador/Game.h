@@ -10,6 +10,8 @@
 #include "Map.h"
 #include "GameElementsGenerator.h"
 
+#include <cstdlib>
+
 class Game : public QDialog
 {
 	Q_OBJECT
@@ -28,6 +30,7 @@ public:
 	void AddNewSelectedRegion(const QPointF& coordPos);
 
 private:
+	void GenerateRandomColor();
 	void paintEvent(QPaintEvent*);
 	void DrawMap(QPainter& painter);
 
@@ -39,6 +42,10 @@ private slots:
 private:
 	Map m_map;
 
+	QColor m_usedColor;
+	
+	std::vector<QColor> m_colorList = { Qt::yellow, Qt:: blue, Qt::green, Qt::cyan, Qt::magenta, Qt::red, Qt::darkGreen, Qt::darkCyan, Qt::darkMagenta, Qt::darkRed };
+	
 	std::vector<QPointF> m_selectedRegions;
 };
 
