@@ -22,6 +22,7 @@ GameElementsGenerator::GameElementsGenerator()
 	ui.multipleChoiceAnswer2Button->hide();
 	ui.multipleChoiceAnswer3Button->hide();
 	ui.multipleChoiceAnswer4Button->hide();
+	ui.fifty_fiftyAdvantagePushButton->hide();
 
 	ui.chooseTerritoryLabel->hide();
 	ui.checkAnswerSelection->hide();
@@ -182,6 +183,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.multipleChoiceAnswer2Button->hide();
 				ui.multipleChoiceAnswer3Button->hide();
 				ui.multipleChoiceAnswer4Button->hide();
+				ui.fifty_fiftyAdvantagePushButton->hide();
 
 				ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 				ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
@@ -212,6 +214,8 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.multipleChoiceAnswer2Button->show();
 				ui.multipleChoiceAnswer3Button->show();
 				ui.multipleChoiceAnswer4Button->show();
+				ui.fifty_fiftyAdvantagePushButton->show();
+
 				ui.checkAnswerSelection->setText("");
 				ui.checkAnswerSelection->show();
 				m_answerHasBeenSelected = false;
@@ -423,6 +427,62 @@ void GameElementsGenerator::on_multipleChoiceAnswer4Button_released()
 		}
 		else
 			ui.checkAnswerSelection->setText("You have already chosen an answer!");
+	}
+}
+
+void GameElementsGenerator::on_fifty_fiftyAdvantagePushButton_released()
+{
+	if (ui.fifty_fiftyAdvantagePushButton->isEnabled())
+	{
+		srand(time(0));
+		int randomAnswerNumber = rand() % 4 + 1;
+		int disabledAnswersCounter = 0;
+		bool isCorrectAnswer;
+		bool oneIsDisabled = false, twoIsDisabled = false, threeIsDisabled = false, fourIsDisabled = false;
+
+		while (disabledAnswersCounter != 2)
+		{
+			switch (randomAnswerNumber)
+			{
+			case 1:
+				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer1Button->text(), isCorrectAnswer);
+				if (!isCorrectAnswer && !oneIsDisabled)
+				{
+					ui.multipleChoiceAnswer1Button->setDisabled(true);
+					disabledAnswersCounter++;
+					oneIsDisabled = true;
+				}
+				break;
+			case 2:
+				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer2Button->text(), isCorrectAnswer);
+				if (!isCorrectAnswer && !twoIsDisabled)
+				{
+					ui.multipleChoiceAnswer2Button->setDisabled(true);
+					disabledAnswersCounter++;
+					twoIsDisabled = true;
+				}
+				break;
+			case 3:
+				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer3Button->text(), isCorrectAnswer);
+				if (!isCorrectAnswer && !threeIsDisabled)
+				{
+					ui.multipleChoiceAnswer3Button->setDisabled(true);
+					disabledAnswersCounter++;
+					threeIsDisabled = true;
+				}
+				break;
+			case 4:
+				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer4Button->text(), isCorrectAnswer);
+				if (!isCorrectAnswer && !fourIsDisabled)
+				{
+					ui.multipleChoiceAnswer4Button->setDisabled(true);
+					disabledAnswersCounter++;
+					fourIsDisabled = true;
+				}
+				break;
+			}
+		}
+		
 	}
 }
 

@@ -2,6 +2,7 @@
 
 #include "LoginRegister.h"
 #include "Game.h"
+#include "GameElementsGenerator.h"
 
 #include <QtWidgets/QApplication>
 
@@ -11,11 +12,11 @@ int main(int argc, char *argv[])
     //Triviador w;
     //w.show();
 	
-    LoginRegister r;
-    r.show();
+    ///LoginRegister r;
+    //r.show();
 	
-    //Game game;
-    //game.show();
+    Game game;
+    game.show();
 
     return a.exec();
 }

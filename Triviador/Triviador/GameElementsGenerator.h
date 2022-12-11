@@ -32,6 +32,7 @@ public:
 	explicit GameElementsGenerator();
 	~GameElementsGenerator();
     
+    //setters and gettters
     bool GetCanChooseTerritory();
     void SetCanChooseTerritory(bool canChooseTerritory);
     void SetNumberOfPlayers(uint16_t numberOfPlayers);
@@ -54,6 +55,7 @@ private slots:
     void on_multipleChoiceAnswer2Button_released();
     void on_multipleChoiceAnswer3Button_released();
     void on_multipleChoiceAnswer4Button_released();
+    void on_fifty_fiftyAdvantagePushButton_released();
 
     void OnTimerTick();
 

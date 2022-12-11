@@ -253,6 +253,19 @@ Answer</string>
     <string>Get Random Question</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="fifty_fiftyAdvantagePushButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>340</y>
+     <width>221</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Use 50-50 advantage</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
