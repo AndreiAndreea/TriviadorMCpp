@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
     //LoginRegister r;
     //r.show();
 	
-    //Game game;
-    //game.show();
+    Game game;
+    game.show();
 
     return a.exec();
 }

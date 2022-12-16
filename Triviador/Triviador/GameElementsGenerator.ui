@@ -146,19 +146,6 @@
 Answer</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="saveQuestionsInFileButton">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>151</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Save questions in file</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="checkAnswerSelection">
    <property name="geometry">
     <rect>

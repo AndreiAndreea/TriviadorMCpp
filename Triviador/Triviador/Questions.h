@@ -6,7 +6,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
-
+#include <array>
 
 class Questions
 {
@@ -25,13 +25,16 @@ public:
 
 	uint8_t GenerateRandomNumber(const uint8_t& size);
 
+	std::vector<QuestionSingleChoice> GetAFewRandomSingleChoiceQuestions(const uint16_t amount);
+	std::vector<QuestionMultipleChoice> GetAFewRandomMultipleChoiceQuestions(uint16_t amount);
+
 	const QuestionSingleChoice& GetRandomSingleChoiceQuestion();
 	const QuestionMultipleChoice& GetRandomMultipleChoiceQuestion();
 
-private: 
-	std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt";
-	std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt";
-
+private:
+	std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt"; //need to be deleted when the server is ready
+	std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt"; //need to be deleted when the server is ready
+	
 public:
 	void GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions);
 	void GetMultipleChoiceQuestionsFromFile(const std::string& filePathMultipleChoiceQuestions);
@@ -39,7 +42,9 @@ public:
 private:
 	std::vector<QuestionSingleChoice> m_singleChoiceQuestions;
 	std::vector<QuestionMultipleChoice> m_multipleChoiceQuestions;
-	
+
+	std::vector<QuestionSingleChoice> randomSingleChoiceQuestions;
+	std::vector<QuestionMultipleChoice> randomMultipleChoiceQuestions;
 
 };
 

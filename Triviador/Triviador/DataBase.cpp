@@ -24,8 +24,8 @@ bool DatabaseStorage::Initialize()
 
 void DatabaseStorage::PopulateDatabaseWithQuestions()
 {
-	std::vector<SingleChoiceQuestionWrapper> singleChoiceQuestionsVector; //save the questions for exporting them to database
-	std::vector<MultipleChoiceQuestionWrapper> multipleChoiceQuestionsVector; //save the questions for exporting them to database
+	std::vector<QuestionSingleChoice> singleChoiceQuestionsVector; //save the questions to export them to database
+	std::vector<QuestionMultipleChoice> multipleChoiceQuestionsVector; //save the questions to export them to database
 
 	std::array<std::string, m_numberOfAnswers> multipleChoiceAnswersArray;
 
@@ -33,14 +33,14 @@ void DatabaseStorage::PopulateDatabaseWithQuestions()
 	std::string currentAnswer;
 
 	for (const auto& question : m_questions.GetSingleChoiceQuestionsVector())
-		singleChoiceQuestionsVector.emplace_back(SingleChoiceQuestionWrapper{ 0, question.GetQuestionText(), question.GetAnswer() });
+		singleChoiceQuestionsVector.emplace_back(QuestionSingleChoice{ 0, question.GetQuestionText(), question.GetAnswer() });
 
 	m_db.insert_range(singleChoiceQuestionsVector.begin(), singleChoiceQuestionsVector.end());
 
 	for (const auto& question : m_questions.GetMultipleChoiceQuestionsVector())
-		multipleChoiceQuestionsVector.emplace_back(MultipleChoiceQuestionWrapper{ 0, question.GetQuestionText(), question.GetAnswers()[0], question.GetAnswers()[1], question.GetAnswers()[2], question.GetAnswers()[3], question.GetAnswers()[4] });
+		multipleChoiceQuestionsVector.emplace_back(QuestionMultipleChoice{ 0, question.GetQuestionText(), question.GetAnswers()[0], question.GetAnswers()[1], question.GetAnswers()[2], question.GetAnswers()[3], question.GetAnswers()[4] });
 
 	m_db.insert_range(multipleChoiceQuestionsVector.begin(), multipleChoiceQuestionsVector.end());
 
-	m_db.insert(Player(0, "Admin", "Admin28!", "admin@blue-zone.ro", "08/10/2022 at 00:00:00", "999999999", "5", "2"));
+	m_db.insert(Player(0, "Admin", "Admin28!", "admin@blue-zone.ro", "08/10/2022 at 12:12:00", "999999999", "5", "2"));
 }

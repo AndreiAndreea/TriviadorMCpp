@@ -16,6 +16,19 @@ QuestionMultipleChoice::QuestionMultipleChoice(const std::string& questionText, 
 
 }
 
+QuestionMultipleChoice::QuestionMultipleChoice(uint16_t id, const std::string& questionText, const std::string& correctAnswer, const std::string& answer1, const std::string& answer2, const std::string& answer3, const std::string& answer4)
+{
+	m_id = id;
+	m_questionText = questionText;
+	
+	m_answers[0] = correctAnswer;
+
+	m_answers[1] = answer1;
+	m_answers[2] = answer2;
+	m_answers[3] = answer3;
+	m_answers[4] = answer4;
+}
+
 QuestionMultipleChoice::QuestionMultipleChoice(const QuestionMultipleChoice& object)
 {
 	*this = object;
@@ -26,9 +39,74 @@ QuestionMultipleChoice::QuestionMultipleChoice(QuestionMultipleChoice&& object)
 	*this = std::move(object);
 }
 
+void QuestionMultipleChoice::SetID(uint16_t id)
+{
+	m_id = id;
+}
+
+uint16_t QuestionMultipleChoice::GetID() const
+{
+	return m_id;
+}
+
+void QuestionMultipleChoice::SetQuestionText(const std::string& questionText)
+{
+	m_questionText = questionText;
+}
+
 const std::string& QuestionMultipleChoice::GetQuestionText() const
 {
 	return m_questionText;
+}
+
+void QuestionMultipleChoice::SetCorrectAnswer(const std::string& answer)
+{
+	m_answers[0] = answer;
+}
+
+const std::string& QuestionMultipleChoice::GetCorrectAnswer() const
+{
+	return m_answers[0];
+}
+
+void QuestionMultipleChoice::SetAnswer1(const std::string& answer)
+{
+	m_answers[1] = answer;
+}
+
+const std::string& QuestionMultipleChoice::GetAnswer1() const
+{
+	return m_answers[1];
+}
+
+void QuestionMultipleChoice::SetAnswer2(const std::string& answer)
+{
+	m_answers[2] = answer;
+}
+
+const std::string& QuestionMultipleChoice::GetAnswer2() const
+{
+	return m_answers[2];
+}
+
+void QuestionMultipleChoice::SetAnswer3(const std::string& answer)
+{
+	m_answers[3] = answer;
+}
+
+const std::string& QuestionMultipleChoice::GetAnswer3() const
+{
+	return m_answers[3];
+}
+
+void QuestionMultipleChoice::SetAnswer4(const std::string& answer)
+{
+	m_answers[4] = answer;
+}
+
+const std::string& QuestionMultipleChoice::GetAnswer4() const
+{
+	return m_answers[4];
 }
 
 const std::array<std::string, m_numberOfAnswers>& QuestionMultipleChoice::GetAnswers() const

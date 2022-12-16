@@ -4,11 +4,16 @@ GameElementsGenerator::GameElementsGenerator()
 {
 	ui.setupUi(this);
 
+	m_amountOfRandomQuestionsFromDatabase = 5;
+
 	DatabaseStorage storage("SingleChoiceQuestions.txt", "MultipleChoiceQuestions.txt");
 	if (!storage.Initialize())
 	{
 		std::cout << "Failed to initialize the database!";
 	}
+
+	m_randomSingleChoiceQuestionsVector = m_questions.GetAFewRandomSingleChoiceQuestions(m_amountOfRandomQuestionsFromDatabase);
+	m_randomMultipleChoiceQuestionsVector = m_questions.GetAFewRandomMultipleChoiceQuestions(m_amountOfRandomQuestionsFromDatabase);
 
 	ui.titleLabel->setText(" ");
 
@@ -89,42 +94,6 @@ void GameElementsGenerator::SetCanChooseTerritory(bool canChooseTerritory)
 void GameElementsGenerator::SetNumberOfPlayers(uint16_t numberOfPlayers)
 {
 	m_numberOfPlayers = numberOfPlayers;
-}
-
-void GameElementsGenerator::SaveSingleChoiceQuestionsToFile(const QString fileName)
-{
-	QFile file(QString("%1").arg(fileName));
-
-	if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-		QTextStream ostream(&file);
-
-		for (const auto& question : m_questions.GetSingleChoiceQuestionsVector())
-			ostream << QString::fromStdString(question.GetQuestionText()) << "\n" << question.GetAnswer() << "\n\n";
-
-		file.close();
-	}
-}
-
-void GameElementsGenerator::SaveMultipleChoiceQuestionsToFile(const QString fileName)
-{
-	QFile file(QString("%1").arg(fileName));
-
-	if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-		QTextStream ostream(&file);
-
-		for (const auto& question : m_questions.GetMultipleChoiceQuestionsVector())
-		{
-			ostream << QString::fromStdString(question.GetQuestionText()) << "\n";
-
-			for (const auto& answer : question.GetAnswers())
-				ostream << QString::fromStdString(answer) << "\n";
-
-			ostream << "\n";
-		}
-		file.close();
-	}
 }
 
 void GameElementsGenerator::StartTimer()
@@ -226,7 +195,12 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 
 				ui.checkAnswerSelection->hide();
 				ui.chooseTerritoryLabel->hide();
-				QuestionSingleChoice SCQuestion = m_questions.GetRandomSingleChoiceQuestion();
+
+				uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
+
+				QuestionSingleChoice SCQuestion = m_randomSingleChoiceQuestionsVector.at(randomPosition);
+				m_randomSingleChoiceQuestionsVector.erase(m_randomSingleChoiceQuestionsVector.begin() + randomPosition);
+
 				m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
 				QString scq = QString::fromStdString(SCQuestion.GetQuestionText());
@@ -260,7 +234,12 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.checkAnswerSelection->setText("");
 				ui.checkAnswerSelection->show();
 				m_answerHasBeenSelected = false;
-				QuestionMultipleChoice MCQuestion = m_questions.GetRandomMultipleChoiceQuestion();
+
+				uint16_t randomPosition = rand() % m_randomMultipleChoiceQuestionsVector.size();
+
+				QuestionMultipleChoice MCQuestion = m_randomMultipleChoiceQuestionsVector.at(randomPosition);
+				m_randomMultipleChoiceQuestionsVector.erase(m_randomMultipleChoiceQuestionsVector.begin() + randomPosition);
+				
 				m_currentAnswer = MCQuestion.GetAnswers()[0];
 
 				QString mcq = QString::fromStdString(MCQuestion.GetQuestionText());
@@ -594,13 +573,4 @@ void GameElementsGenerator::SubmitSingleChoiceAnswer(uint16_t inputAnswer, uint1
 
 	ui.elapsedTimeLabel->show();
 	ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
-}
-
-void GameElementsGenerator::on_saveQuestionsInFileButton_released()
-{
-	if (ui.saveQuestionsInFileButton->isChecked())
-	{
-		SaveSingleChoiceQuestionsToFile("outputSCQuestions.txt");
-		SaveMultipleChoiceQuestionsToFile("outputMCQuestions.txt");
-	}
 }

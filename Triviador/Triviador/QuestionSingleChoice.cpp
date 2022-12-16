@@ -2,6 +2,7 @@
 
 QuestionSingleChoice::QuestionSingleChoice()
 {
+	m_id = 0;
 	m_questionText = "None";
 	m_answer = 0;
 }
@@ -11,6 +12,13 @@ QuestionSingleChoice::QuestionSingleChoice(const std::string& question, uint16_t
 	m_answer(answer)
 {
 
+}
+
+QuestionSingleChoice::QuestionSingleChoice(uint16_t id, const std::string& questionText, uint16_t answer)
+	: m_id(id),
+	m_questionText(questionText),
+	m_answer(answer)
+{
 }
 
 QuestionSingleChoice::QuestionSingleChoice(const QuestionSingleChoice& object)
@@ -23,14 +31,34 @@ QuestionSingleChoice::QuestionSingleChoice(QuestionSingleChoice&& object)
 	*this = std::move(object);
 }
 
+void QuestionSingleChoice::SetQuestionText(const std::string& questionText)
+{
+	m_questionText = questionText;
+}
+
 const std::string& QuestionSingleChoice::GetQuestionText() const
 {
 	return m_questionText;
 }
 
-const uint16_t& QuestionSingleChoice::GetAnswer() const
+void QuestionSingleChoice::SetAnswer(uint16_t answer)
+{
+	m_answer = answer;
+}
+
+uint16_t QuestionSingleChoice::GetAnswer() const
 {
 	return m_answer;
+}
+
+void QuestionSingleChoice::SetID(uint16_t id)
+{
+	m_id = id;
+}
+
+uint16_t QuestionSingleChoice::GetID() const
+{
+	return m_id;
 }
 
 bool QuestionSingleChoice::operator==(const QuestionSingleChoice& object)

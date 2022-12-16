@@ -2,6 +2,7 @@
 
 Player::Player()
 {
+	m_id = 0;
 	m_username = "null";
 	m_password = "null";
 	m_email = "null";

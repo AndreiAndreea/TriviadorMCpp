@@ -2,9 +2,9 @@
 
 Questions::Questions()
 {
-	GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions);
+	GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions); //need to be deleted when the server is ready
 
-	GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions);
+	GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions); //need to be deleted when the server is ready
 }
 
 void Questions::GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions)
@@ -122,6 +122,50 @@ uint8_t Questions::GenerateRandomNumber(const uint8_t& size)
 	}
 	catch (int errorValue) {
 		std::cout << "Error #" << errorValue << ". Invalid size at GenerateRandomNumber method from Questions class." << std::endl;
+	}
+}
+
+std::vector<QuestionSingleChoice> Questions::GetAFewRandomSingleChoiceQuestions(const uint16_t amount)
+{
+	randomSingleChoiceQuestions.clear();
+	
+	if (amount <= m_singleChoiceQuestions.size())
+	{		
+		for (int index = 0; index < amount; index++)
+		{
+			int position = GenerateRandomNumber(m_singleChoiceQuestions.size());
+			randomSingleChoiceQuestions.push_back(m_singleChoiceQuestions[position]);
+
+			m_singleChoiceQuestions.erase(m_singleChoiceQuestions.begin() + position);
+		}
+
+		return randomSingleChoiceQuestions;
+	}
+	else
+	{
+		throw new std::exception("Invalid amount of questions.");
+	}
+}
+
+std::vector<QuestionMultipleChoice> Questions::GetAFewRandomMultipleChoiceQuestions(uint16_t amount)
+{
+	randomMultipleChoiceQuestions.clear();
+
+	if (amount <= m_multipleChoiceQuestions.size())
+	{
+		for (int index = 0; index < amount; index++)
+		{
+			int position = GenerateRandomNumber(m_multipleChoiceQuestions.size());
+			randomMultipleChoiceQuestions.push_back(m_multipleChoiceQuestions[GenerateRandomNumber(m_multipleChoiceQuestions.size())]);
+
+			m_multipleChoiceQuestions.erase(m_multipleChoiceQuestions.begin() + position);
+		}
+
+		return randomMultipleChoiceQuestions;
+	}
+	else
+	{
+		throw new std::exception("Invalid amount of questions.");
 	}
 }
 

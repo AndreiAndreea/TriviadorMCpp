@@ -39,9 +39,6 @@ public:
     void SetNumberOfPlayers(uint16_t numberOfPlayers);
 
 private:
-    void SaveSingleChoiceQuestionsToFile(const QString fileName);
-    void SaveMultipleChoiceQuestionsToFile(const QString fileName);
-    
     void StartTimer();
     void ToggleAnswers(bool toggleAnswer);
     void DisableAdvantageOfferedAnswers(bool toggleAnswer);
@@ -51,8 +48,6 @@ private:
 	void HideOfferedAnswers(bool hide);
 
 private slots:
-    void on_saveQuestionsInFileButton_released();
-
     void on_getRandomQuestionButton_released();
 
     void on_submitAnswerButton_released();
@@ -78,6 +73,8 @@ private slots:
 private:
     bool m_answerHasBeenSelected;
 
+    uint16_t m_amountOfRandomQuestionsFromDatabase;
+
     Questions m_questions;
     std::string m_currentAnswer;
 
@@ -88,4 +85,7 @@ private:
 
     QTimer* timer;
     QElapsedTimer elapsedTime;
+
+    std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
+	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
 };
