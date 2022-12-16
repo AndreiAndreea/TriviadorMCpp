@@ -62,33 +62,32 @@ int main()
 
 			if (username.empty() == false && password.empty() == false)
 			{
-				auto users = userDatabase.get_all<User>(where(c(&User::GetUsername) == username and c(&User::GetPassword) == password));
+				auto findUserInDatabase = userDatabase.get_all<User>(where(c(&User::GetUsername) == username and c(&User::GetPassword) == password));
 
-				if (users.size() == 1)
+				if (findUserInDatabase.size() == 1)
 				{
-					crow::json::wvalue user;
+					crow::json::wvalue user = crow::json::wvalue
+					{
+						{"ID", findUserInDatabase[0].GetID()},
+						{"Username", findUserInDatabase[0].GetUsername()},
+						{"Password", findUserInDatabase[0].GetPassword()},
+						{"Email", findUserInDatabase[0].GetEmail()},
+						{"AccountCreationDate", findUserInDatabase[0].GetAccountCreationDate()},
+						{"TotalScore", findUserInDatabase[0].GetTotalScore()},
+						{"PlayedGames", findUserInDatabase[0].GetPlayedGames()},
+						{"WonGames", findUserInDatabase[0].GetWonGames()}
+					};
 
-					user["ID"] = users[0].GetID();
-					user["Username"] = users[0].GetUsername();
-					user["Password"] = users[0].GetPassword();
-					user["Email"] = users[0].GetEmail();
-					user["AccountCreationDate"] = users[0].GetAccountCreationDate();
-					user["TotalScore"] = users[0].GetTotalScore();
-					user["PlayedGames"] = users[0].GetPlayedGames();
-					user["WonGames"] = users[0].GetWonGames();
-
-					return crow::json::wvalue{ user };
+					return  crow::response(user);
 				}
 				else
 				{
-					return crow::json::wvalue{ "Invalid username or password!" };
-					//return crow::response(403);
+					return crow::response(404, "Username and password not found!");
 				}
 			}
 			else
 			{
-				return crow::json::wvalue{ "Complete all fields and try again!" };
-				//return crow::response(401);
+				return crow::response(500, "Not acceptable! Complete all fields and try again!");
 			}
 		});
 

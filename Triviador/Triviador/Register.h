@@ -36,7 +36,6 @@ private:
 	const std::string GetInputEmailByPlayer() const;
 
 private slots:
-
 	void on_displayPasswordPushButton_pressed();
 	void on_displayPasswordPushButton_released();
 

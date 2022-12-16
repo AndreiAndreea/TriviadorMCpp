@@ -242,5 +242,6 @@
     <None Include="triviador.sqlite">
       <Filter>Resource Files\Database</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

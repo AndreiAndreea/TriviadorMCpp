@@ -133,7 +133,7 @@ void GameElementsGenerator::StartTimer()
 
 	timer = new QTimer(this);
 
-	timer->setInterval(100);
+	timer->setInterval(50);//timer->setInterval(100); - for actual gameplay
 	timer->setTimerType(Qt::PreciseTimer);
 
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));

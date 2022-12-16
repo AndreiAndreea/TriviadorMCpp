@@ -1,5 +1,6 @@
 #include "Login.h"
 #include "Game.h"
+
 #include "Triviador.h"
 
 Login::Login()
@@ -39,8 +40,9 @@ void Login::OnTimerTick()
 
 	if (ui.transferToTriviadorProgressBar->value() >= 100)
 	{
-		Triviador* t = new Triviador;
-		t->show();
+		Triviador* trivia = new Triviador;
+		trivia->show();
+
 		timer->disconnect();
 
 		this->close();
@@ -53,7 +55,7 @@ void Login::StartTimer()
 
 	timer = new QTimer(this);
 
-	timer->setInterval(100);
+	timer->setInterval(30);
 	timer->setTimerType(Qt::PreciseTimer);
 
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));
@@ -86,101 +88,49 @@ void Login::on_loginPushButton_released()
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
-	auto db_user = crow::json::load(responseFromServer.text);
-
-	/*for (const auto& jsonIt : db_user)
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
 	{
-		if (jsonIt["Username"].s() == usernameFromUser && jsonIt["Password"].s() == passwordFromUser)
-		{
-			int idDecodedFromServer = jsonIt["ID"].i();
-			std::string usernameDecodedFromServer = jsonIt["Username"].s();
-			std::string passwordDecodedFromServer = jsonIt["Password"].s();
-			std::string emailDecodedFromServer = jsonIt["Email"].s();
-			std::string accountCreationDateDecodedFromServer = jsonIt["AccountCreationDate"].s();
-			std::string totalScoreDecodedFromServer = jsonIt["TotalScore"].s();
-			std::string playedGamesDecodedFromServer = jsonIt["PlayedGames"].s();
-			std::string wonGamesDecodedFromServer = jsonIt["WonGames"].s();
+		ui.loginErrorLabel->hide();
 
-			//idDecodedFromServer = curl_unescape(idDecodedFromServer.c_str(), idDecodedFromServer.length());
-			usernameDecodedFromServer = curl_unescape(usernameDecodedFromServer.c_str(), usernameDecodedFromServer.length());
-			passwordDecodedFromServer = curl_unescape(passwordDecodedFromServer.c_str(), passwordDecodedFromServer.length());
-			emailDecodedFromServer = curl_unescape(emailDecodedFromServer.c_str(), emailDecodedFromServer.length());
-			accountCreationDateDecodedFromServer = curl_unescape(accountCreationDateDecodedFromServer.c_str(), accountCreationDateDecodedFromServer.length());
-			totalScoreDecodedFromServer = curl_unescape(totalScoreDecodedFromServer.c_str(), totalScoreDecodedFromServer.length());
-			playedGamesDecodedFromServer = curl_unescape(playedGamesDecodedFromServer.c_str(), playedGamesDecodedFromServer.length());
-			wonGamesDecodedFromServer = curl_unescape(wonGamesDecodedFromServer.c_str(), wonGamesDecodedFromServer.length());
+		auto db_user = crow::json::load(responseFromServer.text);
 
-			//currentPlayer.SetID(std::stoi(idDecodedFromServer));
-			currentPlayer.SetID(idDecodedFromServer);
-			currentPlayer.SetUsername(usernameDecodedFromServer);
-			currentPlayer.SetPassword(passwordDecodedFromServer);
-			currentPlayer.SetEmail(emailDecodedFromServer);
-			currentPlayer.SetAccountCreationDate(accountCreationDateDecodedFromServer);
-			currentPlayer.SetTotalScore(totalScoreDecodedFromServer);
-			currentPlayer.SetPlayedGames(playedGamesDecodedFromServer);
-			currentPlayer.SetWonGames(wonGamesDecodedFromServer);
+		currentPlayer.SetID(db_user["ID"].i());
+		currentPlayer.SetUsername(db_user["Username"].s());
+		currentPlayer.SetPassword(db_user["Password"].s());
+		currentPlayer.SetEmail(db_user["Email"].s());
+		currentPlayer.SetAccountCreationDate(db_user["AccountCreationDate"].s());
+		currentPlayer.SetTotalScore(db_user["TotalScore"].s());
+		currentPlayer.SetPlayedGames(db_user["PlayedGames"].s());
+		currentPlayer.SetWonGames(db_user["WonGames"].s());
+		
+		ui.usernameLineEdit->setDisabled(true);
+		ui.passwordLineEdit->setDisabled(true);
+		
+		ui.displayPasswordPushButton->setDisabled(true);
 
-			ui.transferToTriviadorProgressLabel->setText("Login successful! You will be redirected to the game menu page in a few moments!");
-			ui.transferToTriviadorProgressLabel->show();
+		ui.loginBackPushButton->setDisabled(true);
+		
+		ui.loginPushButton->setDisabled(true);
 
-			ui.transferToTriviadorProgressBar->show();
-			StartTimer();
-
-			close();
-		}
-		else
-		{
-			ui.loginErrorLabel->setText(responseFromServer.text.c_str());
-			ui.loginErrorLabel->show();
-		}
-	}*/
-
-	/*if (db_user["Username"] == usernameFromUser && db_user["Password"] == passwordFromUser)
-	{
-		std::string idDecodedFromServer = db_user["ID"].s();
-		std::string usernameDecodedFromServer = db_user["Username"].s();
-		std::string passwordDecodedFromServer = db_user["Password"].s();
-		std::string emailDecodedFromServer = db_user["Email"].s();
-		std::string accountCreationDateDecodedFromServer = db_user["AccountCreationDate"].s();
-		std::string totalScoreDecodedFromServer = db_user["TotalScore"].s();
-		std::string playedGamesDecodedFromServer = db_user["PlayedGames"].s();
-		std::string wonGamesDecodedFromServer = db_user["WonGames"].s();
-
-		idDecodedFromServer = curl_unescape(idDecodedFromServer.c_str(), idDecodedFromServer.length());
-		usernameDecodedFromServer = curl_unescape(usernameDecodedFromServer.c_str(), usernameDecodedFromServer.length());
-		passwordDecodedFromServer = curl_unescape(passwordDecodedFromServer.c_str(), passwordDecodedFromServer.length());
-		emailDecodedFromServer = curl_unescape(emailDecodedFromServer.c_str(), emailDecodedFromServer.length());
-		accountCreationDateDecodedFromServer = curl_unescape(accountCreationDateDecodedFromServer.c_str(), accountCreationDateDecodedFromServer.length());
-		totalScoreDecodedFromServer = curl_unescape(totalScoreDecodedFromServer.c_str(), totalScoreDecodedFromServer.length());
-		playedGamesDecodedFromServer = curl_unescape(playedGamesDecodedFromServer.c_str(), playedGamesDecodedFromServer.length());
-		wonGamesDecodedFromServer = curl_unescape(wonGamesDecodedFromServer.c_str(), wonGamesDecodedFromServer.length());
-
-		currentPlayer.SetID(std::stoi(idDecodedFromServer));
-		currentPlayer.SetUsername(usernameDecodedFromServer);
-		currentPlayer.SetPassword(passwordDecodedFromServer);
-		currentPlayer.SetEmail(emailDecodedFromServer);
-		currentPlayer.SetAccountCreationDate(accountCreationDateDecodedFromServer);
-		currentPlayer.SetTotalScore(totalScoreDecodedFromServer);
-		currentPlayer.SetPlayedGames(playedGamesDecodedFromServer);
-		currentPlayer.SetWonGames(wonGamesDecodedFromServer);
-
-		//Game* g = new Game;
-		//g->show();
-
-		close();
+		ui.transferToTriviadorProgressLabel->setText("Login successfully! You will be redirected to the game menu in a few moments!");
+		ui.transferToTriviadorProgressLabel->show();
+		
+		ui.transferToTriviadorProgressBar->show();
+		
+		StartTimer();
 	}
 	else
 	{
-		ui.loginErrorLabel->setText(responseFromServer.text.c_str());
+		std::string errorText;
+		
+		if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
+			errorText = "Client error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
+		else if (responseFromServer.status_code >= 500)
+			errorText = "Server error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
+
+		ui.loginErrorLabel->setText(errorText.c_str());
 		ui.loginErrorLabel->show();
-	}*/
-
-	//to be moved in if after login server bug is resolved
-	ui.transferToTriviadorProgressLabel->setText("Login successful! You will be redirected to the game menu page in a few moments!");
-	ui.transferToTriviadorProgressLabel->show();
-
-	ui.transferToTriviadorProgressBar->show();
-	StartTimer();
+	}
 }
 
 void Login::on_loginBackPushButton_released()
