@@ -91,44 +91,31 @@ void Register::on_submitDataPushButton_released()
 	std::string emailFromUser = ui.emailLineEdit->text().toLocal8Bit().constData();
 	std::string currentDate = GetCurrentDate();
 	
-	if (usernameFromUser.empty() || passwordFromUser.empty() || emailFromUser.empty())
+	auto currentDateEncoded = curl_easy_escape(nullptr, currentDate.c_str(), 0);
+		
+	std::string link = m_ip + "/registeruser/?username=" + usernameFromUser + "&password=" + passwordFromUser + "&email=" + emailFromUser + "&accountCreationDate=" + currentDateEncoded;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url{ link });
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
 	{
-		ui.incompleteFieldsErrorLabel->show();
-		ui.submitDataErrorLabel->hide();
-		ui.emailErrorLabel->hide();
-	}
-	else if (!isValidEmail(emailFromUser))
-	{
-		ui.emailErrorLabel->show();
-		ui.incompleteFieldsErrorLabel->hide();
-		ui.submitDataErrorLabel->hide();
+		ui.submitDataErrorLabel->setText("Your account has been created successfully. You will be sent to login page in a few moments.");
+		ui.submitDataErrorLabel->show();
+
+		ui.progressBar->show();
+		StartTimer();
 	}
 	else
 	{
-		auto currentDateEncoded = curl_easy_escape(nullptr, currentDate.c_str(), 0);
-		
-		std::string link = m_ip + "/registeruser/?username=" + usernameFromUser + "&password=" + passwordFromUser + "&email=" + emailFromUser + "&accountCreationDate=" + currentDateEncoded;
+		std::string errorText;
+			
+		if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
+			errorText = "Client error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
+		else if (responseFromServer.status_code >= 500)
+			errorText = "Server error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
 
-		cpr::Response responseFromServer = cpr::Get(cpr::Url{ link });
-
-		if (responseFromServer.status_code == 200)
-		{
-			ui.submitDataErrorLabel->setText("Your account has been created successfully. You will be sent to login page in a few moments.");
-			ui.submitDataErrorLabel->show();
-
-			ui.progressBar->show();
-			StartTimer();
-		}
-		else if (responseFromServer.status_code == 400)
-		{
-			ui.submitDataErrorLabel->setText("The username or email you entered is already in use. Please try again.");
-			ui.submitDataErrorLabel->show();
-		}
-		else
-		{
-			ui.submitDataErrorLabel->setText("An error has occurred. Please try again.");
-			ui.submitDataErrorLabel->show();
-		}
+		ui.submitDataErrorLabel->setText(errorText.c_str());
+		ui.submitDataErrorLabel->show();
 	}
 }
 

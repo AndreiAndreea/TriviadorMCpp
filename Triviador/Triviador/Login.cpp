@@ -127,8 +127,8 @@ void Login::on_loginPushButton_released()
 {
 	Player currentPlayer;
 
-	std::string usernameFromUser = ui.usernameLineEdit->text().toLocal8Bit().constData();
-	std::string passwordFromUser = ui.passwordLineEdit->text().toLocal8Bit().constData();
+	std::string usernameFromUser = ui.usernameLineEdit->text().toStdString();
+	std::string passwordFromUser = ui.passwordLineEdit->text().toStdString();
 
 	std::string link = m_ip + "/checkuser/?username=" + usernameFromUser + "&password=" + passwordFromUser;
 	//std::string link = "localhost:18080/checkuser/?username=" +usernameFromUser + "&password=" + passwordFromUser;

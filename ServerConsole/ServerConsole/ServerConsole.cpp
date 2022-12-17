@@ -21,7 +21,7 @@ void initializeFirstDatabase(std::string singleQuestionPath, std::string multipl
 }
 
 int main()
-{
+{	
 	std::string dataFilesPath = "resources/data_files";
 
 	std::string filePathForSingleChoiceQuestion = dataFilesPath + "/questions/SingleChoiceQuestions.txt";
@@ -48,7 +48,7 @@ int main()
 	crow::SimpleApp app;
 
 	CROW_ROUTE(app, "/")([]() {
-		return "This is an example app of crow and sql-orm";
+		return crow::response(200, "Successfully connected to the server.");
 		});
 
 	CROW_ROUTE(app, "/users")(
@@ -137,24 +137,21 @@ int main()
 					{
 						userDatabase.insert(User(countUsers + 1, username, password, email, accountCreationDate, "0", "0", "0"));
 
-						return crow::json::wvalue{ "User registered successfully!" };
+						return crow::response(200, "User registered successfully!");
 					}
 					else
 					{
-						return crow::json::wvalue{ "An account already exists with this username or email!" };
-						//return crow::response(403);
+						return crow::response(409,"An account already exists with this username or email!");
 					}
 				}
 				else
 				{
-					return crow::json::wvalue{ "Invalid email!" };
-					//return crow::response(401);
+					return crow::response(404,"Invalid email!");
 				}
 			}
 			else
 			{
-				return crow::json::wvalue{ "Complete all fields and try again!" };
-				//return crow::response(401);
+				return crow::response(500, "Complete all fields and try again!");
 			}
 		});
 
