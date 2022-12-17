@@ -21,7 +21,7 @@ LoginRegister::~LoginRegister()
 
 }
 
-std::vector<std::string> LoginRegister::splitIP()
+std::vector<std::string> LoginRegister::SplitIP()
 {
 	int i = 0;
 	
@@ -43,7 +43,7 @@ std::vector<std::string> LoginRegister::splitIP()
 	return ip;
 }
 
-bool LoginRegister::isNumber(const std::string& str)
+bool LoginRegister::IsNumber(const std::string& str)
 {
 	for (const auto& c : str)
 		if (!isdigit(c))
@@ -52,9 +52,12 @@ bool LoginRegister::isNumber(const std::string& str)
 	return true;
 }
 
-QString LoginRegister::checkServerIP()
+QString LoginRegister::CheckServerIP()
 {
-	std::vector<std::string> ipTokens = splitIP();
+	if(m_serverIP == "localhost")
+		return "Server IP is valid!";
+	
+	std::vector<std::string> ipTokens = SplitIP();
 
 	if (m_serverIP.size() == 0)
 		return "No server IP inserted!";
@@ -63,7 +66,7 @@ QString LoginRegister::checkServerIP()
 		
 	// checks that tokens are numbers, positive and in range
 	for (const auto& str : ipTokens) {
-		if (!isNumber(str))
+		if (!IsNumber(str))
 			return "Not valid IP! Tokens contain non-digit values!";
 		else if (stoi(str) > 255)
 			return "Not valid IP! Token values bigger than 255 not allowed!";
@@ -72,11 +75,11 @@ QString LoginRegister::checkServerIP()
 	return "Server IP is valid!";
 }
 
-QString LoginRegister::checkServerPort()
+QString LoginRegister::CheckServerPort()
 {
 	if(m_serverPort.size() == 0)
 		return "No server Port inserted!";
-	else if (!isNumber(m_serverPort))
+	else if (!IsNumber(m_serverPort))
 		return "Not valid Port! Contains non-digit values!";
 
 	return "Server port is valid!";
@@ -87,8 +90,8 @@ void LoginRegister::on_connectButton_released()
 	m_serverIP = ui.serverIPLineEdit->text().toStdString();
 	m_serverPort = ui.serverPortLineEdit->text().toStdString();
 
-	QString ipErrorText = checkServerIP();
-	QString portErrorText = checkServerPort();
+	QString ipErrorText = CheckServerIP();
+	QString portErrorText = CheckServerPort();
 
 	ui.ipErrorLabel->setText(ipErrorText);
 	ui.ipErrorLabel->show();
@@ -118,7 +121,7 @@ void LoginRegister::on_signUpButton_released()
 {
 	if (ui.signUpButton->isEnabled())
 	{
-		Register* registerWindow = new Register();
+		Register* registerWindow = new Register(m_serverIP, m_serverPort);
 		registerWindow->show();
 		
 		this->hide();

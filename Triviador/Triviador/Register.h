@@ -24,6 +24,8 @@ private:
 
 public:
 	explicit Register();
+	Register(const std::string& serverIP, const std::string& serverPort);
+
 	~Register();
 
 	//explicit Login(QWidget* parent);
@@ -42,6 +44,15 @@ private slots:
 	void on_submitDataPushButton_released();
 	void on_registerBackPushButton_released();
 
+	void OnTimerTick();
+
+public:
+	void StartTimer();
+
 private:
+	QTimer* timer;
+
 	Player m_currentPlayer;
+
+	std::string m_ip, m_serverIP, m_serverPort;
 };

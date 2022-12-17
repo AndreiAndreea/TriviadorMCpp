@@ -32,16 +32,20 @@ private slots:
 	void on_loginPushButton_released();
 	void on_loginBackPushButton_released();
 
-	void OnTimerTick();
+	void OnPauseTimerTick();
+	void OnTransferTimerTick();
 
 public:
 	const std::string GetUsername() const;
 	const std::string GetPassword() const;
 
-	void StartTimer();
+	void StartPauseTimer();
+	void StartTransferTimer();
 
 private:
-	QTimer* timer;
+	QTimer* pauseTimer;
+	QTimer* transferTimer;
 
+	uint16_t m_wrongDataInsertionCounter;
 	std::string m_ip;
 };

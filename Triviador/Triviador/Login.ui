@@ -130,7 +130,7 @@
     <string>Back to main page</string>
    </property>
   </widget>
-  <widget class="QProgressBar" name="transferToTriviadorProgressBar">
+  <widget class="QProgressBar" name="progressBar">
    <property name="geometry">
     <rect>
      <x>30</x>

@@ -19,11 +19,11 @@ public:
 
 	//explicit Login(QWidget* parent); - Cosmin
 private:
-	std::vector<std::string> splitIP();
-	bool isNumber(const std::string& str);
+	std::vector<std::string> SplitIP();
+	bool IsNumber(const std::string& str);
 
-	QString checkServerIP();
-	QString checkServerPort();
+	QString CheckServerIP();
+	QString CheckServerPort();
 
 private slots:
 	void on_connectButton_released();

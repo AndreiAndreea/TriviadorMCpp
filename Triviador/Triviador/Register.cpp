@@ -6,6 +6,16 @@
 
 Register::Register()
 {
+	
+}
+
+Register::Register(const std::string& serverIP, const std::string& serverPort)
+{
+	m_serverIP = serverIP;
+	m_serverPort = serverPort;
+
+	m_ip = "http://" + m_serverIP + ":" + m_serverPort;
+
 	ui.setupUi(this);
 
 	ui.passwordLineEdit->setEchoMode(QLineEdit::Password);
@@ -19,6 +29,8 @@ Register::Register()
 	ui.displayPasswordPushButton->setStyleSheet("QPushButton { background-color: transparent; }");
 
 	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
+
+	ui.progressBar->hide();
 }
 
 Register::~Register()
@@ -95,7 +107,7 @@ void Register::on_submitDataPushButton_released()
 	{
 		auto currentDateEncoded = curl_easy_escape(nullptr, currentDate.c_str(), 0);
 		
-		std::string link = "http://localhost:18080/registeruser/?username=" + usernameFromUser + "&password=" + passwordFromUser + "&email=" + emailFromUser + "&accountCreationDate=" + currentDateEncoded;
+		std::string link = m_ip + "/registeruser/?username=" + usernameFromUser + "&password=" + passwordFromUser + "&email=" + emailFromUser + "&accountCreationDate=" + currentDateEncoded;
 
 		cpr::Response responseFromServer = cpr::Get(cpr::Url{ link });
 
@@ -104,13 +116,8 @@ void Register::on_submitDataPushButton_released()
 			ui.submitDataErrorLabel->setText("Your account has been created successfully. You will be sent to login page in a few moments.");
 			ui.submitDataErrorLabel->show();
 
-			//TO-DO 
-			//Add a timer for a few seconds and after the timer is out, redirect the player to the login page.
-
-			Login* login = new Login();
-			login->show();
-			
-			close();
+			ui.progressBar->show();
+			StartTimer();
 		}
 		else if (responseFromServer.status_code == 400)
 		{
@@ -134,4 +141,33 @@ void Register::on_registerBackPushButton_released()
 
 		this->close();
 	}
+}
+
+void Register::OnTimerTick()
+{
+	ui.progressBar->setValue(ui.progressBar->value() + 1);
+
+	if (ui.progressBar->value() >= 100)
+	{
+		Login* loginWindow = new Login(m_ip);
+		loginWindow->show();
+
+		timer->disconnect();
+
+		this->close();
+	}
+}
+
+void Register::StartTimer()
+{
+	ui.progressBar->setValue(0);
+
+	timer = new QTimer(this);
+
+	timer->setInterval(30);
+	timer->setTimerType(Qt::PreciseTimer);
+
+	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));
+
+	timer->start();
 }

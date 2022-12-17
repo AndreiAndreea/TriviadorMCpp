@@ -11,6 +11,8 @@ Login::Login(const std::string& ip)
 {
 	m_ip = ip;
 
+	m_wrongDataInsertionCounter = 0;
+
 	ui.setupUi(this);
 
 	ui.passwordLineEdit->setEchoMode(QLineEdit::Password);
@@ -20,7 +22,7 @@ Login::Login(const std::string& ip)
 
 	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
 
-	ui.transferToTriviadorProgressBar->hide();
+	ui.progressBar->hide();
 	ui.transferToTriviadorProgressLabel->hide();
 
 	ui.loginErrorLabel->hide();
@@ -40,33 +42,71 @@ const std::string Login::GetPassword() const
 	return ui.passwordLineEdit->text().toStdString();
 }
 
-void Login::OnTimerTick()
+void Login::OnPauseTimerTick()
 {
-	ui.transferToTriviadorProgressBar->setValue(ui.transferToTriviadorProgressBar->value() + 1);
+	ui.progressBar->setValue(ui.progressBar->value() + 1);
 
-	if (ui.transferToTriviadorProgressBar->value() >= 100)
+	if (ui.progressBar->value() >= 100)
+	{
+		ui.usernameLineEdit->setDisabled(false);
+		ui.passwordLineEdit->setDisabled(false);
+		ui.displayPasswordPushButton->setDisabled(false);
+		ui.loginPushButton->setDisabled(false);
+		ui.loginBackPushButton->setDisabled(false);
+
+		ui.progressBar->hide();
+
+		pauseTimer->disconnect();
+	}
+}
+
+void Login::OnTransferTimerTick()
+{
+	ui.progressBar->setValue(ui.progressBar->value() + 1);
+
+	if (ui.progressBar->value() >= 100)
 	{
 		Triviador* trivia = new Triviador;
 		trivia->show();
 
-		timer->disconnect();
+		transferTimer->disconnect();
 
 		this->close();
 	}
 }
 
-void Login::StartTimer()
+void Login::StartPauseTimer()
 {
-	ui.transferToTriviadorProgressBar->setValue(0);
+	ui.usernameLineEdit->setDisabled(true);
+	ui.passwordLineEdit->setDisabled(true);
+	ui.displayPasswordPushButton->setDisabled(true);
+	ui.loginPushButton->setDisabled(true);
+	ui.loginBackPushButton->setDisabled(true);
+	
+	ui.progressBar->setValue(0);
 
-	timer = new QTimer(this);
+	pauseTimer = new QTimer(this);
 
-	timer->setInterval(30);
-	timer->setTimerType(Qt::PreciseTimer);
+	pauseTimer->setInterval(200);
+	pauseTimer->setTimerType(Qt::PreciseTimer);
 
-	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));
+	connect(pauseTimer, SIGNAL(timeout()), this, SLOT(OnPauseTimerTick()));
 
-	timer->start();
+	pauseTimer->start();
+}
+
+void Login::StartTransferTimer()
+{
+	ui.progressBar->setValue(0);
+
+	transferTimer = new QTimer(this);
+
+	transferTimer->setInterval(30);
+	transferTimer->setTimerType(Qt::PreciseTimer);
+
+	connect(transferTimer, SIGNAL(timeout()), this, SLOT(OnTransferTimerTick()));
+
+	transferTimer->start();
 }
 
 void Login::on_displayPasswordPushButton_pressed()
@@ -90,7 +130,8 @@ void Login::on_loginPushButton_released()
 	std::string usernameFromUser = ui.usernameLineEdit->text().toLocal8Bit().constData();
 	std::string passwordFromUser = ui.passwordLineEdit->text().toLocal8Bit().constData();
 
-	std::string link = m_ip + "/checkuser/?username=" +usernameFromUser + "&password=" + passwordFromUser;
+	std::string link = m_ip + "/checkuser/?username=" + usernameFromUser + "&password=" + passwordFromUser;
+	//std::string link = "localhost:18080/checkuser/?username=" +usernameFromUser + "&password=" + passwordFromUser;
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
@@ -121,9 +162,9 @@ void Login::on_loginPushButton_released()
 		ui.transferToTriviadorProgressLabel->setText("Login successfully! You will be redirected to the game menu in a few moments!");
 		ui.transferToTriviadorProgressLabel->show();
 		
-		ui.transferToTriviadorProgressBar->show();
+		ui.progressBar->show();
 		
-		StartTimer();
+		StartTransferTimer();
 	}
 	else
 	{
@@ -133,6 +174,16 @@ void Login::on_loginPushButton_released()
 			errorText = "Client error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
 		else if (responseFromServer.status_code >= 500)
 			errorText = "Server error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
+
+		m_wrongDataInsertionCounter++;
+		if (m_wrongDataInsertionCounter == 3)
+		{
+			errorText = "Login data was inserted wrong 3 times! Wait to try again!";
+			ui.progressBar->show();
+			StartPauseTimer();
+
+			m_wrongDataInsertionCounter = 0;
+		}
 
 		ui.loginErrorLabel->setText(errorText.c_str());
 		ui.loginErrorLabel->show();
