@@ -18,11 +18,6 @@ public:
 	~LoginRegister();
 
 	//explicit Login(QWidget* parent); - Cosmin
-
-public:
-	std::string GetServerIP();
-	std::string GetServerPort();
-	
 private:
 	std::vector<std::string> splitIP();
 	bool isNumber(const std::string& str);

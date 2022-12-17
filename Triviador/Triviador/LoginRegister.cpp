@@ -21,28 +21,25 @@ LoginRegister::~LoginRegister()
 
 }
 
-std::string LoginRegister::GetServerIP()
-{
-	return m_serverIP;
-}
-
-std::string LoginRegister::GetServerPort()
-{
-	return m_serverPort;
-}
-
 std::vector<std::string> LoginRegister::splitIP()
 {
 	int i = 0;
+	
 	std::vector<std::string> ip;
+
 	auto pos = m_serverIP.find(".");
+
 	while ( pos != std::string::npos) 
 	{
 		ip.push_back(m_serverIP.substr(i, pos - i));
+		
 		i = ++pos;
+		
 		pos = m_serverIP.find(".", pos);
 	}
+	
 	ip.push_back(m_serverIP.substr(i, m_serverIP.length()));
+	
 	return ip;
 }
 
@@ -51,6 +48,7 @@ bool LoginRegister::isNumber(const std::string& str)
 	for (const auto& c : str)
 		if (!isdigit(c))
 			return false;
+	
 	return true;
 }
 
@@ -71,7 +69,7 @@ QString LoginRegister::checkServerIP()
 			return "Not valid IP! Token values bigger than 255 not allowed!";
 	}
 
-	return "";
+	return "Server IP is valid!";
 }
 
 QString LoginRegister::checkServerPort()
@@ -81,7 +79,7 @@ QString LoginRegister::checkServerPort()
 	else if (!isNumber(m_serverPort))
 		return "Not valid Port! Contains non-digit values!";
 
-	return "";
+	return "Server port is valid!";
 }
 
 void LoginRegister::on_connectButton_released()
@@ -98,7 +96,7 @@ void LoginRegister::on_connectButton_released()
 	ui.portErrorLabel->setText(portErrorText);
 	ui.portErrorLabel->show();
 
-	if (ipErrorText.isEmpty() && portErrorText.isEmpty())
+	if (ipErrorText == "Server IP is valid!" && portErrorText == "Server port is valid!")
 	{
 		ui.serverDataWidget->hide();
 		ui.loginRegisterWidget->show();
@@ -109,8 +107,9 @@ void LoginRegister::on_signInButton_released()
 {
 	if (ui.signInButton->isEnabled())
 	{
-		Login* loginWindow = new Login();
+		Login* loginWindow = new Login("http://" + m_serverIP + ":" + m_serverPort);
 		loginWindow->show();
+		
 		this->hide();
 	}
 }
@@ -121,6 +120,7 @@ void LoginRegister::on_signUpButton_released()
 	{
 		Register* registerWindow = new Register();
 		registerWindow->show();
+		
 		this->hide();
 	}
 }

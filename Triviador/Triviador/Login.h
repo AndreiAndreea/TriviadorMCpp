@@ -21,6 +21,8 @@ private:
 
 public:
 	explicit Login();
+	Login(const std::string& ip);
+	
 	~Login();
 
 private slots:
@@ -40,4 +42,6 @@ public:
 
 private:
 	QTimer* timer;
+
+	std::string m_ip;
 };

@@ -31,6 +31,9 @@ int main()
 
 	std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
 	std::vector<bool> m_selectedSingleChoiceQuestions;
+
+	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
+	std::vector<bool> m_selectedMultiplChoiceQuestions;
 	
 	uint8_t amountOfQuestions = 5;
 
@@ -231,6 +234,87 @@ int main()
 
 	auto& getAmountOfSingleQuestions = CROW_ROUTE(app, "/getAmountOfSingleQuestions").methods(crow::HTTPMethod::POST);
 	getAmountOfSingleQuestions(UserDatabaseControl(userDatabase));
+
+	CROW_ROUTE(app, "/getMultipleQuestions")(
+		[&questionsDatabase]
+		()
+		{
+			std::vector<crow::json::wvalue> usersJson;
+
+			for (const auto& question : questionsDatabase.iterate<QuestionMultipleChoice>())
+			{
+				usersJson.push_back(crow::json::wvalue
+					{
+						{"ID", question.GetID()},
+						{"question", question.GetQuestionText()},
+						{"correctAnswer", question.GetCorrectAnswer()},
+						{"answer1", question.GetAnswer1()},
+						{"answer2", question.GetAnswer2()},
+						{"answer3", question.GetAnswer3()},
+						{"answer4", question.GetAnswer4()}
+					});
+			}
+
+			return crow::json::wvalue{ usersJson };
+		}
+		);
+
+		auto& getMultipleQuestions = CROW_ROUTE(app, "/getMultipleQuestions").methods(crow::HTTPMethod::POST);
+		getMultipleQuestions(UserDatabaseControl(userDatabase));
+
+	//the ID of questions isn't get correctly from DB
+	CROW_ROUTE(app, "/getAmountOfMultipleQuestions")(
+		[&questionsDatabase, &amountOfQuestions, &m_selectedMultiplChoiceQuestions, &m_randomMultipleChoiceQuestionsVector]
+		()
+		{
+			auto countSingleQuestions = questionsDatabase.count<QuestionSingleChoice>();
+
+			if (m_selectedMultiplChoiceQuestions.size() != countSingleQuestions)
+				m_selectedMultiplChoiceQuestions.resize(countSingleQuestions + 1);
+
+			if (m_randomMultipleChoiceQuestionsVector.size() <= countSingleQuestions - amountOfQuestions)
+			{
+				for (uint8_t index = 0; index < amountOfQuestions; index++)
+				{
+					uint8_t randomID = rand() % countSingleQuestions + 1;
+
+					//can we use std::find ? (maybe needs to change bool to int)
+					while (m_selectedMultiplChoiceQuestions[randomID] == true)
+					{
+						randomID = rand() % countSingleQuestions + 1;
+					}
+
+					m_randomMultipleChoiceQuestionsVector.push_back(questionsDatabase.get<QuestionMultipleChoice>(randomID));
+
+					m_selectedMultiplChoiceQuestions[randomID] = true;
+				}
+
+				std::vector<crow::json::wvalue> usersJson;
+
+				for (const auto& question : m_randomMultipleChoiceQuestionsVector)
+				{
+					usersJson.push_back(crow::json::wvalue
+						{
+							{"question", question.GetQuestionText()},
+							{"correctAnswer", question.GetCorrectAnswer()},
+							{"answer1", question.GetAnswer1()},
+							{"answer2", question.GetAnswer2()},
+							{"answer3", question.GetAnswer3()},
+							{"answer4", question.GetAnswer4()}
+						});
+				}
+
+				return crow::response(crow::json::wvalue{ usersJson });
+			}
+			else
+			{
+				return crow::response(404, "No more single choice questions found! You have selected all the single choice questions.");
+			}
+		}
+		);
+
+	auto& getAmountOfMultipleQuestions = CROW_ROUTE(app, "/getAmountOfMultipleQuestions").methods(crow::HTTPMethod::POST);
+	getAmountOfMultipleQuestions(UserDatabaseControl(userDatabase));
 	
 	app.port(18080).multithreaded().run();
 

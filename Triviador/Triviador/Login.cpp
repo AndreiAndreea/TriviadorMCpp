@@ -5,6 +5,12 @@
 
 Login::Login()
 {
+}
+
+Login::Login(const std::string& ip)
+{
+	m_ip = ip;
+
 	ui.setupUi(this);
 
 	ui.passwordLineEdit->setEchoMode(QLineEdit::Password);
@@ -84,7 +90,7 @@ void Login::on_loginPushButton_released()
 	std::string usernameFromUser = ui.usernameLineEdit->text().toLocal8Bit().constData();
 	std::string passwordFromUser = ui.passwordLineEdit->text().toLocal8Bit().constData();
 
-	std::string link = "http://localhost:18080/checkuser/?username=" +usernameFromUser + "&password=" + passwordFromUser;
+	std::string link = m_ip + "/checkuser/?username=" +usernameFromUser + "&password=" + passwordFromUser;
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
