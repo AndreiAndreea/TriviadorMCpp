@@ -6,63 +6,168 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
+    <width>650</width>
     <height>435</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="signInButton">
+  <widget class="QWidget" name="loginRegisterWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>180</y>
-     <width>141</width>
-     <height>31</height>
+     <x>40</x>
+     <y>160</y>
+     <width>551</width>
+     <height>171</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Sign In</string>
-   </property>
+   <widget class="QLabel" name="greetingLabel">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>10</y>
+      <width>361</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe MDL2 Assets</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Enjoy Triviador today! Create or sign in to your account!</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="signUpButton">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>110</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sign Up</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="signInButton">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>100</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sign In</string>
+    </property>
+   </widget>
   </widget>
-  <widget class="QPushButton" name="signUpButton">
+  <widget class="QWidget" name="serverDataWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>180</y>
-     <width>141</width>
-     <height>31</height>
+     <x>20</x>
+     <y>30</y>
+     <width>611</width>
+     <height>121</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Sign Up</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="greetingLabel">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>70</y>
-     <width>361</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Segoe MDL2 Assets</family>
-     <pointsize>20</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Enjoy Triviador today! Create or sign in to your account!</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
+   <widget class="QLabel" name="serverIPLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>server IP:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="serverPortLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>server Port:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="serverIPLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>113</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="serverPortLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>60</y>
+      <width>113</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="connectButton">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>90</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Connect</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ipErrorLabel">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>20</y>
+      <width>351</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ipErrorLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="portErrorLabel">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>60</y>
+      <width>351</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>portErrorLabel</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
