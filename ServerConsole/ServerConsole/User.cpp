@@ -127,7 +127,9 @@ crow::response UserDatabaseControl::operator()(const crow::request& request) con
 	if (id != end && username != end && password != end && email != end && accountCreationDate != end && totalScore != end && playedGames != end && wonGames != end)
 	{
 		User user(std::stoi(id->second), username->second, password->second, email->second, accountCreationDate->second, totalScore->second, playedGames->second, wonGames->second);
+		
 		database.update(user);
+		
 		return crow::response(200);
 	}
 	else

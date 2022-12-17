@@ -127,11 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Database.cpp" />
+    <ClCompile Include="QuestionMultipleChoice.cpp" />
+    <ClCompile Include="Questions.cpp" />
+    <ClCompile Include="QuestionSingleChoice.cpp" />
     <ClCompile Include="ServerConsole.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Database.h" />
+    <ClInclude Include="QuestionMultipleChoice.h" />
+    <ClInclude Include="Questions.h" />
+    <ClInclude Include="QuestionSingleChoice.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>

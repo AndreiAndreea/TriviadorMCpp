@@ -25,6 +25,18 @@
     <Filter Include="Source Files\Utilities">
       <UniqueIdentifier>{25d3ef7b-ed0d-42bd-b3c3-b9883f19fd06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Database">
+      <UniqueIdentifier>{b97cfe49-76ea-44b6-9b3b-51864f36047b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Database">
+      <UniqueIdentifier>{777927c8-db73-4976-ab35-d76a2483f941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Questions">
+      <UniqueIdentifier>{8dd3a008-0c97-4633-947a-cd2f466224d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Questions">
+      <UniqueIdentifier>{246a0eaa-28d6-4fc0-93a4-21ce8e26f6bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServerConsole.cpp">
@@ -36,6 +48,18 @@
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Database.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Questions.cpp">
+      <Filter>Source Files\Questions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionSingleChoice.cpp">
+      <Filter>Source Files\Questions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionMultipleChoice.cpp">
+      <Filter>Source Files\Questions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
@@ -43,6 +67,18 @@
     </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Database.h">
+      <Filter>Header Files\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Questions.h">
+      <Filter>Header Files\Questions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionSingleChoice.h">
+      <Filter>Header Files\Questions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionMultipleChoice.h">
+      <Filter>Header Files\Questions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
