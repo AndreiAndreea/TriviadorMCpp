@@ -2,9 +2,9 @@
 
 Questions::Questions()
 {
-	GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions); //need to be deleted when the server is ready
+	//GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestions); //need to be deleted when the server is ready
 
-	GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions); //need to be deleted when the server is ready
+	//GetMultipleChoiceQuestionsFromFile(m_filePathForMultipleChoiceQuestions); //need to be deleted when the server is ready
 }
 
 void Questions::GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions)
@@ -112,8 +112,6 @@ void Questions::RemoveMultipleChoiceQuestionByObject(QuestionMultipleChoice& obj
 
 uint8_t Questions::GenerateRandomNumber(const uint8_t& size)
 {
-	srand((int)time(0));
-
 	try {
 		if (size > 0)
 			return (rand() % size) + 0;
@@ -125,7 +123,7 @@ uint8_t Questions::GenerateRandomNumber(const uint8_t& size)
 	}
 }
 
-std::vector<QuestionSingleChoice> Questions::GetAFewRandomSingleChoiceQuestions(const uint16_t amount)
+std::vector<QuestionSingleChoice> Questions::GetAFewRandomSingleChoiceQuestions(uint16_t amount)
 {
 	randomSingleChoiceQuestions.clear();
 
@@ -181,4 +179,17 @@ const QuestionMultipleChoice& Questions::GetRandomMultipleChoiceQuestion()
 	uint8_t randomIndex = GenerateRandomNumber(m_multipleChoiceQuestions.size());
 
 	return m_multipleChoiceQuestions[randomIndex];
+}
+
+QuestionDatabaseControl::QuestionDatabaseControl(QuestionsStorage& storage)
+	: database(storage)
+{
+
+}
+
+crow::response QuestionDatabaseControl::operator()(const crow::request& request) const
+{
+	//NEED TO BE IMPLEMENTED
+	
+	return crow::response(200);
 }

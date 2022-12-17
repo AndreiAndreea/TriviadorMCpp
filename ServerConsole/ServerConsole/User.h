@@ -57,7 +57,7 @@ private:
 	std::string m_wonGames;
 };
 
-inline auto CreateStorage(const std::string& fileName)
+inline auto CreateUsersStorage(const std::string& fileName)
 {
 	return make_storage(
 		fileName,
@@ -75,7 +75,7 @@ inline auto CreateStorage(const std::string& fileName)
 	);
 }
 
-using UsersStorage = decltype(CreateStorage(""));
+using UsersStorage = decltype(CreateUsersStorage(""));
 
 class UserDatabaseControl
 {
