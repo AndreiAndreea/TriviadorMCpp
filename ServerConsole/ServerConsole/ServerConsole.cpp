@@ -351,6 +351,46 @@ int main()
 	auto& updateUser = CROW_ROUTE(app, "/updateuser").methods(crow::HTTPMethod::POST);
 	updateUser(UserDatabaseControl(userDatabase));
 
+	CROW_ROUTE(app, "/getuserdata/")(
+		[&userDatabase]
+		(const crow::request& req)
+		{
+			std::string username = req.url_params.get("username");
+
+			if (username.empty() == false)
+			{
+				auto findUserInDatabase = userDatabase.get_all<User>(where(c(&User::GetUsername) == username));
+
+				if (findUserInDatabase.size() == 1)
+				{
+					crow::json::wvalue user = crow::json::wvalue
+					{
+						{"ID", findUserInDatabase[0].GetID()},
+						{"Username", findUserInDatabase[0].GetUsername()},
+						{"Password", findUserInDatabase[0].GetPassword()},
+						{"Email", findUserInDatabase[0].GetEmail()},
+						{"AccountCreationDate", findUserInDatabase[0].GetAccountCreationDate()},
+						{"TotalScore", findUserInDatabase[0].GetTotalScore()},
+						{"PlayedGames", findUserInDatabase[0].GetPlayedGames()},
+						{"WonGames", findUserInDatabase[0].GetWonGames()}
+					};
+
+					return  crow::response(user);
+				}
+				else
+				{
+					return crow::response(404, "Username found!");
+				}
+			}
+			else
+			{
+				return crow::response(500, "Not acceptable! Complete all fields and try again!");
+			}
+		});
+
+	// https://stackoverflow.com/a/630475/12388382
+	auto& getUserData = CROW_ROUTE(app, "/getuserdata").methods(crow::HTTPMethod::POST);
+	getUserData(UserDatabaseControl(userDatabase));
 	
 	app.port(18080).multithreaded().run();
 
