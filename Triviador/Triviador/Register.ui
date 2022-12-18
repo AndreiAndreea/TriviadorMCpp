@@ -107,6 +107,9 @@
    <property name="text">
     <string>Create account</string>
    </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="submitDataErrorLabel">
    <property name="geometry">

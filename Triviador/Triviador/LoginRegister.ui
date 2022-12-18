@@ -141,6 +141,9 @@
     <property name="text">
      <string>Connect</string>
     </property>
+    <property name="default">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="ipErrorLabel">
     <property name="geometry">

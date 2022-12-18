@@ -27,6 +27,7 @@ GameElementsGenerator::GameElementsGenerator()
 	ui.multipleChoiceAnswer2Button->hide();
 	ui.multipleChoiceAnswer3Button->hide();
 	ui.multipleChoiceAnswer4Button->hide();
+	ui.elapsedTimeLabel->hide();
 
 	ui.fifty_fiftyAdvantageButton->hide();
 	ui.suggestAnswerAdvantageButton->hide();
@@ -59,6 +60,8 @@ void GameElementsGenerator::OnTimerTick()
 		ToggleAnswers(true);
 
 		timer->disconnect();
+		ui.offerAnswersAdvantageButton->setDisabled(true);
+		ui.suggestAnswerAdvantageButton->setDisabled(true);
 	}
 }
 
@@ -195,6 +198,9 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 
 				ui.checkAnswerSelection->hide();
 				ui.chooseTerritoryLabel->hide();
+				
+				ui.offerAnswersAdvantageButton->setDisabled(false);
+				ui.suggestAnswerAdvantageButton->setDisabled(false);
 
 				uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
 
@@ -344,7 +350,6 @@ void GameElementsGenerator::on_multipleChoiceAnswer2Button_released()
 	if (ui.multipleChoiceAnswer2Button->isEnabled())
 	{
 		CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer2Button->text(), isCorrectAnswer);
-
 		if (m_answerHasBeenSelected == false)
 		{
 			if (isCorrectAnswer)
@@ -484,15 +489,17 @@ void GameElementsGenerator::on_suggestAnswerAdvantageButton_released()
 {
 	srand(time(0));
 	uint16_t randomValue = std::stoi(m_currentAnswer) + rand() % 20 - rand() % 20;
-
+	
 	ui.suggestAnswerAdvantageLabel->setText(QString::number(randomValue));
 	ui.suggestAnswerAdvantageLabel->show();
+	ui.offerAnswersAdvantageButton->setDisabled(true);
 }
 
 void GameElementsGenerator::on_offerAnswersAdvantageButton_released()
 {
 	srand(time(0));
 	uint16_t randomValue;
+	ui.suggestAnswerAdvantageButton->setDisabled(true);
 
 	randomValue = std::stoi(m_currentAnswer) - rand() % 80;
 	ui.offeredAnswer1Button->setText(QString::number(randomValue));

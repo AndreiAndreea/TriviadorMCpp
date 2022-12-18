@@ -145,6 +145,9 @@
     <string>Submit
 Answer</string>
    </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="checkAnswerSelection">
    <property name="geometry">
