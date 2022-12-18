@@ -42,6 +42,25 @@ void Triviador::on_playGamePushButton_released()
 void Triviador::on_profilePushButton_released()
 {
 	ui.menuWidget->hide();
+
+	std::string link = m_ip + "/getuserdata/?username=" + m_playerUsername;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		auto db_user = crow::json::load(responseFromServer.text);
+
+		ui.userProfileUsernameLabel->setText(QString::fromStdString(db_user["Username"].s()));
+		
+		ui.userProfileEmailLabel->setText(QString::fromStdString(db_user["Email"].s()));
+
+		ui.userProfilePlayedGamesLabel->setText(QString::fromStdString(db_user["PlayedGames"].s()));
+
+		ui.userProfileWonGamesLabel->setText(QString::fromStdString(db_user["WonGames"].s()));
+
+		ui.userProfileCreationDateLabel->setText(QString::fromStdString(db_user["AccountCreationDate"].s()));
+	}
 	
 	ui.profileWidget->show();
 }

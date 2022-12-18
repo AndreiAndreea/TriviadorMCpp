@@ -76,8 +76,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>20</y>
-       <width>141</width>
+       <y>0</y>
+       <width>91</width>
        <height>21</height>
       </rect>
      </property>
@@ -89,7 +89,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>140</y>
+       <y>150</y>
        <width>131</width>
        <height>24</height>
       </rect>
@@ -102,8 +102,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>50</y>
-       <width>141</width>
+       <y>60</y>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -111,12 +111,12 @@
       <string>Played Games:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="profileWonGamesLable">
+    <widget class="QLabel" name="profileWonGamesLabel">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>80</y>
-       <width>141</width>
+       <y>90</y>
+       <width>91</width>
        <height>21</height>
       </rect>
      </property>
@@ -128,13 +128,129 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>140</y>
+       <y>150</y>
        <width>131</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
       <string>Profile settings</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="userProfileWonGamesLabel">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>90</y>
+       <width>141</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>user_data</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="userProfilePlayedGamesLabel">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>60</y>
+       <width>141</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>user_data</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="userProfileUsernameLabel">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>0</y>
+       <width>141</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>user_data</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="profileEmailLabel">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Email:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="userProfileEmailLabel">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>30</y>
+       <width>141</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>user_data</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="userProfileCreationDateLabel">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>120</y>
+       <width>171</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>user_data</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="profileCreationDateLabel">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>120</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Creation date</string>
      </property>
     </widget>
    </widget>
@@ -266,7 +382,7 @@
      <x>0</x>
      <y>0</y>
      <width>767</width>
-     <height>22</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>
