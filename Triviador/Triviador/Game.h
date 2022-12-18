@@ -35,9 +35,10 @@ private:
 
 	void mouseReleaseEvent(QMouseEvent* ev);
 
-	QString CheckMapSize();
+	QString CheckMapSize(uint16_t mapHeight ,uint16_t mapWidth, uint16_t numberOfPlayers);
 
 private slots:
+	void on_playersSpinBox_valueChanged(int arg1);
 	void on_twoPlayersPushButton_released();
 	void on_threePlayersPushButton_released();
 	void on_fourPlayersPushButton_released();

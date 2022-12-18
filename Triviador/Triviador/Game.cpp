@@ -124,21 +124,17 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 						w.SetCanChooseTerritory(false);
 					}
 				}
-
 			}
 		}
 	}
 }
 
-QString Game::CheckMapSize()
+QString Game::CheckMapSize(uint16_t mapHeight ,uint16_t mapWidth, uint16_t numberOfPlayers)
 {
-	uint16_t mapHeight = m_map.GetMapSize().first;
-	uint16_t mapWidth = m_map.GetMapSize().second;
-	uint16_t limit = m_map.GetNumberOfPlayers() + 1;
-
+	uint16_t limit = numberOfPlayers + 1;
 	if (mapHeight < limit || mapWidth < limit)
 		return "Map dimensions have to be at least the number of players + 1 each!";
-	return "";
+	return "Map size is ok!";
 }
 
 void Game::on_twoPlayersPushButton_released()
@@ -212,23 +208,44 @@ void Game::on_customModePushButton_released()
 
 	w.SetNumberOfPlayers(ui.playersSpinBox->value());
 
-	m_map.SetNumberOfPlayers(ui.playersSpinBox->value());	
-	m_map.SetNumberOfRounds(ui.roundsSpinBox->value());
+	//m_map.SetNumberOfPlayers(ui.playersSpinBox->value());	
+	//m_map.SetNumberOfRounds(ui.roundsSpinBox->value());
+}
+
+void Game::on_playersSpinBox_valueChanged(int arg1)
+{
+	ui.roundsSpinBox->setMinimum(arg1 - 1);
+	ui.roundsSpinBox->setMaximum(arg1 * 3 / 2);
+	ui.roundsSpinBox->setValue(arg1 + 2);
+
+	ui.mapWidthSpinBox->setMinimum(arg1 - 1);
+	ui.mapWidthSpinBox->setMaximum(arg1 * 2);
+	ui.mapWidthSpinBox->setValue(arg1 + 3);
+
+	ui.mapHeightSpinBox->setMinimum(arg1 - 1);
+	ui.mapHeightSpinBox->setMaximum(arg1 * 2);
+	ui.mapHeightSpinBox->setValue(arg1 + 1);
 }
 
 void Game::on_finishGameModeSetupPushButton_released()
 {
 	uint16_t mapHeight = ui.mapHeightSpinBox->value();
 	uint16_t mapWidth = ui.mapWidthSpinBox->value();
-	m_map.SetMapSize(mapHeight, mapWidth);
+	
+	uint16_t numberOfPlayers = ui.playersSpinBox->value();
+	uint16_t numberOfRounds = ui.roundsSpinBox->value();
 
-	QString mapSizeErrorText = CheckMapSize();
-	ui.mapSizeErrorLabel->setText(mapSizeErrorText);
-	ui.mapSizeErrorLabel->show();
-
-	if (mapSizeErrorText == "")
+	QString mapSizeErrorText = CheckMapSize(mapHeight, mapWidth,numberOfPlayers);
+	
+	if (mapSizeErrorText == "Map size is ok!")
 	{
+		ui.mapSizeErrorLabel->hide();
 		gameModeIsSet = true;
-		m_map.CreateMap();
+		m_map.CreateMapCustomMode(mapHeight, mapWidth, numberOfPlayers, numberOfRounds);
+	}
+	else
+	{
+		ui.mapSizeErrorLabel->setText(mapSizeErrorText);
+		ui.mapSizeErrorLabel->show();
 	}
 }

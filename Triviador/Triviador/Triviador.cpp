@@ -50,6 +50,13 @@ void Triviador::on_profileSettingsPushButton_released()
 	ui.profileSettingsWidget->show();
 }
 
+void Triviador::on_backToMenuFromProfileSettingsButton_released()
+{
+	ui.menuWidget->show();
+
+	ui.profileSettingsWidget->hide();
+}
+
 void Triviador::on_quitPushButton_released()
 {
 	close();

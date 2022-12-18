@@ -17,6 +17,7 @@ public:
 	void SetMapSize(uint16_t height, uint16_t width);
 
 	void CreateMap();
+	void CreateMapCustomMode(uint16_t mapHeight, uint16_t mapWidth, uint16_t numberOfPlayers, uint16_t numberOfRounds);
 
 	bool IsRegionAvailable(Coords coords);
 	void RemoveUnusedRegion(uint8_t position);

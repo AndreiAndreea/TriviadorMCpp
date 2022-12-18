@@ -208,9 +208,9 @@
    <widget class="QLabel" name="mapSizeErrorLabel">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>250</y>
-      <width>191</width>
+      <x>260</x>
+      <y>240</y>
+      <width>321</width>
       <height>81</height>
      </rect>
     </property>

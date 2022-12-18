@@ -40,6 +40,15 @@ void Map::CreateMap()
 		m_numberOfRounds = 5;
 		break;
 	}
+	
+}
+
+void Map::CreateMapCustomMode(uint16_t mapHeight, uint16_t mapWidth, uint16_t numberOfPlayers, uint16_t numberOfRounds)
+{
+	m_mapSize.first = mapHeight;
+	m_mapSize.second = mapWidth;
+	m_unusedRegions.resize(mapHeight * mapWidth);
+	m_numberOfRounds = numberOfRounds;
 }
 
 bool Map::IsRegionAvailable(Coords coords)

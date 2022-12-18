@@ -25,6 +25,8 @@ private slots:
     void on_profilePushButton_released();
     void on_profileSettingsPushButton_released();
 
+    void on_backToMenuFromProfileSettingsButton_released();
+
     void on_changeUsernamePushButton_released();
     void on_changePasswordPushButton_released();
     void on_changeEmailPushButton_released();
