@@ -198,7 +198,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 
 				ui.checkAnswerSelection->hide();
 				ui.chooseTerritoryLabel->hide();
-				
+
 				ui.offerAnswersAdvantageButton->setDisabled(false);
 				ui.suggestAnswerAdvantageButton->setDisabled(false);
 
@@ -245,7 +245,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 
 				QuestionMultipleChoice MCQuestion = m_randomMultipleChoiceQuestionsVector.at(randomPosition);
 				m_randomMultipleChoiceQuestionsVector.erase(m_randomMultipleChoiceQuestionsVector.begin() + randomPosition);
-				
+
 				m_currentAnswer = MCQuestion.GetAnswers()[0];
 
 				QString mcq = QString::fromStdString(MCQuestion.GetQuestionText());
@@ -429,22 +429,32 @@ void GameElementsGenerator::on_multipleChoiceAnswer4Button_released()
 	}
 }
 
+bool GameElementsGenerator::CheckQStringToAnswer(QString text)
+{
+	QString answer = QString::fromStdString(m_currentAnswer);
+	
+	if (answer == text)
+		return true;
+	return false;
+}
+
 void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 {
 	if (ui.fifty_fiftyAdvantageButton->isEnabled())
 	{
 		srand(time(0));
-		int randomAnswerNumber = rand() % 4 + 1;
 		int disabledAnswersCounter = 0;
 		bool isCorrectAnswer;
 		bool oneIsDisabled = false, twoIsDisabled = false, threeIsDisabled = false, fourIsDisabled = false;
 
 		while (disabledAnswersCounter != 2)
 		{
+			int randomAnswerNumber = rand() % 4 + 1;
+
 			switch (randomAnswerNumber)
 			{
 			case 1:
-				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer1Button->text(), isCorrectAnswer);
+				isCorrectAnswer = CheckQStringToAnswer(ui.multipleChoiceAnswer1Button->text());
 				if (!isCorrectAnswer && !oneIsDisabled)
 				{
 					ui.multipleChoiceAnswer1Button->setDisabled(true);
@@ -453,7 +463,7 @@ void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 				}
 				break;
 			case 2:
-				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer2Button->text(), isCorrectAnswer);
+				isCorrectAnswer = CheckQStringToAnswer(ui.multipleChoiceAnswer2Button->text());
 				if (!isCorrectAnswer && !twoIsDisabled)
 				{
 					ui.multipleChoiceAnswer2Button->setDisabled(true);
@@ -462,7 +472,7 @@ void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 				}
 				break;
 			case 3:
-				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer3Button->text(), isCorrectAnswer);
+				isCorrectAnswer = CheckQStringToAnswer(ui.multipleChoiceAnswer3Button->text());
 				if (!isCorrectAnswer && !threeIsDisabled)
 				{
 					ui.multipleChoiceAnswer3Button->setDisabled(true);
@@ -471,7 +481,7 @@ void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 				}
 				break;
 			case 4:
-				CheckMultipleChoiceAnswer(ui.multipleChoiceAnswer4Button->text(), isCorrectAnswer);
+				isCorrectAnswer = CheckQStringToAnswer(ui.multipleChoiceAnswer4Button->text());
 				if (!isCorrectAnswer && !fourIsDisabled)
 				{
 					ui.multipleChoiceAnswer4Button->setDisabled(true);
@@ -488,8 +498,8 @@ void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 void GameElementsGenerator::on_suggestAnswerAdvantageButton_released()
 {
 	srand(time(0));
-	uint16_t randomValue = std::stoi(m_currentAnswer) + rand() % 20 - rand() % 20;
-	
+	uint16_t randomValue = std::stoi(m_currentAnswer) + rand() % 10 - rand() % 10;
+
 	ui.suggestAnswerAdvantageLabel->setText(QString::number(randomValue));
 	ui.suggestAnswerAdvantageLabel->show();
 	ui.offerAnswersAdvantageButton->setDisabled(true);
@@ -505,13 +515,13 @@ void GameElementsGenerator::on_offerAnswersAdvantageButton_released()
 	ui.offeredAnswer1Button->setText(QString::number(randomValue));
 
 	randomValue = std::stoi(m_currentAnswer) - rand() % 20;
-	ui.offeredAnswer1Button->setText(QString::number(randomValue));
+	ui.offeredAnswer2Button->setText(QString::number(randomValue));
 
 	randomValue = std::stoi(m_currentAnswer) + rand() % 20;
-	ui.offeredAnswer1Button->setText(QString::number(randomValue));
+	ui.offeredAnswer3Button->setText(QString::number(randomValue));
 
 	randomValue = std::stoi(m_currentAnswer) + rand() % 80;
-	ui.offeredAnswer1Button->setText(QString::number(randomValue));
+	ui.offeredAnswer4Button->setText(QString::number(randomValue));
 
 	HideOfferedAnswers(false);
 }
@@ -524,6 +534,7 @@ void GameElementsGenerator::on_offeredAnswer1Button_released()
 	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
 	DisableAdvantageOfferedAnswers(true);
 }
+
 void GameElementsGenerator::on_offeredAnswer2Button_released()
 {
 	uint16_t inputAnswer = ui.offeredAnswer2Button->text().toInt();

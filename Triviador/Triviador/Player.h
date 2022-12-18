@@ -29,8 +29,8 @@ public:
 	const std::string& GetPassword() const;
 
 	void SetEmail(const std::string& email);
-	const std::string& GetEmail() const;	
-	
+	const std::string& GetEmail() const;
+
 	void SetAccountCreationDate(const std::string& accountCreationDate);
 	const std::string& GetAccountCreationDate() const;
 
@@ -81,4 +81,8 @@ private:
 	std::vector<Coords> m_territory;
 
 	uint8_t m_lives = 3;
+
+	bool m_has5050Advantage = true;
+	bool m_hasSuggestAnswerAdvantage = true;
+	bool m_hasOfferAnswersAdvantage = true;
 };

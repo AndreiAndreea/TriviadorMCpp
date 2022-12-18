@@ -44,6 +44,8 @@ private:
     void DisableAdvantageOfferedAnswers(bool toggleAnswer);
 
     void CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& answer);
+
+    bool CheckQStringToAnswer(const QString text);
     
 	void HideOfferedAnswers(bool hide);
 
