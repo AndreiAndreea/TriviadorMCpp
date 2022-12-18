@@ -4,7 +4,10 @@
 
 #include "Game.h"
 
-#include<QDebug>
+#include <QDebug>
+
+#include <curl/curl.h>
+#include <cpr/cpr.h>
 
 class Triviador : public QMainWindow
 {
@@ -12,6 +15,7 @@ class Triviador : public QMainWindow
 
 public:
     Triviador(QWidget* parent = nullptr);
+    Triviador(const std::string& ip, const std::string& playerUsername);
     ~Triviador();
 
 private:
@@ -31,4 +35,10 @@ private slots:
     void on_changePasswordPushButton_released();
     void on_changeEmailPushButton_released();
 
+    void on_saveProfileSettingsPushButton_released();
+
+private:
+    std::string m_ip;
+    
+	std::string m_playerUsername;
 };

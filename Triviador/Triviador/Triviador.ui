@@ -143,7 +143,7 @@
      <rect>
       <x>20</x>
       <y>190</y>
-      <width>391</width>
+      <width>451</width>
       <height>191</height>
      </rect>
     </property>
@@ -240,6 +240,22 @@
      </property>
      <property name="text">
       <string>Save </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="updateUserDetailsMessageLabel">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>30</y>
+       <width>111</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Update user details message</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>

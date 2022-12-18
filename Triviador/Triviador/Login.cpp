@@ -67,7 +67,7 @@ void Login::OnTransferTimerTick()
 
 	if (ui.progressBar->value() >= 100)
 	{
-		Triviador* trivia = new Triviador;
+		Triviador* trivia = new Triviador(m_ip, GetUsername());
 		trivia->show();
 
 		transferTimer->disconnect();

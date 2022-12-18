@@ -312,6 +312,45 @@ int main()
 
 	auto& getAmountOfMultipleQuestions = CROW_ROUTE(app, "/getAmountOfMultipleQuestions").methods(crow::HTTPMethod::POST);
 	getAmountOfMultipleQuestions(UserDatabaseControl(userDatabase));
+
+	CROW_ROUTE(app, "/updateuser/")(
+		[&userDatabase]
+		(const crow::request& req)
+		{
+			std::string currentUsername = req.url_params.get("current_username");
+			std::string newUsername = req.url_params.get("new_username");
+			std::string newPassword = req.url_params.get("new_password");
+			std::string newEmail = req.url_params.get("new_email");
+
+			auto users = userDatabase.get_all<User>(where(c(&User::GetUsername) == currentUsername));
+
+			if (users.size() == 1)
+			{
+				auto user = users[0];
+
+				if (newUsername != "")
+					user.SetUsername(newUsername);
+
+				if (newPassword != "")
+					user.SetPassword(newPassword);
+
+				if (newEmail != "")
+					user.SetEmail(newEmail);
+
+				userDatabase.update(user);
+
+				return crow::response(200, "User updated!");
+			}
+			else
+			{
+				return crow::response(404, "User not found!");
+			}
+		}
+		);
+
+	auto& updateUser = CROW_ROUTE(app, "/updateuser").methods(crow::HTTPMethod::POST);
+	updateUser(UserDatabaseControl(userDatabase));
+
 	
 	app.port(18080).multithreaded().run();
 
