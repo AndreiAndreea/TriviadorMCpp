@@ -54,6 +54,7 @@ void Login::OnPauseTimerTick()
 		ui.loginPushButton->setDisabled(false);
 		ui.loginBackPushButton->setDisabled(false);
 
+		ui.loginErrorLabel->hide();
 		ui.progressBar->hide();
 
 		pauseTimer->disconnect();
@@ -87,7 +88,7 @@ void Login::StartPauseTimer()
 
 	pauseTimer = new QTimer(this);
 
-	pauseTimer->setInterval(200);
+	pauseTimer->setInterval(1200);
 	pauseTimer->setTimerType(Qt::PreciseTimer);
 
 	connect(pauseTimer, SIGNAL(timeout()), this, SLOT(OnPauseTimerTick()));
@@ -178,7 +179,7 @@ void Login::on_loginPushButton_released()
 		m_wrongDataInsertionCounter++;
 		if (m_wrongDataInsertionCounter == 3)
 		{
-			errorText = "Login data was inserted wrong 3 times! Wait to try again!";
+			errorText = "Login data was inserted wrong 3 times! Wait 2 minutes to try again!";
 			ui.progressBar->show();
 			StartPauseTimer();
 

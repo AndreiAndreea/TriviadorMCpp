@@ -25,7 +25,6 @@ public:
 	~Game();
 
 public:
-	uint16_t GetNumberOfPlayers();
 	bool ClickedOnRegion(const QPointF& coordClick, const QPointF& coordRegion);
 	void AddNewSelectedRegion(const QPointF& coordPos);
 
@@ -36,10 +35,18 @@ private:
 
 	void mouseReleaseEvent(QMouseEvent* ev);
 
+	QString CheckMapSize();
+
 private slots:
-	void on_numberOfPlayersLineEdit_textChanged(const QString& arg1);
+	void on_twoPlayersPushButton_released();
+	void on_threePlayersPushButton_released();
+	void on_fourPlayersPushButton_released();
+	void on_customModePushButton_released();
+	void on_finishGameModeSetupPushButton_released();
 
 private:
+	bool gameModeIsSet;
+
 	Map m_map;
 
 	QColor m_usedColor;

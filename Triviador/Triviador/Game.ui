@@ -6,48 +6,218 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>793</width>
+    <width>784</width>
     <height>419</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLineEdit" name="numberOfPlayersLineEdit">
+  <widget class="QWidget" name="gameModeWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>30</y>
-     <width>111</width>
-     <height>21</height>
+     <x>20</x>
+     <y>20</y>
+     <width>721</width>
+     <height>361</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QLabel" name="numberOfPlayersLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>10</y>
-     <width>201</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Introduceti numarul de jucatori:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="existingRegion">
-   <property name="geometry">
-    <rect>
-     <x>320</x>
-     <y>30</y>
-     <width>151</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Regiunea deja exista!</string>
-   </property>
+   <widget class="QPushButton" name="twoPlayersPushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>2 players</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="threePlayersPushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>3 players</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="fourPlayersPushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>4 players</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="customModePushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>custom</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="gameModeLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>191</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select game mode:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="existingRegionLabel">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>10</y>
+      <width>151</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Regiunea deja exista!</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="playersSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>41</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="roundsSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>42</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="mapHeightSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>250</y>
+      <width>42</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="playersLabel">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>190</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>number of players</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="roundsLabel">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>220</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>number of rounds</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mapHeightLabel">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>250</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>map height</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="mapWidthSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>280</y>
+      <width>42</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mapWidthLabel">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>280</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>map width</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="finishGameModeSetupPushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>310</y>
+      <width>171</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>finish setup</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mapSizeErrorLabel">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>250</y>
+      <width>191</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Map size error label</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

@@ -25,7 +25,7 @@ void Triviador::on_playGamePushButton_released()
 {
 	Game* triviaGame = new Game;
 	triviaGame->show();
-	
+
 	close();
 }
 

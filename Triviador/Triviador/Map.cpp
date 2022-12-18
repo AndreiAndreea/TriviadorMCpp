@@ -5,6 +5,18 @@ void Map::SetNumberOfPlayers(uint16_t numberOfPlayers)
 	m_numberOfPlayers = numberOfPlayers;
 }
 
+void Map::SetNumberOfRounds(uint16_t numberOfRounds)
+{
+	m_numberOfRounds = numberOfRounds;
+}
+
+void Map::SetMapSize(uint16_t height, uint16_t width)
+{
+	m_mapSize.first = height;
+	m_mapSize.second = width;
+	m_unusedRegions.resize(height * width);
+}
+
 void Map::CreateMap()
 {
 	switch (m_numberOfPlayers)
@@ -27,8 +39,6 @@ void Map::CreateMap()
 		m_unusedRegions.resize(24);
 		m_numberOfRounds = 5;
 		break;
-	//default:
-		//break;
 	}
 }
 
@@ -54,6 +64,11 @@ bool Map::IsRegionAvailable(Coords coords)
 void Map::RemoveUnusedRegion(uint8_t position)
 {
 	m_unusedRegions.erase(m_unusedRegions.begin() + position);
+}
+
+uint16_t Map::GetNumberOfPlayers() const
+{
+	return m_numberOfPlayers;
 }
 
 std::pair<uint16_t, uint16_t> Map::GetMapSize() const

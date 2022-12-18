@@ -4,19 +4,33 @@ Game::Game()
 {
 	ui.setupUi(this);
 	w.show();
-	ui.existingRegion->hide();
+	ui.existingRegionLabel->hide();
+	ui.mapSizeErrorLabel->hide();
+	
+	ui.playersSpinBox->setRange(2, 9);
+	ui.roundsSpinBox->setRange(2, 25);
+	ui.mapHeightSpinBox->setRange(3, 25);
+	ui.mapWidthSpinBox->setRange(3, 25);
+
+	ui.playersSpinBox->hide();
+	ui.roundsSpinBox->hide();
+	ui.mapHeightSpinBox->hide();
+	ui.mapWidthSpinBox->hide();
+	
+	ui.playersLabel->hide();
+	ui.roundsLabel->hide();
+	ui.mapHeightLabel->hide();
+	ui.mapWidthLabel->hide();
+
+	ui.finishGameModeSetupPushButton->hide();
+
+	gameModeIsSet = false;
 
 	GenerateRandomColor();
 }
 
 Game::~Game()
 {
-}
-
-uint16_t Game::GetNumberOfPlayers()
-{
-	QString numberOfPlayers = ui.numberOfPlayersLineEdit->text();
-	return static_cast<uint16_t>(numberOfPlayers.toInt());
 }
 
 bool Game::ClickedOnRegion(const QPointF& coordClick, const QPointF& coordRegion)
@@ -60,22 +74,24 @@ void Game::paintEvent(QPaintEvent*)
 
 void Game::DrawMap(QPainter& painter)
 {
-	for (size_t i = 0; i < m_map.GetMapSize().first; i++)
+	if (gameModeIsSet == true)
 	{
-		for (size_t j = 0; j < m_map.GetMapSize().second; j++)
+		for (size_t i = 0; i < m_map.GetMapSize().first; i++)
 		{
-			QRect square(300 + 50 * j, 70 + 50 * i, 50, 50);
+			for (size_t j = 0; j < m_map.GetMapSize().second; j++)
+			{
+				QRect square(300 + 50 * j, 70 + 50 * i, 50, 50);
 
-			QPen pen;
+				QPen pen;
 
-			pen.setColor(Qt::black);
+				pen.setColor(Qt::black);
 
-			painter.setPen(pen);
-			painter.drawRect(square);
+				painter.setPen(pen);
+				painter.drawRect(square);
+			}
 		}
+		update();
 	}
-
-	update();
 }
 
 void Game::mouseReleaseEvent(QMouseEvent* ev)
@@ -98,13 +114,13 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 							found = 1;
 					if (found)
 					{
-						ui.existingRegion->show();
-						ui.existingRegion->setText("Regiunea deja exista!");
+						ui.existingRegionLabel->show();
+						ui.existingRegionLabel->setText("Regiunea deja exista!");
 					}
 					else
 					{
 						AddNewSelectedRegion(regionCoordinates);
-						ui.existingRegion->hide();
+						ui.existingRegionLabel->hide();
 						w.SetCanChooseTerritory(false);
 					}
 				}
@@ -114,16 +130,105 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 	}
 }
 
-void Game::on_numberOfPlayersLineEdit_textChanged(const QString& arg1)
+QString Game::CheckMapSize()
 {
-	/*QString test = QString("%1").arg(ui.numberOfPlayersLineEdit->text());
-	ui.numberOfPlayersLabel->setText(test);*/
+	uint16_t mapHeight = m_map.GetMapSize().first;
+	uint16_t mapWidth = m_map.GetMapSize().second;
+	uint16_t limit = m_map.GetNumberOfPlayers() + 1;
 
-	m_map.SetNumberOfPlayers(GetNumberOfPlayers());
-	w.SetNumberOfPlayers(GetNumberOfPlayers());
+	if (mapHeight < limit || mapWidth < limit)
+		return "Map dimensions have to be at least the number of players + 1 each!";
+	return "";
+}
+
+void Game::on_twoPlayersPushButton_released()
+{
+	ui.threePlayersPushButton->setDisabled(true);
+	ui.fourPlayersPushButton->setDisabled(true);
+	ui.customModePushButton->setDisabled(true);
+
+	m_map.SetNumberOfPlayers(2);
+	w.SetNumberOfPlayers(2);
+
+	gameModeIsSet = true;
 
 	m_map.CreateMap();
 
 	//when a new map is created, we need to clear the colored regions of the previous map
 	m_selectedRegions.clear();
+}
+
+void Game::on_threePlayersPushButton_released()
+{
+	ui.twoPlayersPushButton->setDisabled(true);
+	ui.fourPlayersPushButton->setDisabled(true);
+	ui.customModePushButton->setDisabled(true);
+	
+	m_map.SetNumberOfPlayers(3);
+	w.SetNumberOfPlayers(3);
+
+	gameModeIsSet = true;
+
+	m_map.CreateMap();
+
+	//when a new map is created, we need to clear the colored regions of the previous map
+	m_selectedRegions.clear();
+}
+
+void Game::on_fourPlayersPushButton_released()
+{
+	ui.twoPlayersPushButton->setDisabled(true);
+	ui.threePlayersPushButton->setDisabled(true);
+	ui.customModePushButton->setDisabled(true);
+	
+	m_map.SetNumberOfPlayers(4);
+	w.SetNumberOfPlayers(4);
+
+	gameModeIsSet = true;
+
+	m_map.CreateMap();
+
+	//when a new map is created, we need to clear the colored regions of the previous map
+	m_selectedRegions.clear();
+}
+
+void Game::on_customModePushButton_released()
+{
+	ui.twoPlayersPushButton->setDisabled(true);
+	ui.threePlayersPushButton->setDisabled(true);
+	ui.fourPlayersPushButton->setDisabled(true);
+
+	ui.playersSpinBox->show();
+	ui.roundsSpinBox->show();
+	ui.mapHeightSpinBox->show();
+	ui.mapWidthSpinBox->show();
+
+	ui.playersLabel->show();
+	ui.roundsLabel->show();
+	ui.mapHeightLabel->show();
+	ui.mapWidthLabel->show();
+
+	ui.finishGameModeSetupPushButton->show();
+
+	w.SetNumberOfPlayers(ui.playersSpinBox->value());
+
+	m_map.SetNumberOfPlayers(ui.playersSpinBox->value());	
+	m_map.SetNumberOfRounds(ui.roundsSpinBox->value());
+}
+
+void Game::on_finishGameModeSetupPushButton_released()
+{
+	uint16_t mapHeight = ui.mapHeightSpinBox->value();
+	uint16_t mapWidth = ui.mapWidthSpinBox->value();
+	m_map.SetMapSize(mapHeight, mapWidth);
+
+	QString mapSizeErrorText = CheckMapSize();
+	ui.mapSizeErrorLabel->setText(mapSizeErrorText);
+	ui.mapSizeErrorLabel->show();
+
+	if (mapSizeErrorText == "")
+	{
+		gameModeIsSet = true;
+		m_map.CreateMap();
+	}
 }
