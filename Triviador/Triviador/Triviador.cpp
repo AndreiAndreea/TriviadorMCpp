@@ -33,7 +33,7 @@ Triviador::~Triviador()
 
 void Triviador::on_playGamePushButton_released()
 {
-	Game* triviaGame = new Game;
+	Game* triviaGame = new Game(m_ip, m_playerUsername);
 	triviaGame->show();
 
 	close();
@@ -94,6 +94,10 @@ void Triviador::on_backToMenuFromProfileSettingsButton_released()
 
 void Triviador::on_quitPushButton_released()
 {
+	std::string link = m_ip + "/logoutuser/?username=" + m_playerUsername;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
 	close();
 }
 

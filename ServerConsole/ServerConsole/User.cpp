@@ -10,17 +10,19 @@ User::User()
 	m_totalScore = std::string();
 	m_playedGames = std::string();
 	m_wonGames = std::string();
+	m_connectStatus = std::string();
 }
 
-User::User(uint32_t id, const std::string& username, const std::string& password, const std::string& email, const std::string& accountCreationDate, const std::string& totalScore, const std::string& playedGames, const std::string& wonGames)
-	: m_id(id), 
-	m_username(username), 
-	m_password(password), 
-	m_email(email), 
-	m_accountCreationDate(accountCreationDate), 
-	m_totalScore(totalScore), 
-	m_playedGames(playedGames), 
-	m_wonGames(wonGames)
+User::User(uint32_t id, const std::string& username, const std::string& password, const std::string& email, const std::string& accountCreationDate, const std::string& totalScore, const std::string& playedGames, const std::string& wonGames, const std::string& connectStatus)
+	: m_id(id),
+	m_username(username),
+	m_password(password),
+	m_email(email),
+	m_accountCreationDate(accountCreationDate),
+	m_totalScore(totalScore),
+	m_playedGames(playedGames),
+	m_wonGames(wonGames),
+	m_connectStatus(connectStatus)
 {
 }
 
@@ -104,6 +106,16 @@ const std::string& User::GetWonGames() const
 	return m_wonGames;
 }
 
+void User::SetConnectStatus(const std::string& connectStatus)
+{
+	m_connectStatus = connectStatus;
+}
+
+const std::string& User::GetConnectStatus() const
+{
+	return m_connectStatus;
+}
+
 UserDatabaseControl::UserDatabaseControl(UsersStorage& storage)
 	: database(storage)
 {
@@ -114,7 +126,7 @@ crow::response UserDatabaseControl::operator()(const crow::request& request) con
 {
 	auto bodyArgs = ParseUrlArgs(request.body); //id=2&quantity=3&...
 	auto end = bodyArgs.end();
-	
+
 	auto id = bodyArgs.find("id");
 	auto username = bodyArgs.find("username");
 	auto password = bodyArgs.find("password");
@@ -123,13 +135,14 @@ crow::response UserDatabaseControl::operator()(const crow::request& request) con
 	auto totalScore = bodyArgs.find("totalScore");
 	auto playedGames = bodyArgs.find("playedGames");
 	auto wonGames = bodyArgs.find("wonGames");
+	auto connectStatus = bodyArgs.find("connectStatus");
 
-	if (id != end && username != end && password != end && email != end && accountCreationDate != end && totalScore != end && playedGames != end && wonGames != end)
+	if (id != end && username != end && password != end && email != end && accountCreationDate != end && totalScore != end && playedGames != end && wonGames != end && connectStatus != end)
 	{
-		User user(std::stoi(id->second), username->second, password->second, email->second, accountCreationDate->second, totalScore->second, playedGames->second, wonGames->second);
-		
+		User user(std::stoi(id->second), username->second, password->second, email->second, accountCreationDate->second, totalScore->second, playedGames->second, wonGames->second, connectStatus->second);
+
 		database.update(user);
-		
+
 		return crow::response(200);
 	}
 	else

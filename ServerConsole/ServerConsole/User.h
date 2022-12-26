@@ -16,7 +16,7 @@ class User
 {
 public:
 	User();
-	User(uint32_t id, const std::string& username, const std::string& password, const std::string& email, const std::string& accountCreationDate, const std::string& totalScore, const std::string& playedGames, const std::string& wonGames);
+	User(uint32_t id, const std::string& username, const std::string& password, const std::string& email, const std::string& accountCreationDate, const std::string& totalScore, const std::string& playedGames, const std::string& wonGames, const std::string& connectStatus);
 	
 public:
 	void SetID(uint32_t id);
@@ -43,6 +43,9 @@ public:
 	void SetWonGames(const std::string& wonGames);
 	const std::string& GetWonGames() const;
 
+	void SetConnectStatus(const std::string& connectStatus);
+	const std::string& GetConnectStatus() const;
+
 private:
 	uint32_t m_id;
 
@@ -55,6 +58,8 @@ private:
 
 	std::string m_playedGames;
 	std::string m_wonGames;
+
+	std::string m_connectStatus;
 };
 
 inline auto CreateUsersStorage(const std::string& fileName)
@@ -70,7 +75,8 @@ inline auto CreateUsersStorage(const std::string& fileName)
 			make_column("accountCreationDate", &User::GetAccountCreationDate, &User::SetAccountCreationDate),
 			make_column("score", &User::GetTotalScore, &User::SetTotalScore),
 			make_column("playedGames", &User::GetPlayedGames, &User::SetPlayedGames),
-			make_column("wonGames", &User::GetWonGames, &User::SetWonGames)
+			make_column("wonGames", &User::GetWonGames,&User::SetWonGames),
+			make_column("connectStatus", &User::GetConnectStatus, &User::SetConnectStatus)
 		)
 	);
 }

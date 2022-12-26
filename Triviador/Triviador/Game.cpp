@@ -2,11 +2,18 @@
 
 Game::Game()
 {
+}
+
+Game::Game(const std::string& ip, const std::string& username)
+{
+	m_ip = ip;
+	m_playerUsername = username;
+
 	ui.setupUi(this);
 	w.show();
 	ui.existingRegionLabel->hide();
 	ui.mapSizeErrorLabel->hide();
-	
+
 	ui.playersSpinBox->setRange(2, 9);
 	ui.roundsSpinBox->setRange(2, 25);
 	ui.mapHeightSpinBox->setRange(3, 25);
@@ -16,7 +23,7 @@ Game::Game()
 	ui.roundsSpinBox->hide();
 	ui.mapHeightSpinBox->hide();
 	ui.mapWidthSpinBox->hide();
-	
+
 	ui.playersLabel->hide();
 	ui.roundsLabel->hide();
 	ui.mapHeightLabel->hide();
@@ -248,4 +255,11 @@ void Game::on_finishGameModeSetupPushButton_released()
 		ui.mapSizeErrorLabel->setText(mapSizeErrorText);
 		ui.mapSizeErrorLabel->show();
 	}
+}
+
+void Game::closeEvent(QCloseEvent* e)
+{
+	std::string link = m_ip + "/logoutuser/?username=" + m_playerUsername;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 }

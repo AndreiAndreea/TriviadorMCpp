@@ -12,6 +12,8 @@
 
 #include <cstdlib>
 
+#include <cpr/cpr.h>
+
 class Game : public QDialog
 {
 	Q_OBJECT
@@ -22,6 +24,9 @@ private:
 
 public:
 	explicit Game();
+	
+	Game(const std::string& ip, const std::string& username);
+	
 	~Game();
 
 public:
@@ -44,6 +49,8 @@ private slots:
 	void on_fourPlayersPushButton_released();
 	void on_customModePushButton_released();
 	void on_finishGameModeSetupPushButton_released();
+	
+	void closeEvent(QCloseEvent* e);
 
 private:
 	bool gameModeIsSet;
@@ -55,5 +62,10 @@ private:
 	std::vector<QColor> m_colorList = { Qt::yellow, Qt:: blue, Qt::green, Qt::cyan, Qt::magenta, Qt::red, Qt::darkGreen, Qt::darkCyan, Qt::darkMagenta, Qt::darkRed };
 	
 	std::vector<QPointF> m_selectedRegions;
+
+	QTimer* transferTimer;
+
+	std::string m_ip;
+	std::string m_playerUsername;
 };
 

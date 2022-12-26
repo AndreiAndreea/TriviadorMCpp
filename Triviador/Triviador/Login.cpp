@@ -131,8 +131,7 @@ void Login::on_loginPushButton_released()
 	std::string usernameFromUser = ui.usernameLineEdit->text().toStdString();
 	std::string passwordFromUser = ui.passwordLineEdit->text().toStdString();
 
-	std::string link = m_ip + "/checkuser/?username=" + usernameFromUser + "&password=" + passwordFromUser;
-	//std::string link = "localhost:18080/checkuser/?username=" +usernameFromUser + "&password=" + passwordFromUser;
+	std::string link = m_ip + "/loginuser/?username=" + usernameFromUser + "&password=" + passwordFromUser;
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 

@@ -26,7 +26,8 @@ inline auto createStorage(const std::string& filename)
 			make_column("accountCreationDate", &User::GetAccountCreationDate, &User::SetAccountCreationDate),
 			make_column("score", &User::GetTotalScore, &User::SetTotalScore),
 			make_column("playedGames", &User::GetPlayedGames, &User::SetPlayedGames),
-			make_column("wonGames", &User::GetWonGames, &User::SetWonGames)
+			make_column("wonGames", &User::GetWonGames, &User::SetWonGames),
+			make_column("connectStatus", &User::GetConnectStatus, &User::SetConnectStatus)
 		),
 		make_table(
 			"SingleChoiceQuestions",

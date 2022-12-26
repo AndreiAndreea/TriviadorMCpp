@@ -67,14 +67,15 @@ int main()
 					{"AccountCreationDate", user.GetAccountCreationDate()},
 					{"TotalScore", user.GetTotalScore()},
 					{"PlayedGames", user.GetPlayedGames()},
-					{"WonGames", user.GetWonGames()}
+					{"WonGames", user.GetWonGames()},
+					{"ConnectStatus", user.GetConnectStatus()}
 				});
 			}
 
 			return crow::json::wvalue{ usersJson };
 		});
 
-	CROW_ROUTE(app, "/checkuser/")(
+	CROW_ROUTE(app, "/loginuser/")(
 		[&userDatabase]
 		(const crow::request& req)
 		{
@@ -87,19 +88,30 @@ int main()
 
 				if (findUserInDatabase.size() == 1)
 				{
-					crow::json::wvalue user = crow::json::wvalue
+					if (findUserInDatabase[0].GetConnectStatus() == "Offline")
 					{
-						{"ID", findUserInDatabase[0].GetID()},
-						{"Username", findUserInDatabase[0].GetUsername()},
-						{"Password", findUserInDatabase[0].GetPassword()},
-						{"Email", findUserInDatabase[0].GetEmail()},
-						{"AccountCreationDate", findUserInDatabase[0].GetAccountCreationDate()},
-						{"TotalScore", findUserInDatabase[0].GetTotalScore()},
-						{"PlayedGames", findUserInDatabase[0].GetPlayedGames()},
-						{"WonGames", findUserInDatabase[0].GetWonGames()}
-					};
+						findUserInDatabase[0].SetConnectStatus("Online");
+						userDatabase.update(findUserInDatabase[0]);
 
-					return  crow::response(user);
+						crow::json::wvalue user = crow::json::wvalue
+						{
+							{"ID", findUserInDatabase[0].GetID()},
+							{"Username", findUserInDatabase[0].GetUsername()},
+							{"Password", findUserInDatabase[0].GetPassword()},
+							{"Email", findUserInDatabase[0].GetEmail()},
+							{"AccountCreationDate", findUserInDatabase[0].GetAccountCreationDate()},
+							{"TotalScore", findUserInDatabase[0].GetTotalScore()},
+							{"PlayedGames", findUserInDatabase[0].GetPlayedGames()},
+							{"WonGames", findUserInDatabase[0].GetWonGames()},
+							{"ConnectStatus", findUserInDatabase[0].GetConnectStatus()}
+						};
+
+						return  crow::response(user);
+					}
+					else
+					{
+						return crow::response(409, "User is already logged in.");
+					}
 				}
 				else
 				{
@@ -113,8 +125,40 @@ int main()
 		});
 
 	// https://stackoverflow.com/a/630475/12388382
-	auto& checkIfUserExistsInDatabase = CROW_ROUTE(app, "/checkuser").methods(crow::HTTPMethod::POST);
-	checkIfUserExistsInDatabase(UserDatabaseControl(userDatabase));
+	auto& loginUser = CROW_ROUTE(app, "/loginuser").methods(crow::HTTPMethod::POST);
+	loginUser(UserDatabaseControl(userDatabase));
+
+	CROW_ROUTE(app, "/logoutuser/")(
+		[&userDatabase]
+		(const crow::request& req)
+		{
+			std::string username = req.url_params.get("username");
+
+			auto findUserInDatabase = userDatabase.get_all<User>(where(c(&User::GetUsername) == username));
+
+			if (findUserInDatabase.size() == 1)
+			{
+				if (findUserInDatabase[0].GetConnectStatus() == "Online")
+				{
+					findUserInDatabase[0].SetConnectStatus("Offline");
+					userDatabase.update(findUserInDatabase[0]);
+
+					return crow::response(200, "User successfully logged out.");
+				}
+				else
+				{
+					return crow::response(409, "User is already logged out.");
+				}
+			}
+			else
+			{
+				return crow::response(404, "User not found!");
+			}
+		});
+
+	// https://stackoverflow.com/a/630475/12388382
+	auto& logoutUser = CROW_ROUTE(app, "/logoutuser").methods(crow::HTTPMethod::POST);
+	logoutUser(UserDatabaseControl(userDatabase));
 
 	CROW_ROUTE(app, "/registeruser/")(
 		[&userDatabase]
@@ -135,7 +179,7 @@ int main()
 
 					if (users.size() == 0)
 					{
-						userDatabase.insert(User(countUsers + 1, username, password, email, accountCreationDate, "0", "0", "0"));
+						userDatabase.insert(User(countUsers + 1, username, password, email, accountCreationDate, "0", "0", "0", "Offline"));
 
 						return crow::response(200, "User registered successfully!");
 					}
@@ -372,7 +416,8 @@ int main()
 						{"AccountCreationDate", findUserInDatabase[0].GetAccountCreationDate()},
 						{"TotalScore", findUserInDatabase[0].GetTotalScore()},
 						{"PlayedGames", findUserInDatabase[0].GetPlayedGames()},
-						{"WonGames", findUserInDatabase[0].GetWonGames()}
+						{"WonGames", findUserInDatabase[0].GetWonGames()},
+						{"ConnectStatus", findUserInDatabase[0].GetConnectStatus()}
 					};
 
 					return  crow::response(user);
