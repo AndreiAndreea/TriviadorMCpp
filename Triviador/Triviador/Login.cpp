@@ -3,6 +3,8 @@
 
 #include "Triviador.h"
 
+QTime timeLeft(0, 2, 0);
+
 Login::Login()
 {
 }
@@ -15,6 +17,7 @@ Login::Login(const std::string& serverIP, const std::string& serverPort)
 	m_ip = "http://" + m_serverIP + ":" + m_serverPort;
 
 	m_wrongDataInsertionCounter = 0;
+	m_userAlreadyOnlineCounter = 0;
 
 	ui.setupUi(this);
 
@@ -26,6 +29,7 @@ Login::Login(const std::string& serverIP, const std::string& serverPort)
 	ui.displayPasswordPushButton->setIcon(QIcon("resources/img/icons/eye-off.png"));
 
 	ui.progressBar->hide();
+	ui.progressBarLeftTimeLabel->hide();
 	ui.transferToTriviadorProgressLabel->hide();
 
 	ui.loginErrorLabel->hide();
@@ -48,6 +52,9 @@ const std::string Login::GetPassword() const
 void Login::OnPauseTimerTick()
 {
 	ui.progressBar->setValue(ui.progressBar->value() + 1);
+
+	timeLeft = timeLeft.addSecs(-1);
+	ui.progressBarLeftTimeLabel->setText("0" + timeLeft.toString("m:ss") + " minutes left");
 
 	if (ui.progressBar->value() >= 100)
 	{
@@ -91,7 +98,20 @@ void Login::StartPauseTimer()
 
 	pauseTimer = new QTimer(this);
 
-	pauseTimer->setInterval(1200);
+	if (m_wrongDataInsertionCounter == 3)
+	{
+		pauseTimer->setInterval(1200);
+		ui.progressBarLeftTimeLabel->setText("0" + timeLeft.toString("m:ss") + " minutes left");
+		ui.progressBarLeftTimeLabel->show();
+	}
+	else if (m_userAlreadyOnlineCounter == 3)
+	{
+		pauseTimer->setInterval(3000);
+		timeLeft = timeLeft.addSecs(180);
+		ui.progressBarLeftTimeLabel->setText("0" + timeLeft.toString("m:ss") + " minutes left");
+		ui.progressBarLeftTimeLabel->show();
+	}
+
 	pauseTimer->setTimerType(Qt::PreciseTimer);
 
 	connect(pauseTimer, SIGNAL(timeout()), this, SLOT(OnPauseTimerTick()));
@@ -178,7 +198,11 @@ void Login::on_loginPushButton_released()
 		else if (responseFromServer.status_code >= 500)
 			errorText = "Server error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
 
-		m_wrongDataInsertionCounter++;
+		if (responseFromServer.status_code == 409)
+			m_userAlreadyOnlineCounter++;
+		else
+			m_wrongDataInsertionCounter++;
+
 		if (m_wrongDataInsertionCounter == 3)
 		{
 			errorText = "Login data was inserted wrong 3 times! Wait 2 minutes to try again!";
@@ -186,6 +210,14 @@ void Login::on_loginPushButton_released()
 			StartPauseTimer();
 
 			m_wrongDataInsertionCounter = 0;
+		}
+		else if (m_userAlreadyOnlineCounter == 3)
+		{
+			errorText = "The user whose data was inserted 3 times is already online! Wait 5 minutes to try connecting again!";
+			ui.progressBar->show();
+			StartPauseTimer();
+
+			m_userAlreadyOnlineCounter = 0;
 		}
 
 		ui.loginErrorLabel->setText(errorText.c_str());

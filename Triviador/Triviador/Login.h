@@ -49,7 +49,7 @@ private:
 	QTimer* pauseTimer;
 	QTimer* transferTimer;
 
-	uint16_t m_wrongDataInsertionCounter;
+	uint16_t m_wrongDataInsertionCounter, m_userAlreadyOnlineCounter;
 	std::string m_ip;
 
 	std::string m_serverIP;

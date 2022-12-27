@@ -137,7 +137,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>280</y>
+     <y>290</y>
      <width>141</width>
      <height>16</height>
     </rect>
@@ -166,6 +166,19 @@
    </property>
    <property name="wordWrap">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="progressBarLeftTimeLabel">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>290</y>
+     <width>171</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Progress bar left time label</string>
    </property>
   </widget>
  </widget>
