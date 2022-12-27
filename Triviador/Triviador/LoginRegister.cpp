@@ -1,20 +1,17 @@
 #include "LoginRegister.h"
 
-#include "Register.h"
-#include "Login.h"
-
-#include <regex>
-
 LoginRegister::LoginRegister()
 {
 	ui.setupUi(this);
 
-	ui.serverDataWidget->show();
 	ui.ipErrorLabel->hide();
 	ui.portErrorLabel->hide();
 	ui.serverErrorLabel->hide();
 
-	ui.loginRegisterWidget->hide();
+	ui.serverIPLineEdit->setText("");
+	ui.serverPortLineEdit->setText("");	
+
+	ui.stackedWidget->setCurrentIndex(0);
 }
 
 LoginRegister::~LoginRegister()
@@ -86,7 +83,7 @@ QString LoginRegister::CheckServerPort()
 	return "Server port is valid!";
 }
 
-void LoginRegister::on_connectButton_released()
+void LoginRegister::on_connectButton_clicked()
 {
 	ui.serverErrorLabel->hide();
 
@@ -110,12 +107,24 @@ void LoginRegister::on_connectButton_released()
 
 		if (responseFromServer.status_code == 200)
 		{
-			ui.serverDataWidget->hide();
-			ui.loginRegisterWidget->show();
-
 			ui.ipErrorLabel->hide();
 			ui.portErrorLabel->hide();
 			ui.serverErrorLabel->hide();
+
+			ui.serverIPLineEdit->setText("");
+			ui.serverPortLineEdit->setText("");
+			
+			ui.stackedWidget->setCurrentIndex(1);
+
+			LoginWindow = new Login(m_serverIP, m_serverPort);
+			ui.stackedWidget->insertWidget(2, LoginWindow);
+
+			RegisterWindow = new Register(m_serverIP, m_serverPort);
+			ui.stackedWidget->insertWidget(3, RegisterWindow);
+			
+			connect(LoginWindow, SIGNAL(BackToMenu()), this, SLOT(backToMenuFromLoginOrRegisterButton()));
+			connect(RegisterWindow, SIGNAL(BackToMenu()), this, SLOT(backToMenuFromLoginOrRegisterButton()));
+			connect(RegisterWindow, SIGNAL(BackToLogin()), this, SLOT(backToLoginFromRegisterButton()));
 		}
 		else
 		{
@@ -126,13 +135,10 @@ void LoginRegister::on_connectButton_released()
 }
 
 void LoginRegister::on_signInButton_released()
-{
+{	
 	if (ui.signInButton->isEnabled())
 	{
-		Login* loginWindow = new Login("http://" + m_serverIP + ":" + m_serverPort);
-		loginWindow->show();
-
-		this->hide();
+		ui.stackedWidget->setCurrentIndex(2);
 	}
 }
 
@@ -140,9 +146,16 @@ void LoginRegister::on_signUpButton_released()
 {
 	if (ui.signUpButton->isEnabled())
 	{
-		Register* registerWindow = new Register(m_serverIP, m_serverPort);
-		registerWindow->show();
-
-		this->hide();
+		ui.stackedWidget->setCurrentIndex(3); 
 	}
+}
+
+void LoginRegister::backToMenuFromLoginOrRegisterButton()
+{
+	ui.stackedWidget->setCurrentIndex(0);
+}
+
+void LoginRegister::backToLoginFromRegisterButton()
+{
+	ui.stackedWidget->setCurrentIndex(2);
 }

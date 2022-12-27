@@ -123,10 +123,7 @@ void Register::on_registerBackPushButton_released()
 {
 	if (ui.registerBackPushButton->isEnabled())
 	{
-		LoginRegister* r = new LoginRegister;
-		r->show();
-
-		this->close();
+		emit BackToMenu();
 	}
 }
 
@@ -136,12 +133,9 @@ void Register::OnTimerTick()
 
 	if (ui.progressBar->value() >= 100)
 	{
-		Login* loginWindow = new Login(m_ip);
-		loginWindow->show();
+		emit BackToLogin();
 
 		timer->disconnect();
-
-		this->close();
 	}
 }
 

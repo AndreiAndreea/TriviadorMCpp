@@ -21,7 +21,7 @@ private:
 
 public:
 	explicit Login();
-	Login(const std::string& ip);
+	Login(const std::string& serverIP, const std::string& serverPort);
 	
 	~Login();
 
@@ -34,6 +34,9 @@ private slots:
 
 	void OnPauseTimerTick();
 	void OnTransferTimerTick();
+
+signals:
+	void BackToMenu();
 
 public:
 	const std::string GetUsername() const;
@@ -48,4 +51,7 @@ private:
 
 	uint16_t m_wrongDataInsertionCounter;
 	std::string m_ip;
+
+	std::string m_serverIP;
+	std::string m_serverPort;
 };

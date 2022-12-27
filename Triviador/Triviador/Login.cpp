@@ -7,9 +7,12 @@ Login::Login()
 {
 }
 
-Login::Login(const std::string& ip)
+Login::Login(const std::string& serverIP, const std::string& serverPort)
 {
-	m_ip = ip;
+	m_serverIP = serverIP;
+	m_serverPort = serverPort;
+
+	m_ip = "http://" + m_serverIP + ":" + m_serverPort;
 
 	m_wrongDataInsertionCounter = 0;
 
@@ -194,9 +197,6 @@ void Login::on_loginBackPushButton_released()
 {
 	if (ui.loginBackPushButton->isEnabled())
 	{
-		LoginRegister* r = new LoginRegister;
-		r->show();
-
-		this->close();
+		emit BackToMenu();
 	}
 }

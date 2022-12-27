@@ -46,6 +46,10 @@ private slots:
 
 	void OnTimerTick();
 
+signals:
+	void BackToMenu();
+	void BackToLogin();
+
 public:
 	void StartTimer();
 
