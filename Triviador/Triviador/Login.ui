@@ -6,180 +6,195 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>796</width>
-    <height>435</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="singInLabel">
+  <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>70</y>
-     <width>221</width>
-     <height>21</height>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>720</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Get ready for battle!</string>
+   <property name="currentIndex">
+    <number>0</number>
    </property>
-  </widget>
-  <widget class="QLineEdit" name="usernameLineEdit">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>150</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="usernameLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>125</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enter username/email:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="passwordLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>180</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enter password:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="passwordLineEdit">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>200</y>
-     <width>151</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="displayPasswordPushButton">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>190</y>
-     <width>21</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="loginPushButton">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>240</y>
-     <width>141</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Log In</string>
-   </property>
-   <property name="default">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="loginErrorLabel">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>90</y>
-     <width>211</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Error at login invalid credenrtials</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="loginBackPushButton">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>320</y>
-     <width>141</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Back to main page</string>
-   </property>
-  </widget>
-  <widget class="QProgressBar" name="progressBar">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>290</y>
-     <width>141</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="value">
-    <number>24</number>
-   </property>
-   <property name="textVisible">
-    <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="transferToTriviadorProgressLabel">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>230</y>
-     <width>251</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Transfer to Triviador progress label</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="progressBarLeftTimeLabel">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>290</y>
-     <width>171</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Progress bar left time label</string>
-   </property>
+   <widget class="QWidget" name="page">
+    <widget class="QPushButton" name="loginPushButton">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>335</y>
+       <width>141</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Log In</string>
+     </property>
+     <property name="default">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="transferToTriviadorProgressLabel">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>325</y>
+       <width>251</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Transfer to Triviador progress label</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loginBackPushButton">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>415</y>
+       <width>141</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Back to main page</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="displayPasswordPushButton">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>285</y>
+       <width>21</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="singInLabel">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>165</y>
+       <width>221</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Get ready for battle!</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="loginErrorLabel">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>185</y>
+       <width>211</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Error at login invalid credenrtials</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="passwordLabel">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>275</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Enter password:</string>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>385</y>
+       <width>141</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="usernameLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>245</y>
+       <width>151</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="progressBarLeftTimeLabel">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>385</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Progress bar left time label</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="passwordLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>295</y>
+       <width>151</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="usernameLabel">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>220</y>
+       <width>151</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Enter username/email:</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <resources/>

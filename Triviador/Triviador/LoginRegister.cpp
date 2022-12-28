@@ -11,6 +11,8 @@ LoginRegister::LoginRegister()
 	ui.serverIPLineEdit->setText("");
 	ui.serverPortLineEdit->setText("");	
 
+	this->setWindowTitle("Triviador");
+
 	ui.stackedWidget->setCurrentIndex(0);
 }
 
@@ -152,10 +154,20 @@ void LoginRegister::on_signUpButton_released()
 
 void LoginRegister::backToMenuFromLoginOrRegisterButton()
 {
-	ui.stackedWidget->setCurrentIndex(0);
+	ui.stackedWidget->setCurrentIndex(1);
 }
 
 void LoginRegister::backToLoginFromRegisterButton()
 {
 	ui.stackedWidget->setCurrentIndex(2);
+}
+
+void LoginRegister::closeEvent(QCloseEvent* e)
+{
+	//update the database with the new credentials of the user before closing the application
+	m_playerUsername = LoginWindow->GetUsername();
+	
+	std::string link = "http://" + m_serverIP + ":" + m_serverPort + "/logoutuser/?username=" + m_playerUsername;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 }

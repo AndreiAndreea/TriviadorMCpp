@@ -18,7 +18,6 @@
 #include <cstdlib>
 
 #include "Questions.h"
-#include "LoginRegister.h"
 
 #include "DataBase.h"
 

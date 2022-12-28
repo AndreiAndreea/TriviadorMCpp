@@ -8,22 +8,22 @@ Triviador::Triviador(QWidget* parent)
 
 Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 {
-	m_ip = ip;
-	m_playerUsername = playerUsername;
-
 	ui.setupUi(this);
 
-	ui.menuWidget->show();
+	this->setWindowTitle("Triviador");
 
-	ui.profileWidget->hide();
-
-	ui.profileSettingsWidget->hide();
+	m_ip = ip;
+	m_playerUsername = playerUsername;
 
 	ui.changeUsernameLineEdit->hide();
 	ui.changePasswordLineEdit->hide();
 	ui.changeEmailLineEdit->hide();
 
+	ui.userErrorLabel->hide();
+
 	ui.updateUserDetailsMessageLabel->hide();
+
+	ui.stackedWidget->setCurrentIndex(0);
 }
 
 Triviador::~Triviador()
@@ -33,63 +33,33 @@ Triviador::~Triviador()
 
 void Triviador::on_playGamePushButton_released()
 {
-	Game* triviaGame = new Game(m_ip, m_playerUsername);
-	triviaGame->show();
+	triviadorGame = new Game(m_ip, m_playerUsername);
 
-	close();
+	ui.stackedWidget->insertWidget(3, triviadorGame);
+	
+	ui.stackedWidget->setCurrentIndex(3);
 }
 
 void Triviador::on_profilePushButton_released()
 {
-	ui.menuWidget->hide();
-
-	std::string link = m_ip + "/getuserdata/?username=" + m_playerUsername;
-
-	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
-
-	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
-	{
-		auto db_user = crow::json::load(responseFromServer.text);
-
-		ui.userProfileUsernameLabel->setText(QString::fromStdString(db_user["Username"].s()));
-		
-		ui.userProfileEmailLabel->setText(QString::fromStdString(db_user["Email"].s()));
-
-		ui.userProfilePlayedGamesLabel->setText(QString::fromStdString(db_user["PlayedGames"].s()));
-
-		ui.userProfileWonGamesLabel->setText(QString::fromStdString(db_user["WonGames"].s()));
-
-		ui.userProfileCreationDateLabel->setText(QString::fromStdString(db_user["AccountCreationDate"].s()));
-	}
-	
-	ui.profileWidget->show();
+	updateUserDetails();
 }
 
 void Triviador::on_backToMenuPushButton_released()
 {
-	ui.menuWidget->show();
-	
-	ui.profileWidget->hide();
+	ui.stackedWidget->setCurrentIndex(0);
 }
 
 void Triviador::on_profileSettingsPushButton_released()
 {
-	ui.profileWidget->hide();
-
-	ui.profileSettingsWidget->show();
+	ui.stackedWidget->setCurrentIndex(2);
 }
 
-void Triviador::on_backToMenuFromProfileSettingsButton_released()
+void Triviador::on_backToProfileButton_released()
 {
-	ui.menuWidget->show();
+	ui.stackedWidget->setCurrentIndex(1);
 
-	ui.profileSettingsWidget->hide();
-
-	ui.changeUsernameLineEdit->hide();
-	ui.changePasswordLineEdit->hide();
-	ui.changeEmailLineEdit->hide();
-
-	ui.updateUserDetailsMessageLabel->hide();
+	updateUserDetails();
 }
 
 void Triviador::on_quitPushButton_released()
@@ -164,5 +134,35 @@ void Triviador::on_saveProfileSettingsPushButton_released()
 		ui.updateUserDetailsMessageLabel->setText(text.c_str()); 
 		ui.updateUserDetailsMessageLabel->show();
 	}
-	
+}
+
+void Triviador::updateUserDetails()
+{
+	ui.userErrorLabel->hide();
+
+	ui.stackedWidget->setCurrentIndex(1);
+
+	std::string link = m_ip + "/getuserdata/?username=" + m_playerUsername;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		auto db_user = crow::json::load(responseFromServer.text);
+
+		ui.userProfileUsernameLabel->setText(QString::fromStdString(db_user["Username"].s()));
+
+		ui.userProfileEmailLabel->setText(QString::fromStdString(db_user["Email"].s()));
+
+		ui.userProfilePlayedGamesLabel->setText(QString::fromStdString(db_user["PlayedGames"].s()));
+
+		ui.userProfileWonGamesLabel->setText(QString::fromStdString(db_user["WonGames"].s()));
+
+		ui.userProfileCreationDateLabel->setText(QString::fromStdString(db_user["AccountCreationDate"].s()));
+	}
+	else
+	{
+		ui.userErrorLabel->setText("Error: " + QString::fromStdString(std::to_string(responseFromServer.status_code)) + "\n" + QString::fromStdString(responseFromServer.text));
+		ui.userErrorLabel->show();
+	}
 }

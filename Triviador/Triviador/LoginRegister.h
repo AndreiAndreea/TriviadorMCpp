@@ -39,8 +39,11 @@ private slots:
 	void backToMenuFromLoginOrRegisterButton();
 	void backToLoginFromRegisterButton();
 
+	void closeEvent(QCloseEvent* e);
+
 private:
 	std::string m_serverIP, m_serverPort;
+	std::string m_playerUsername;
 
 private:
 	Register* RegisterWindow;

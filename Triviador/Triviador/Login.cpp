@@ -1,7 +1,4 @@
 #include "Login.h"
-#include "Game.h"
-
-#include "Triviador.h"
 
 QTime timeLeft(0, 2, 0);
 
@@ -33,6 +30,8 @@ Login::Login(const std::string& serverIP, const std::string& serverPort)
 	ui.transferToTriviadorProgressLabel->hide();
 
 	ui.loginErrorLabel->hide();
+
+	ui.stackedWidget->setCurrentIndex(0);
 }
 
 Login::~Login()
@@ -77,12 +76,12 @@ void Login::OnTransferTimerTick()
 
 	if (ui.progressBar->value() >= 100)
 	{
-		Triviador* trivia = new Triviador(m_ip, GetUsername());
-		trivia->show();
+		triviadorMenu = new Triviador(m_ip, GetUsername());
+		ui.stackedWidget->insertWidget(1, triviadorMenu);
 
 		transferTimer->disconnect();
 
-		this->close();
+		ui.stackedWidget->setCurrentIndex(1);
 	}
 }
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>435</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,8 +21,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>657</width>
-     <height>435</height>
+     <width>1280</width>
+     <height>720</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -32,8 +32,8 @@
     <widget class="QLabel" name="serverIPLabel">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>180</y>
+       <x>420</x>
+       <y>280</y>
        <width>71</width>
        <height>21</height>
       </rect>
@@ -50,8 +50,8 @@
     <widget class="QLineEdit" name="serverPortLineEdit">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>220</y>
+       <x>500</x>
+       <y>320</y>
        <width>113</width>
        <height>21</height>
       </rect>
@@ -60,8 +60,8 @@
     <widget class="QLabel" name="serverPortLabel">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>220</y>
+       <x>420</x>
+       <y>320</y>
        <width>71</width>
        <height>21</height>
       </rect>
@@ -78,8 +78,8 @@
     <widget class="QLabel" name="ipErrorLabel">
      <property name="geometry">
       <rect>
-       <x>330</x>
-       <y>180</y>
+       <x>630</x>
+       <y>280</y>
        <width>261</width>
        <height>16</height>
       </rect>
@@ -91,8 +91,8 @@
     <widget class="QLabel" name="serverErrorLabel">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>50</y>
+       <x>450</x>
+       <y>150</y>
        <width>351</width>
        <height>51</height>
       </rect>
@@ -112,8 +112,8 @@
     <widget class="QPushButton" name="connectButton">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>390</y>
+       <x>860</x>
+       <y>490</y>
        <width>75</width>
        <height>24</height>
       </rect>
@@ -128,8 +128,8 @@
     <widget class="QLabel" name="portErrorLabel">
      <property name="geometry">
       <rect>
-       <x>330</x>
-       <y>220</y>
+       <x>630</x>
+       <y>320</y>
        <width>261</width>
        <height>16</height>
       </rect>
@@ -141,8 +141,8 @@
     <widget class="QLineEdit" name="serverIPLineEdit">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>180</y>
+       <x>500</x>
+       <y>280</y>
        <width>113</width>
        <height>21</height>
       </rect>
@@ -153,8 +153,8 @@
     <widget class="QPushButton" name="signUpButton">
      <property name="geometry">
       <rect>
-       <x>400</x>
-       <y>210</y>
+       <x>700</x>
+       <y>350</y>
        <width>141</width>
        <height>31</height>
       </rect>
@@ -166,8 +166,8 @@
     <widget class="QPushButton" name="signInButton">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>210</y>
+       <x>420</x>
+       <y>350</y>
        <width>141</width>
        <height>31</height>
       </rect>
@@ -179,8 +179,8 @@
     <widget class="QLabel" name="greetingLabel">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>120</y>
+       <x>450</x>
+       <y>260</y>
        <width>361</width>
        <height>81</height>
       </rect>

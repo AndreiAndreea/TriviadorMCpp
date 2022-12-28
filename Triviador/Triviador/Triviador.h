@@ -29,7 +29,7 @@ private slots:
     void on_profilePushButton_released();
     void on_profileSettingsPushButton_released();
 
-    void on_backToMenuFromProfileSettingsButton_released();
+    void on_backToProfileButton_released();
 
     void on_changeUsernamePushButton_released();
     void on_changePasswordPushButton_released();
@@ -37,8 +37,17 @@ private slots:
 
     void on_saveProfileSettingsPushButton_released();
 
+signals:
+    void BackToMenu();
+
+private:
+    void updateUserDetails();
+
 private:
     std::string m_ip;
     
 	std::string m_playerUsername;
+
+private:
+    Game* triviadorGame;
 };

@@ -6,373 +6,396 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>767</width>
-    <height>452</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Triviador</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="menuWidget" native="true">
+   <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>20</y>
-      <width>91</width>
-      <height>181</height>
+      <x>0</x>
+      <y>0</y>
+      <width>1280</width>
+      <height>720</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="quitPushButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Quit</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="profilePushButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Profile</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="playGamePushButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Play game</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="profileWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>351</width>
-      <height>181</height>
-     </rect>
+    <property name="currentIndex">
+     <number>2</number>
     </property>
-    <widget class="QLabel" name="profileUsernameLabel">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>0</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Username:</string>
-     </property>
+    <widget class="QWidget" name="page">
+     <widget class="QPushButton" name="profilePushButton">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>310</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Profile</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="playGamePushButton">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>260</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Play game</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="quitPushButton">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>360</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Quit</string>
+      </property>
+     </widget>
     </widget>
-    <widget class="QPushButton" name="backToMenuPushButton">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>150</y>
-       <width>131</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Back to the menu</string>
-     </property>
+    <widget class="QWidget" name="page_2">
+     <widget class="QLabel" name="profileCreationDateLabel">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>180</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Creation date</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="userProfilePlayedGamesLabel">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>120</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>user_data</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="profileUsernameLabel">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>60</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Username:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="userProfileUsernameLabel">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>60</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>user_data</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="profilePlayedGamesLable">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>120</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Played Games:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="profileSettingsPushButton">
+      <property name="geometry">
+       <rect>
+        <x>1120</x>
+        <y>620</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Profile settings</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="userProfileEmailLabel">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>90</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>user_data</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="userProfileCreationDateLabel">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>180</y>
+        <width>171</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>user_data</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="backToMenuPushButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>620</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Back to the menu</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="profileWonGamesLabel">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>150</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Won Games:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="userProfileWonGamesLabel">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>150</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>user_data</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="profileEmailLabel">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>90</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Email:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="userErrorLabel">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>20</y>
+        <width>291</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>error </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </widget>
-    <widget class="QLabel" name="profilePlayedGamesLable">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>60</y>
-       <width>101</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Played Games:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="profileWonGamesLabel">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>90</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Won Games:</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="profileSettingsPushButton">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>150</y>
-       <width>131</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Profile settings</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="userProfileWonGamesLabel">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>90</y>
-       <width>141</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>user_data</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="userProfilePlayedGamesLabel">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>60</y>
-       <width>141</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>user_data</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="userProfileUsernameLabel">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>0</y>
-       <width>141</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>user_data</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="profileEmailLabel">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>30</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Email:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="userProfileEmailLabel">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>30</y>
-       <width>141</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>user_data</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="userProfileCreationDateLabel">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>120</y>
-       <width>171</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>user_data</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="profileCreationDateLabel">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>120</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Creation date</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="profileSettingsWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>190</y>
-      <width>451</width>
-      <height>191</height>
-     </rect>
-    </property>
-    <widget class="QPushButton" name="changeUsernamePushButton">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>10</y>
-       <width>131</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Change username</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="changeUsernameLineEdit">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>10</y>
-       <width>131</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="changePasswordLineEdit">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>50</y>
-       <width>131</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="changeEmailLineEdit">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>90</y>
-       <width>131</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="changePasswordPushButton">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>50</y>
-       <width>131</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Change password</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="changeEmailPushButton">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>90</y>
-       <width>131</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Change email</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="backToMenuFromProfileSettingsButton">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>150</y>
-       <width>131</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Back to the menu</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="saveProfileSettingsPushButton">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>150</y>
-       <width>131</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Save </string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="updateUserDetailsMessageLabel">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>30</y>
-       <width>111</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Update user details message</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
+    <widget class="QWidget" name="page_3">
+     <widget class="QLineEdit" name="changeUsernameLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>250</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="changeEmailPushButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>330</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change email</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="changeEmailLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>330</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="changeUsernamePushButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>250</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change username</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="changePasswordPushButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>290</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change password</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="saveProfileSettingsPushButton">
+      <property name="geometry">
+       <rect>
+        <x>1120</x>
+        <y>620</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save </string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="changePasswordLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>290</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="backToMenuFromProfileSettingsButton">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>210</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>delete this sooon</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="updateUserDetailsMessageLabel">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>270</y>
+        <width>111</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Update user details message</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="backToProfileButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>620</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Back to profile </string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -381,8 +404,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>767</width>
-     <height>30</height>
+     <width>1280</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -12,6 +12,8 @@
 #include <curl/curl.h>
 #include <cpr/cpr.h>
 
+#include "Triviador.h"
+
 class Login : public QDialog
 {
 	Q_OBJECT
@@ -34,7 +36,7 @@ private slots:
 
 	void OnPauseTimerTick();
 	void OnTransferTimerTick();
-
+	
 signals:
 	void BackToMenu();
 
@@ -54,4 +56,7 @@ private:
 
 	std::string m_serverIP;
 	std::string m_serverPort;
+
+private:
+	Triviador* triviadorMenu;
 };
