@@ -13,13 +13,6 @@ bool isValidEmail(const std::string& email)
 	return regex_match(email, validEmailPattern);
 }
 
-void initializeFirstDatabase(std::string singleQuestionPath, std::string multipleQuestionPath)
-{
-	DatabaseStorage storage(singleQuestionPath, multipleQuestionPath);
-
-	storage.Initialize();
-}
-
 int main()
 {	
 	std::string dataFilesPath = "resources/data_files";
@@ -37,7 +30,11 @@ int main()
 	
 	uint8_t amountOfQuestions = 5;
 
-	initializeFirstDatabase(filePathForSingleChoiceQuestion, filePathForMultipleChoiceQuestion);
+	DatabaseStorage database(filePathForSingleChoiceQuestion, filePathForMultipleChoiceQuestion);
+	database.Initialize();
+	
+	Storage db = createStorage(filePathForDatabase);
+	db.sync_schema();
 
 	UsersStorage userDatabase = CreateUsersStorage(filePathForDatabase);
 	userDatabase.sync_schema();
