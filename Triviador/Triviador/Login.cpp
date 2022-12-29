@@ -65,6 +65,7 @@ void Login::OnPauseTimerTick()
 
 		ui.loginErrorLabel->hide();
 		ui.progressBar->hide();
+		ui.progressBarLeftTimeLabel->hide();
 
 		pauseTimer->disconnect();
 	}

@@ -370,10 +370,10 @@
      <widget class="QLabel" name="updateUserDetailsMessageLabel">
       <property name="geometry">
        <rect>
-        <x>740</x>
-        <y>270</y>
-        <width>111</width>
-        <height>61</height>
+        <x>590</x>
+        <y>370</y>
+        <width>121</width>
+        <height>91</height>
        </rect>
       </property>
       <property name="text">
@@ -396,6 +396,45 @@
        <string>Back to profile </string>
       </property>
      </widget>
+     <widget class="QLabel" name="changeUsernameMessageLabel">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>250</y>
+        <width>521</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change username message label</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="changePasswordMessageLabel">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>290</y>
+        <width>521</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change password message label</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="changeEmailMessageLabel">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>330</y>
+        <width>521</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change email message label</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -405,7 +444,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>

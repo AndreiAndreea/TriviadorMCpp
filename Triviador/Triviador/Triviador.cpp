@@ -21,7 +21,13 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 
 	ui.userErrorLabel->hide();
 
+	ui.changeUsernameMessageLabel->hide();
+	ui.changePasswordMessageLabel->hide();
+	ui.changeEmailMessageLabel->hide();
+
 	ui.updateUserDetailsMessageLabel->hide();
+
+	ui.saveProfileSettingsPushButton->setDisabled(true);
 
 	ui.stackedWidget->setCurrentIndex(0);
 }
@@ -78,6 +84,31 @@ void Triviador::on_changeUsernamePushButton_released()
 	ui.updateUserDetailsMessageLabel->hide();
 
 	std::string newUsername = ui.changeUsernameLineEdit->text().toLocal8Bit().constData();
+
+	std::string link = m_ip + "/findusernameduplicate/?new_username=" + newUsername;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code == 404)
+	{
+		if (newUsername != "")
+		{
+			ui.changeUsernameMessageLabel->setText("Valid choice!");
+			ui.saveProfileSettingsPushButton->setDisabled(false);
+		}
+		else
+		{
+			ui.changeUsernameMessageLabel->setText("Enter a new valid username and press the change username button!");
+			ui.saveProfileSettingsPushButton->setDisabled(true);
+		}
+	}
+	else
+	{
+		ui.changeUsernameMessageLabel->setText("This username is already used!");
+		ui.saveProfileSettingsPushButton->setDisabled(true);
+	}
+
+	ui.changeUsernameMessageLabel->show();
 }
 
 void Triviador::on_changePasswordPushButton_released()
@@ -86,7 +117,32 @@ void Triviador::on_changePasswordPushButton_released()
 
 	ui.updateUserDetailsMessageLabel->hide();
 
-	std::string newUsername = ui.changePasswordLineEdit->text().toLocal8Bit().constData();
+	std::string newPassword = ui.changePasswordLineEdit->text().toLocal8Bit().constData();
+
+	std::string link = m_ip + "/findpasswordduplicate/?new_password=" + newPassword;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code == 404)
+	{
+		if (newPassword != "")
+		{
+			ui.changePasswordMessageLabel->setText("Valid choice!");
+			ui.saveProfileSettingsPushButton->setDisabled(false);
+		}
+		else
+		{
+			ui.changePasswordMessageLabel->setText("Enter a new valid password and press the change password button!");
+			ui.saveProfileSettingsPushButton->setDisabled(true);
+		}
+	}
+	else
+	{
+		ui.changePasswordMessageLabel->setText("This password is already used!");
+		ui.saveProfileSettingsPushButton->setDisabled(true);
+	}
+
+	ui.changePasswordMessageLabel->show();
 }
 
 void Triviador::on_changeEmailPushButton_released()
@@ -95,7 +151,32 @@ void Triviador::on_changeEmailPushButton_released()
 
 	ui.updateUserDetailsMessageLabel->hide();
 
-	std::string newUsername = ui.changeEmailLineEdit->text().toLocal8Bit().constData();
+	std::string newEmail = ui.changeEmailLineEdit->text().toLocal8Bit().constData();
+
+	std::string link = m_ip + "/findemailduplicate/?new_email=" + newEmail;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code == 404)
+	{
+		if (newEmail != "")
+		{
+			ui.changeEmailMessageLabel->setText("Valid choice!");
+			ui.saveProfileSettingsPushButton->setDisabled(false);
+		}
+		else
+		{
+			ui.changeEmailMessageLabel->setText("Enter a new valid password and press the change password button!");
+			ui.saveProfileSettingsPushButton->setDisabled(true);
+		}
+	}
+	else
+	{
+		ui.changeEmailMessageLabel->setText("This password is already used!");
+		ui.saveProfileSettingsPushButton->setDisabled(true);
+	}
+
+	ui.changeEmailMessageLabel->show();
 }
 
 void Triviador::on_saveProfileSettingsPushButton_released()
@@ -123,9 +204,15 @@ void Triviador::on_saveProfileSettingsPushButton_released()
 		ui.changeUsernameLineEdit->hide();
 		ui.changePasswordLineEdit->hide();
 		ui.changeEmailLineEdit->hide();
-		
+
 		ui.updateUserDetailsMessageLabel->setText(responseFromServer.text.c_str());
 		ui.updateUserDetailsMessageLabel->show();
+
+		ui.changeUsernameMessageLabel->hide();
+		ui.changePasswordMessageLabel->hide();
+		ui.changeEmailMessageLabel->hide();
+
+		ui.saveProfileSettingsPushButton->setDisabled(true);
 	}
 	else
 	{
