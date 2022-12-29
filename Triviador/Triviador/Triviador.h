@@ -45,6 +45,12 @@ private slots:
 
     void on_playersSpinBox_valueChanged(int arg1);
 
+    void on_joinLobbyPushButton_released();
+    void on_backToLobbyPushButton_released();
+
+    void on_readyGameLobbyPushButton_released();
+    void on_startGameLobbyPushButton_released();
+
 signals:
     void BackToMenuSignal();
     void BackToLoginSignal();

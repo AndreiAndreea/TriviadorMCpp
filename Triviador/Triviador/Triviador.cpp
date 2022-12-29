@@ -15,6 +15,8 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 	m_ip = ip;
 	m_playerUsername = playerUsername;
 
+	ui.startGameLobbyPushButton->hide();
+
 	ui.changeUsernameLineEdit->hide();
 	ui.changePasswordLineEdit->hide();
 	ui.changeEmailLineEdit->hide();
@@ -56,13 +58,6 @@ Triviador::~Triviador()
 
 void Triviador::on_playGamePushButton_released()
 {
-	//triviadorGame = new Game(m_ip, m_playerUsername);
-
-	//ui.stackedWidget->insertWidget(3, triviadorGame);
-	//
-	//ui.stackedWidget->setCurrentIndex(3);
-
-	//lobby thing
 	ui.stackedWidget->setCurrentIndex(3);
 
 	if (ui.customModePushButton->isChecked())
@@ -313,6 +308,40 @@ void Triviador::on_playersSpinBox_valueChanged(int arg1)
 	ui.mapHeightSpinBox->setMinimum(arg1 - 1);
 	ui.mapHeightSpinBox->setMaximum(arg1 * 2);
 	ui.mapHeightSpinBox->setValue(arg1 + 1);
+}
+
+void Triviador::on_joinLobbyPushButton_released()
+{
+	//get the number of players & rounds & map size
+	
+	ui.stackedWidget->setCurrentIndex(4);
+}
+
+void Triviador::on_backToLobbyPushButton_released()
+{
+	//clear the lobby settings
+	TurnAutoExclusiveButtonsForCustomMode(false);
+
+	SetCheckedButtonsForLobby(false);
+	
+	ui.stackedWidget->setCurrentIndex(3);
+}
+
+void Triviador::on_readyGameLobbyPushButton_released()
+{
+	ui.readyGameLobbyPushButton->setDisabled(true);
+	ui.backToLobbyPushButton->setDisabled(true);
+
+	ui.startGameLobbyPushButton->show();
+}
+
+void Triviador::on_startGameLobbyPushButton_released()
+{	
+	triviadorGame = new Game(m_ip, m_playerUsername);
+
+	ui.stackedWidget->insertWidget(4, triviadorGame);
+	
+	ui.stackedWidget->setCurrentIndex(4);
 }
 
 void Triviador::UpdateUserDetails()
