@@ -424,7 +424,7 @@ int main()
 				}
 				else
 				{
-					return crow::response(404, "Username found!");
+					return crow::response(404, "Username not found!");
 				}
 			}
 			else
@@ -437,6 +437,69 @@ int main()
 	auto& getUserData = CROW_ROUTE(app, "/getuserdata").methods(crow::HTTPMethod::POST);
 	getUserData(UserDatabaseControl(userDatabase));
 	
+	CROW_ROUTE(app, "/findusernameduplicate/")(
+		[&userDatabase]
+		(const crow::request& req)
+		{
+			std::string newUsername = req.url_params.get("new_username");
+			
+			auto users = userDatabase.get_all<User>(where(c(&User::GetUsername) == newUsername));
+
+			if (users.size() == 1)
+			{
+				return crow::response(200, "Username already exists!");
+			}
+			else
+			{
+				return crow::response(404, "Username not found!");
+			}
+		});
+
+	auto& findUsernameDuplicate = CROW_ROUTE(app, "/findusernameduplicate").methods(crow::HTTPMethod::POST);
+	findUsernameDuplicate(UserDatabaseControl(userDatabase));
+
+	CROW_ROUTE(app, "/findpasswordduplicate/")(
+		[&userDatabase]
+		(const crow::request& req)
+		{
+			std::string newPassword = req.url_params.get("new_password");
+
+			auto users = userDatabase.get_all<User>(where(c(&User::GetPassword) == newPassword));
+
+			if (users.size() == 1)
+			{
+				return crow::response(200, "Password already exists!");
+			}
+			else
+			{
+				return crow::response(404, "Password not found!");
+			}
+		});
+
+	auto& findPasswordDuplicate = CROW_ROUTE(app, "/findpasswordduplicate").methods(crow::HTTPMethod::POST);
+	findPasswordDuplicate(UserDatabaseControl(userDatabase));
+
+	CROW_ROUTE(app, "/findemailduplicate/")(
+		[&userDatabase]
+		(const crow::request& req)
+		{
+			std::string newEmail = req.url_params.get("new_email");
+
+			auto users = userDatabase.get_all<User>(where(c(&User::GetEmail) == newEmail));
+
+			if (users.size() == 1)
+			{
+				return crow::response(200, "Email already exists!");
+			}
+			else
+			{
+				return crow::response(404, "Email not found!");
+			}
+		});
+
+	auto& findEmailDuplicate = CROW_ROUTE(app, "/findemailduplicate").methods(crow::HTTPMethod::POST);
+	findEmailDuplicate(UserDatabaseControl(userDatabase));
+
 	app.port(18080).multithreaded().run();
 
 	return 0;
