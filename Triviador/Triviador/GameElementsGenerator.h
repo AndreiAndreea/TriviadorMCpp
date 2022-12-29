@@ -79,8 +79,6 @@ private:
     Questions m_questions;
     std::string m_currentAnswer;
 
-    //Ui::GameElementsGenerator ui;
-
     bool m_canChooseTerritory;
     uint16_t m_numberOfPlayers = 0;
 

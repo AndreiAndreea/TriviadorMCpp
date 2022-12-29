@@ -25,7 +25,24 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 	ui.changePasswordMessageLabel->hide();
 	ui.changeEmailMessageLabel->hide();
 
+	ui.playersSpinBox->setRange(2, 9);
+	ui.roundsSpinBox->setRange(2, 25);
+	ui.mapHeightSpinBox->setRange(3, 25);
+	ui.mapWidthSpinBox->setRange(3, 25);
+
+	ui.playersSpinBox->hide();
+	ui.roundsSpinBox->hide();
+	ui.mapHeightSpinBox->hide();
+	ui.mapWidthSpinBox->hide();
+
+	ui.playersLabel->hide();
+	ui.roundsLabel->hide();
+	ui.mapHeightLabel->hide();
+	ui.mapWidthLabel->hide();
+	
 	ui.updateUserDetailsMessageLabel->hide();
+
+	ui.joinLobbyPushButton->hide();
 
 	ui.saveProfileSettingsPushButton->setDisabled(true);
 
@@ -39,16 +56,28 @@ Triviador::~Triviador()
 
 void Triviador::on_playGamePushButton_released()
 {
-	triviadorGame = new Game(m_ip, m_playerUsername);
+	//triviadorGame = new Game(m_ip, m_playerUsername);
 
-	ui.stackedWidget->insertWidget(3, triviadorGame);
-	
+	//ui.stackedWidget->insertWidget(3, triviadorGame);
+	//
+	//ui.stackedWidget->setCurrentIndex(3);
+
+	//lobby thing
 	ui.stackedWidget->setCurrentIndex(3);
+
+	if (ui.customModePushButton->isChecked())
+		HideCustomModeSettings();
+
+	TurnAutoExclusiveButtonsForCustomMode(false);
+
+	SetCheckedButtonsForLobby(false);
+
+	ui.joinLobbyPushButton->hide();
 }
 
 void Triviador::on_profilePushButton_released()
 {
-	updateUserDetails();
+	UpdateUserDetails();
 }
 
 void Triviador::on_backToMenuPushButton_released()
@@ -65,16 +94,21 @@ void Triviador::on_backToProfileButton_released()
 {
 	ui.stackedWidget->setCurrentIndex(1);
 
-	updateUserDetails();
+	UpdateUserDetails();
 }
 
-void Triviador::on_quitPushButton_released()
+void Triviador::on_backToMenuPushButton_2_released()
+{
+	ui.stackedWidget->setCurrentIndex(0);
+}
+
+void Triviador::on_quitPushButton_clicked()
 {
 	std::string link = m_ip + "/logoutuser/?username=" + m_playerUsername;
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
-	close();
+	emit BackToLoginSignal();
 }
 
 void Triviador::on_changeUsernamePushButton_released()
@@ -223,7 +257,65 @@ void Triviador::on_saveProfileSettingsPushButton_released()
 	}
 }
 
-void Triviador::updateUserDetails()
+void Triviador::on_twoPlayersPushButton_released()
+{
+	if (ui.twoPlayersPushButton->autoExclusive() == false)
+		TurnAutoExclusiveButtonsForCustomMode(true);
+
+	if(ui.playersSpinBox->isHidden() == false)
+		HideCustomModeSettings();
+
+	ui.joinLobbyPushButton->show();
+}
+
+void Triviador::on_threePlayersPushButton_released()
+{
+	if (ui.twoPlayersPushButton->autoExclusive() == false)
+		TurnAutoExclusiveButtonsForCustomMode(true);
+	
+	if (ui.playersSpinBox->isHidden() == false)
+		HideCustomModeSettings();
+
+	ui.joinLobbyPushButton->show();
+}
+
+void Triviador::on_fourPlayersPushButton_released()
+{
+	if (ui.twoPlayersPushButton->autoExclusive() == false)
+		TurnAutoExclusiveButtonsForCustomMode(true);
+	
+	if (ui.playersSpinBox->isHidden() == false)
+		HideCustomModeSettings();
+
+	ui.joinLobbyPushButton->show();
+}
+
+void Triviador::on_customModePushButton_released()
+{
+	if (ui.twoPlayersPushButton->autoExclusive() == false)
+		TurnAutoExclusiveButtonsForCustomMode(true);
+	
+	ShowCustomModeSettings();
+
+	ui.joinLobbyPushButton->show();
+}
+
+void Triviador::on_playersSpinBox_valueChanged(int arg1)
+{
+	ui.roundsSpinBox->setMinimum(arg1 - 1);
+	ui.roundsSpinBox->setMaximum(arg1 * 3 / 2);
+	ui.roundsSpinBox->setValue(arg1 + 2);
+
+	ui.mapWidthSpinBox->setMinimum(arg1 - 1);
+	ui.mapWidthSpinBox->setMaximum(arg1 * 2);
+	ui.mapWidthSpinBox->setValue(arg1 + 3);
+
+	ui.mapHeightSpinBox->setMinimum(arg1 - 1);
+	ui.mapHeightSpinBox->setMaximum(arg1 * 2);
+	ui.mapHeightSpinBox->setValue(arg1 + 1);
+}
+
+void Triviador::UpdateUserDetails()
 {
 	ui.userErrorLabel->hide();
 
@@ -252,4 +344,48 @@ void Triviador::updateUserDetails()
 		ui.userErrorLabel->setText("Error: " + QString::fromStdString(std::to_string(responseFromServer.status_code)) + "\n" + QString::fromStdString(responseFromServer.text));
 		ui.userErrorLabel->show();
 	}
+}
+
+void Triviador::ShowCustomModeSettings()
+{
+	ui.playersSpinBox->show();
+	ui.roundsSpinBox->show();
+	ui.mapHeightSpinBox->show();
+	ui.mapWidthSpinBox->show();
+
+	ui.playersLabel->show();
+	ui.roundsLabel->show();
+	ui.mapHeightLabel->show();
+	ui.mapWidthLabel->show();
+}
+
+void Triviador::HideCustomModeSettings()
+{
+	ui.playersSpinBox->hide();
+	ui.roundsSpinBox->hide();
+	ui.mapHeightSpinBox->hide();
+	ui.mapWidthSpinBox->hide();
+
+	ui.playersLabel->hide();
+	ui.roundsLabel->hide();
+	ui.mapHeightLabel->hide();
+	ui.mapWidthLabel->hide();
+}
+
+void Triviador::TurnAutoExclusiveButtonsForCustomMode(bool state)
+{
+	ui.twoPlayersPushButton->setAutoExclusive(state);
+	ui.threePlayersPushButton->setAutoExclusive(state);
+	ui.fourPlayersPushButton->setAutoExclusive(state);
+
+	ui.customModePushButton->setAutoExclusive(state);
+}
+
+void Triviador::SetCheckedButtonsForLobby(bool state)
+{
+	ui.twoPlayersPushButton->setChecked(state);
+	ui.threePlayersPushButton->setChecked(state);
+	ui.fourPlayersPushButton->setChecked(state);
+
+	ui.customModePushButton->setChecked(state);
 }

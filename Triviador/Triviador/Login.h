@@ -32,13 +32,22 @@ private slots:
 	void on_displayPasswordPushButton_released();
 	
 	void on_loginPushButton_released();
-	void on_loginBackPushButton_released();
+
+	void on_mainMenuPushButton_clicked();
+	void on_serverDetailsPushButton_clicked();
+
+	void on_exitPushButton_clicked();
 
 	void OnPauseTimerTick();
 	void OnTransferTimerTick();
+
+	void CloseApplicationSlotFromGame();
 	
 signals:
 	void BackToMenu();
+	void BackToServer();
+	
+	void CloseApplicationSignal();
 
 public:
 	const std::string GetUsername() const;

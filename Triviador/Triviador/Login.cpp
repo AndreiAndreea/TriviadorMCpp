@@ -31,6 +31,8 @@ Login::Login(const std::string& serverIP, const std::string& serverPort)
 
 	ui.loginErrorLabel->hide();
 
+	ui.usernameLineEdit->setFocus();
+
 	ui.stackedWidget->setCurrentIndex(0);
 }
 
@@ -59,9 +61,14 @@ void Login::OnPauseTimerTick()
 	{
 		ui.usernameLineEdit->setDisabled(false);
 		ui.passwordLineEdit->setDisabled(false);
+		
 		ui.displayPasswordPushButton->setDisabled(false);
+		
 		ui.loginPushButton->setDisabled(false);
-		ui.loginBackPushButton->setDisabled(false);
+		
+		ui.serverDetailsPushButton->setDisabled(false);
+		ui.exitPushButton->setDisabled(false);
+		ui.mainMenuPushButton->setDisabled(false);
 
 		ui.loginErrorLabel->hide();
 		ui.progressBar->hide();
@@ -80,19 +87,50 @@ void Login::OnTransferTimerTick()
 		triviadorMenu = new Triviador(m_ip, GetUsername());
 		ui.stackedWidget->insertWidget(1, triviadorMenu);
 
-		transferTimer->disconnect();
+		connect(triviadorMenu, SIGNAL(BackToLoginSignal()), this, SLOT(CloseApplicationSlotFromGame()));
 
 		ui.stackedWidget->setCurrentIndex(1);
+
+		transferTimer->disconnect();
 	}
+}
+
+void Login::CloseApplicationSlotFromGame()
+{
+	ui.usernameLineEdit->setText("");
+
+	ui.passwordLineEdit->setText("");
+
+	ui.progressBar->hide();
+	ui.progressBarLeftTimeLabel->hide();
+	ui.transferToTriviadorProgressLabel->hide();
+
+	ui.usernameLineEdit->setDisabled(false);
+	ui.passwordLineEdit->setDisabled(false);
+
+	ui.displayPasswordPushButton->setDisabled(false);
+
+	ui.serverDetailsPushButton->setDisabled(false);
+	ui.exitPushButton->setDisabled(false);
+	ui.mainMenuPushButton->setDisabled(false);
+
+	ui.loginPushButton->setDisabled(false);
+	
+	ui.stackedWidget->setCurrentIndex(0);
 }
 
 void Login::StartPauseTimer()
 {
 	ui.usernameLineEdit->setDisabled(true);
 	ui.passwordLineEdit->setDisabled(true);
+	
 	ui.displayPasswordPushButton->setDisabled(true);
+	
 	ui.loginPushButton->setDisabled(true);
-	ui.loginBackPushButton->setDisabled(true);
+	
+	ui.serverDetailsPushButton->setDisabled(true);
+	ui.exitPushButton->setDisabled(true);
+	ui.mainMenuPushButton->setDisabled(true);
 	
 	ui.progressBar->setValue(0);
 
@@ -178,7 +216,9 @@ void Login::on_loginPushButton_released()
 		
 		ui.displayPasswordPushButton->setDisabled(true);
 
-		ui.loginBackPushButton->setDisabled(true);
+		ui.serverDetailsPushButton->setDisabled(true);
+		ui.exitPushButton->setDisabled(true);
+		ui.mainMenuPushButton->setDisabled(true);
 		
 		ui.loginPushButton->setDisabled(true);
 
@@ -225,10 +265,17 @@ void Login::on_loginPushButton_released()
 	}
 }
 
-void Login::on_loginBackPushButton_released()
+void Login::on_mainMenuPushButton_clicked()
 {
-	if (ui.loginBackPushButton->isEnabled())
-	{
-		emit BackToMenu();
-	}
+	emit BackToMenu();
+}
+
+void Login::on_serverDetailsPushButton_clicked()
+{
+	emit BackToServer();
+}
+
+void Login::on_exitPushButton_clicked()
+{
+	emit CloseApplicationSignal();
 }

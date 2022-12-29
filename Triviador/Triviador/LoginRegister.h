@@ -36,6 +36,7 @@ private slots:
 	void on_signInButton_released();
 	void on_signUpButton_released();
 
+	void backToServerFromLoginButton();
 	void backToMenuFromLoginOrRegisterButton();
 	void backToLoginFromRegisterButton();
 

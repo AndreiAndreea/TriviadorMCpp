@@ -24,24 +24,39 @@ private:
 private slots:
     void on_playGamePushButton_released();
     void on_backToMenuPushButton_released();
-    void on_quitPushButton_released();
+    void on_quitPushButton_clicked();
     
     void on_profilePushButton_released();
     void on_profileSettingsPushButton_released();
 
     void on_backToProfileButton_released();
+    void on_backToMenuPushButton_2_released();
 
     void on_changeUsernamePushButton_released();
     void on_changePasswordPushButton_released();
     void on_changeEmailPushButton_released();
 
     void on_saveProfileSettingsPushButton_released();
+    
+    void on_twoPlayersPushButton_released();
+	void on_threePlayersPushButton_released();
+	void on_fourPlayersPushButton_released();
+    void on_customModePushButton_released();
+
+    void on_playersSpinBox_valueChanged(int arg1);
 
 signals:
-    void BackToMenu();
+    void BackToMenuSignal();
+    void BackToLoginSignal();
 
 private:
-    void updateUserDetails();
+    void UpdateUserDetails();
+
+	void ShowCustomModeSettings();
+	void HideCustomModeSettings();
+
+	void TurnAutoExclusiveButtonsForCustomMode(bool state);
+	void SetCheckedButtonsForLobby(bool state);
 
 private:
     std::string m_ip;

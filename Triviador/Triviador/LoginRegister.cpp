@@ -14,6 +14,10 @@ LoginRegister::LoginRegister()
 	this->setWindowTitle("Triviador");
 
 	ui.stackedWidget->setCurrentIndex(0);
+
+	ui.serverIPLineEdit->setFocus();
+
+	LoginWindow = new Login("","");//temp fix for reading invalid location in Login UI
 }
 
 LoginRegister::~LoginRegister()
@@ -109,6 +113,8 @@ void LoginRegister::on_connectButton_clicked()
 
 		if (responseFromServer.status_code == 200)
 		{
+			ui.signInButton->setFocus();
+
 			ui.ipErrorLabel->hide();
 			ui.portErrorLabel->hide();
 			ui.serverErrorLabel->hide();
@@ -125,8 +131,12 @@ void LoginRegister::on_connectButton_clicked()
 			ui.stackedWidget->insertWidget(3, RegisterWindow);
 			
 			connect(LoginWindow, SIGNAL(BackToMenu()), this, SLOT(backToMenuFromLoginOrRegisterButton()));
+			connect(LoginWindow, SIGNAL(BackToServer()), this, SLOT(backToServerFromLoginButton()));
+
 			connect(RegisterWindow, SIGNAL(BackToMenu()), this, SLOT(backToMenuFromLoginOrRegisterButton()));
 			connect(RegisterWindow, SIGNAL(BackToLogin()), this, SLOT(backToLoginFromRegisterButton()));
+
+			connect(LoginWindow, SIGNAL(CloseApplicationSignal()), this, SLOT(close()));
 		}
 		else
 		{
@@ -152,6 +162,11 @@ void LoginRegister::on_signUpButton_released()
 	}
 }
 
+void LoginRegister::backToServerFromLoginButton()
+{
+	ui.stackedWidget->setCurrentIndex(0);
+}
+
 void LoginRegister::backToMenuFromLoginOrRegisterButton()
 {
 	ui.stackedWidget->setCurrentIndex(1);
@@ -164,10 +179,29 @@ void LoginRegister::backToLoginFromRegisterButton()
 
 void LoginRegister::closeEvent(QCloseEvent* e)
 {
-	//update the database with the new credentials of the user before closing the application
-	m_playerUsername = LoginWindow->GetUsername();
-	
-	std::string link = "http://" + m_serverIP + ":" + m_serverPort + "/logoutuser/?username=" + m_playerUsername;
+	//update the database with the new credentials of the user before closing the application by pressing the 'X' button or by pressing 'ALT+F4' or by pressing the 'EXIT' button on the window
+	if (LoginWindow->GetUsername().empty() == false && LoginWindow->GetPassword().empty() == false)
+	{
+		m_playerUsername = LoginWindow->GetUsername();
+		
+		std::string link = "http://" + m_serverIP + ":" + m_serverPort + "/getuserdata/?username=" + m_playerUsername;
 
-	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+		cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+		if (responseFromServer.status_code == 200)
+		{
+			auto userDetails = crow::json::load(responseFromServer.text);
+
+			std::string db_status = userDetails["ConnectStatus"].s();
+
+			if (db_status == "Online")
+			{
+				std::string link = "http://" + m_serverIP + ":" + m_serverPort + "/logoutuser/?username=" + m_playerUsername;
+
+				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+			}
+		}
+	}
+
+	e->accept();
 }
