@@ -30,9 +30,9 @@ int main()
 	
 	uint8_t amountOfQuestions = 5;
 
-	DatabaseStorage database(filePathForSingleChoiceQuestion, filePathForMultipleChoiceQuestion);
-	database.Initialize();
-	
+	//DatabaseStorage database(filePathForSingleChoiceQuestion, filePathForMultipleChoiceQuestion);
+	//database.Initialize();
+
 	Storage db = createStorage(filePathForDatabase);
 	db.sync_schema();
 
@@ -496,6 +496,33 @@ int main()
 
 	auto& findEmailDuplicate = CROW_ROUTE(app, "/findemailduplicate").methods(crow::HTTPMethod::POST);
 	findEmailDuplicate(UserDatabaseControl(userDatabase));
+
+	CROW_ROUTE(app, "/getAlllobbiesDetails/")(
+		[&db]
+		(const crow::request& req)
+		{
+			std::vector<crow::json::wvalue> lobbies;
+
+			for (const auto& lobby : db.iterate<Lobby>())
+			{
+				lobbies.push_back(crow::json::wvalue
+					{
+						{"LobbyID", lobby.GetLobbyID()},
+						{"GameType", lobby.GetGameType()},
+						{"Player1", lobby.GetPlayer1()},
+						{"Player2", lobby.GetPlayer2()},
+						{"Player3", lobby.GetPlayer3()},
+						{"Player4", lobby.GetPlayer4()},
+						{"Player5", lobby.GetPlayer5()},
+						{"Player6", lobby.GetPlayer6()}
+					});
+			}
+
+			return crow::response(crow::json::wvalue{ lobbies });
+		});
+
+	auto& getAllLobbiesDetails = CROW_ROUTE(app, "/getAlllobbiesDetails").methods(crow::HTTPMethod::POST);
+	getAllLobbiesDetails(DatabaseStorage(db));
 
 	app.port(18080).multithreaded().run();
 

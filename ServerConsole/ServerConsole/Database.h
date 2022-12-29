@@ -64,20 +64,24 @@ using Storage = decltype(createStorage(""));
 
 class DatabaseStorage
 {
+private:
+	std::string m_filePathForDatabase = "resources/data_files/database/triviador.sqlite";
+
+	Storage& m_database;// = createStorage(m_filePathForDatabase);
+	
 public:
-	DatabaseStorage(const std::string& filePathForSingleChoiceQuestion, const std::string& filePathForMultipeChoiceQuestion);
+	//DatabaseStorage(const std::string& filePathForSingleChoiceQuestion, const std::string& filePathForMultipeChoiceQuestion);
+	DatabaseStorage(Storage& storage);
 
 public:
 	void Initialize();
+
+	crow::response operator() (const crow::request& request) const;
 
 private:
 	void PopulateDatabaseWithData();
 
 private:
-	std::string m_filePathForDatabase = "resources/data_files/database/triviador.sqlite";
-	
-	Storage m_database = createStorage(m_filePathForDatabase);
-	
 	std::string m_filePathForSingleChoiceQuestion;
 	std::string m_filePathForMultipeChoiceQuestion;
 
