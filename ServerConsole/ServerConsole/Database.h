@@ -50,6 +50,8 @@ inline auto createStorage(const std::string& filename)
 			"LobbyDetails",
 			make_column("id_lobby", &Lobby::GetLobbyID, &Lobby::SetLobbyID, autoincrement(), primary_key()),
 			make_column("game_type", &Lobby::GetGameType, &Lobby::SetGameType),
+			make_column("game_status", &Lobby::GetGameStatus, &Lobby::SetGameStatus),
+			make_column("room_number", &Lobby::GetRoomNumber, &Lobby::SetRoomNumber),
 			make_column("player1", &Lobby::GetPlayer1, &Lobby::SetPlayer1),
 			make_column("player2", &Lobby::GetPlayer2, &Lobby::SetPlayer2),
 			make_column("player3", &Lobby::GetPlayer3, &Lobby::SetPlayer3),
@@ -64,14 +66,14 @@ using Storage = decltype(createStorage(""));
 
 class DatabaseStorage
 {
+public:
+	DatabaseStorage(const std::string& filePathForSingleChoiceQuestion, const std::string& filePathForMultipeChoiceQuestion, Storage& storage);
+	DatabaseStorage(Storage& storage);
+	
 private:
 	std::string m_filePathForDatabase = "resources/data_files/database/triviador.sqlite";
 
-	Storage& m_database;// = createStorage(m_filePathForDatabase);
-	
-public:
-	//DatabaseStorage(const std::string& filePathForSingleChoiceQuestion, const std::string& filePathForMultipeChoiceQuestion);
-	DatabaseStorage(Storage& storage);
+	Storage& m_database;
 
 public:
 	void Initialize();

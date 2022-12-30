@@ -48,7 +48,12 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 
 	ui.saveProfileSettingsPushButton->setDisabled(true);
 
+	ui.maximNumberOfPlayers2Label->hide();
+	ui.currentNumberOfPlayers2Label->hide();
+
 	ui.stackedWidget->setCurrentIndex(0);
+
+	UpdateLobbiesDetails();
 }
 
 Triviador::~Triviador()
@@ -62,6 +67,8 @@ void Triviador::on_playGamePushButton_released()
 
 	if (ui.customModePushButton->isChecked())
 		HideCustomModeSettings();
+
+	UpdateLobbiesDetails();
 
 	TurnAutoExclusiveButtonsForCustomMode(false);
 
@@ -372,6 +379,34 @@ void Triviador::UpdateUserDetails()
 	{
 		ui.userErrorLabel->setText("Error: " + QString::fromStdString(std::to_string(responseFromServer.status_code)) + "\n" + QString::fromStdString(responseFromServer.text));
 		ui.userErrorLabel->show();
+	}
+}
+
+void Triviador::UpdateLobbiesDetails()
+{
+	std::string link = m_ip + "/getAlllobbiesDetails/";
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		auto db_lobbies = crow::json::load(responseFromServer.text);
+
+		if (db_lobbies["game_type"] == "2players")
+		{
+			if (db_lobbies["game_status"] == "Room created" || db_lobbies["game_status"] == "Game started")
+			{
+				ui.twoPlayersLobbyLabel->show();
+				ui.twoPlayersLobbyLabel->setText(QString::fromStdString(db_lobbies["game_status"].s()));
+			}
+			else if (db_lobbies["game_status"] == "Waiting for players")
+			{
+				ui.currentNumberOfPlayers2Label->show();
+				ui.currentNumberOfPlayers2Label->setText("0");
+
+				ui.maximNumberOfPlayers2Label->show();
+			}
+		}
 	}
 }
 

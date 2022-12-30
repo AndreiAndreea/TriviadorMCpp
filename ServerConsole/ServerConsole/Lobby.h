@@ -6,7 +6,7 @@ class Lobby
 {
 public:
 	Lobby();
-	Lobby(uint32_t id, const std::string& game_type, const std::string& player1, const std::string& player2, const std::string& player3, const std::string& player4, const std::string& player5, const std::string& player6);
+	Lobby(uint32_t id, const std::string& game_type, const std::string& game_status, const std::string& room_number, const std::string& player1, const std::string& player2, const std::string& player3, const std::string& player4, const std::string& player5, const std::string& player6);
 	
 	~Lobby();
 
@@ -16,6 +16,12 @@ public:
 
 	void SetGameType(const std::string& game_type);
 	const std::string& GetGameType() const;
+
+	void SetGameStatus(const std::string& game_status);
+	const std::string& GetGameStatus() const;
+
+	void SetRoomNumber(const std::string& room_number);
+	const std::string& GetRoomNumber() const;
 	
 	void SetPlayer1(const std::string& player1);
 	const std::string& GetPlayer1() const;
@@ -38,7 +44,7 @@ public:
 private:
 	uint32_t m_IDLobby;
 
-	std::string m_gameType;
+	std::string m_gameType, m_gameStatus, m_roomNumber;
 
 	std::string m_player1, m_player2, m_player3, m_player4, m_player5, m_player6;
 };

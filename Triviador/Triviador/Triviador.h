@@ -58,6 +58,8 @@ signals:
 private:
     void UpdateUserDetails();
 
+    void UpdateLobbiesDetails();
+
 	void ShowCustomModeSettings();
 	void HideCustomModeSettings();
 

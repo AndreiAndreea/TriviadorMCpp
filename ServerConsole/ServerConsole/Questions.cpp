@@ -180,16 +180,3 @@ const QuestionMultipleChoice& Questions::GetRandomMultipleChoiceQuestion()
 
 	return m_multipleChoiceQuestions[randomIndex];
 }
-
-QuestionDatabaseControl::QuestionDatabaseControl(QuestionsStorage& storage)
-	: database(storage)
-{
-
-}
-
-crow::response QuestionDatabaseControl::operator()(const crow::request& request) const
-{
-	//NEED TO BE IMPLEMENTED
-	
-	return crow::response(200);
-}
