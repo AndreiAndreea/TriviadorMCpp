@@ -559,6 +559,71 @@ int main()
 	auto& getAllLobbiesDetails = CROW_ROUTE(app, "/getAlllobbiesDetails").methods(crow::HTTPMethod::POST);
 	getAllLobbiesDetails(DatabaseStorage(storage));
 
+	// Update a lobby by ID
+	CROW_ROUTE(app, "/updateLobby/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string gameType = req.url_params.get("gameType");
+			std::string gameStatus = req.url_params.get("gameStatus");
+			std::string roomNumber = req.url_params.get("roomNumber");
+			std::string player1 = req.url_params.get("player1");
+			std::string player2 = req.url_params.get("player2");
+			std::string player3 = req.url_params.get("player3");
+			std::string player4 = req.url_params.get("player4");
+			std::string player5 = req.url_params.get("player5");
+			std::string player6 = req.url_params.get("player6");
+			
+			try {
+				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+
+				if (gameType.empty() == false)
+					lobby.SetGameType(gameType);
+
+				if (gameStatus.empty() == false)
+					lobby.SetGameStatus(gameStatus);
+
+				if (roomNumber.empty() == false)
+					lobby.SetRoomNumber(roomNumber);
+
+				if (player1.empty() == false)
+					lobby.SetPlayer1(player1);
+
+				if (player2.empty() == false)
+					lobby.SetPlayer2(player2);
+
+				if (player3.empty() == false)
+					lobby.SetPlayer3(player3);
+
+				if (player4.empty() == false)
+					lobby.SetPlayer4(player4);
+
+				if (player5.empty() == false)
+					lobby.SetPlayer5(player5);
+
+				if (player6.empty() == false)
+					lobby.SetPlayer6(player6);
+
+				if (gameType.empty() == false || gameStatus.empty() == false || roomNumber.empty() == false || player1.empty() == false || player2.empty() == false || player3.empty() == false || player4.empty() == false || player5.empty() == false || player6.empty() == false)
+				{
+					storage.update(lobby);
+
+					return crow::response("Lobby updated!");
+				}
+				else
+				{
+					return crow::response(404, "No data to update!");
+				}
+			}
+			catch (std::system_error e) {
+				return crow::response(404, "Lobby not found!");
+			}
+		});
+
+	auto& updateLobby = CROW_ROUTE(app, "/updateLobby").methods(crow::HTTPMethod::POST);
+	updateLobby(DatabaseStorage(storage));
+
 	app.port(18080).multithreaded().run();
 
 	return 0;
