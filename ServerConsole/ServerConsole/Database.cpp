@@ -44,6 +44,8 @@ crow::response DatabaseStorage::operator()(const crow::request& request) const
 	auto gameType = bodyArgs.find("game_type");
 	auto gameStatus = bodyArgs.find("game_status");
 	auto roomNumber = bodyArgs.find("room_number");
+	auto currentNumberOfPlayers = bodyArgs.find("current_numbers_of_players");
+	auto maximNumberOfPlayers = bodyArgs.find("maxim_numbers_of_players");
 	auto player1 = bodyArgs.find("player1");
 	auto player2 = bodyArgs.find("player2");
 	auto player3 = bodyArgs.find("player3");
@@ -51,9 +53,9 @@ crow::response DatabaseStorage::operator()(const crow::request& request) const
 	auto player5 = bodyArgs.find("player5");
 	auto player6 = bodyArgs.find("player6");
 
-	if (lobbyID != end && gameType != end && gameStatus != end && roomNumber != end && player1 != end && player2 != end && player3 != end && player4 != end && player5 != end && player6 != end)
+	if (lobbyID != end && gameType != end && gameStatus != end && roomNumber != end && currentNumberOfPlayers != end && maximNumberOfPlayers != end && player1 != end && player2 != end && player3 != end && player4 != end && player5 != end && player6 != end)
 	{
-		Lobby lobby(std::stoi(lobbyID->second), gameType->second, gameStatus->second, roomNumber->second, player1->second, player2->second, player3->second, player4->second, player5->second, player6->second);
+		Lobby lobby(std::stoi(lobbyID->second), gameType->second, gameStatus->second, roomNumber->second, std::stoi(currentNumberOfPlayers->second), std::stoi(maximNumberOfPlayers->second), player1->second, player2->second, player3->second, player4->second, player5->second, player6->second);
 
 		m_database.update(lobby);
 
@@ -89,8 +91,8 @@ void DatabaseStorage::PopulateDatabaseWithData()
 	m_database.insert(User(0, "Test", "test", "test@blue-zone.ro", "01/01/2023 at 12:00:00", "0", "0", "0", "Offline"));
 	m_database.insert(User(0, "Andre", "andre", "contact@blue-zone.ro", "01/01/2024 at 12:00:00", "0", "0", "0", "Offline"));
 
-	m_database.insert(Lobby(0, "2players", "Room created", "2P_12302022110500", "NULL", "NULL", "0", "0", "0", "0"));
-	m_database.insert(Lobby(0, "3players", "Room created", "3P_12302022120600", "NULL", "NULL", "NULL", "0", "0", "0"));
-	m_database.insert(Lobby(0, "4players", "Room created", "4P_12302022130700", "NULL", "NULL", "NULL", "NULL", "0", "0"));
-	m_database.insert(Lobby(0, "customMode", "Room created", "CM_12302022140800", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL"));
+	m_database.insert(Lobby(0, "2players", "Room created", "2P_12302022110500", 0, 2, "", "", "", "", "", ""));
+	m_database.insert(Lobby(0, "3players", "Room created", "3P_12302022120600", 0, 3, "", "", "", "", "", ""));
+	m_database.insert(Lobby(0, "4players", "Room created", "4P_12302022130700", 0, 4, "", "", "", "", "", ""));
+	m_database.insert(Lobby(0, "customMode", "Room created", "CM_12302022140800", 0, 6, "", "", "", "", "", ""));
 }
