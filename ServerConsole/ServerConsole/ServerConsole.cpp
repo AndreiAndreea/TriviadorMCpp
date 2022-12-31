@@ -597,6 +597,79 @@ int main()
 	auto& getAvailableLobby = CROW_ROUTE(app, "/getAvailableLobby").methods(crow::HTTPMethod::POST);
 	getAvailableLobby(DatabaseStorage(storage));
 
+	// Get a specific lobby details
+	CROW_ROUTE(app, "/getLobbyDetails/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string lobbyID = req.url_params.get("lobbyID");
+
+			auto lobby = storage.get<Lobby>(lobbyID);
+
+			crow::json::wvalue lobbyDetails = crow::json::wvalue
+			{
+				{"lobbyID", lobby.GetLobbyID()},
+				{"gameType", lobby.GetGameType()},
+				{"gameStatus", lobby.GetGameStatus()},
+				{"currentNumberOfPlayers", lobby.GetCurrentNumberOfPlayers()},
+				{"maximNumberOfPlayers", lobby.GetMaximNumberOfPlayers()},
+				{"player1", lobby.GetPlayer1()},
+				{"player2", lobby.GetPlayer2()},
+				{"player3", lobby.GetPlayer3()},
+				{"player4", lobby.GetPlayer4()},
+				{"player5", lobby.GetPlayer5()},
+				{"player6", lobby.GetPlayer6()}
+			};
+
+			return crow::response(crow::json::wvalue{ lobbyDetails });
+		});
+
+	auto& getLobbyDetails = CROW_ROUTE(app, "/getLobbyDetails").methods(crow::HTTPMethod::POST);
+	getLobbyDetails(DatabaseStorage(storage));
+
+	// Create a new lobby by the gameType
+	CROW_ROUTE(app, "/createNewLobby/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string game_type = req.url_params.get("gameType");
+
+			std::string game_status = "Room created";
+			std::string room_number = "RANDOM_GENERATED_NUMBER";
+
+			if (game_type == "2players")
+			{
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 2, "", "", "", "", "", ""));
+
+				return crow::response(200, "Lobby for '2players' has been created!");
+			}
+			else if (game_type == "3players")
+			{
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 3, "", "", "", "", "", ""));
+
+				return crow::response(200, "Lobby for '3players' has been created!");
+			}
+			else if (game_type == "4players")
+			{
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 4, "", "", "", "", "", ""));
+
+				return crow::response(200, "Lobby for '4players' has been created!");
+			}
+			else if (game_type == "customMode")
+			{
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 6, "", "", "", "", "", ""));
+
+				return crow::response(200, "Lobby for 'custoMode' has been created!");
+			}
+			else
+			{
+				return crow::response(404, "Game type not found!");
+			}
+		});
+
+	auto& createNewLobby = CROW_ROUTE(app, "/createNewLobby").methods(crow::HTTPMethod::POST);
+	createNewLobby(DatabaseStorage(storage));
+
 	// Update a lobby by ID
 	CROW_ROUTE(app, "/updateLobby/")(
 		[&storage]
@@ -606,6 +679,7 @@ int main()
 			std::string gameType = req.url_params.get("gameType");
 			std::string gameStatus = req.url_params.get("gameStatus");
 			std::string roomNumber = req.url_params.get("roomNumber");
+			std::string currentNumberOfPlayers = req.url_params.get("currentNumberOfPlayers");
 			std::string maximNumberOfPlayers = req.url_params.get("maximNumberOfPlayers");
 			std::string player1 = req.url_params.get("player1");
 			std::string player2 = req.url_params.get("player2");
@@ -625,6 +699,9 @@ int main()
 
 				if (roomNumber.empty() == false)
 					lobby.SetRoomNumber(roomNumber);
+
+				if (currentNumberOfPlayers.empty() == false)
+					lobby.SetCurrentNumberOfPlayers(std::stoi(currentNumberOfPlayers));
 
 				if (maximNumberOfPlayers.empty() == false)
 					lobby.SetMaximNumberOfPlayers(std::stoi(maximNumberOfPlayers));
@@ -647,7 +724,7 @@ int main()
 				if (player6.empty() == false)
 					lobby.SetPlayer6(player6);
 
-				if (gameType.empty() == false || gameStatus.empty() == false || roomNumber.empty() == false || maximNumberOfPlayers.empty() == false || player1.empty() == false || player2.empty() == false || player3.empty() == false || player4.empty() == false || player5.empty() == false || player6.empty() == false)
+				if (gameType.empty() == false || gameStatus.empty() == false || roomNumber.empty() == false || currentNumberOfPlayers.empty() == false || maximNumberOfPlayers.empty() == false || player1.empty() == false || player2.empty() == false || player3.empty() == false || player4.empty() == false || player5.empty() == false || player6.empty() == false)
 				{
 					storage.update(lobby);
 
