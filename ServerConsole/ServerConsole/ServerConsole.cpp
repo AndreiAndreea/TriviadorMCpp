@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include<iostream>
 
 #include "Database.h"
 
@@ -17,6 +18,24 @@ bool isValidEmail(const std::string& email)
 	std::regex validEmailPattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
 
 	return regex_match(email, validEmailPattern);
+}
+
+void SetAllOnlineUsersToOfflineStatus(Storage& storage)
+{
+	auto allUsers = storage.get_all<User>(where(c(&User::GetConnectStatus) == "Online"));
+
+	if (allUsers.size() > 0)
+	{
+		std::cout << "Found " << allUsers.size() << " online user" << (allUsers.size() > 1 ? "s" : "") << ". Setting " << (allUsers.size() > 1 ? "them" : "it") << " to offline status...\n";
+		
+		for (auto& user : allUsers)
+		{
+			user.SetConnectStatus("Offline");
+			storage.update(user);
+		}
+
+		std::cout << (allUsers.size() > 1 ? "All" : "The") << " online user" << (allUsers.size() > 1 ? "s are" : " is") << " now offline!\n";
+	}
 }
 
 int main()
@@ -39,8 +58,25 @@ int main()
 	Storage storage = createStorage(filePathForDatabase);
 	storage.sync_schema();
 
-	DatabaseStorage database(filePathForSingleChoiceQuestion, filePathForMultipleChoiceQuestion, storage);
-	database.Initialize();
+	std::ifstream databaseFile(filePathForDatabase);
+
+	if (databaseFile.bad() == false)
+	{
+		DatabaseStorage database(filePathForSingleChoiceQuestion, filePathForMultipleChoiceQuestion, storage);
+
+		database.Initialize();
+
+		std::cout << "\n";
+	}
+	
+	if(databaseFile.good() == true)
+	{
+		std::cout << "Loading the database...\n";
+
+		SetAllOnlineUsersToOfflineStatus(storage);
+	}
+
+	std::cout << "\n";
 
 	crow::SimpleApp app;
 

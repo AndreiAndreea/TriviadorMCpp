@@ -29,10 +29,6 @@ void DatabaseStorage::Initialize()
 
 		std::cout << "Database was successfully created!\n";
 	}
-	else
-	{
-		std::cout << "Database already exists!\n";
-	}
 }
 
 crow::response DatabaseStorage::operator()(const crow::request& request) const
