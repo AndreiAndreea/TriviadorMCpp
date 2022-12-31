@@ -42,12 +42,16 @@ private slots:
 	void OnTransferTimerTick();
 
 	void CloseApplicationSlotFromGame();
+
+	void ServerCrashedSlot();
 	
 signals:
 	void BackToMenu();
 	void BackToServer();
 	
 	void CloseApplicationSignal();
+
+	void ServerCrashedSignalLogin();
 
 public:
 	const std::string GetUsername() const;

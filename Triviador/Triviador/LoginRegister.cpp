@@ -137,6 +137,8 @@ void LoginRegister::on_connectButton_clicked()
 			connect(RegisterWindow, SIGNAL(BackToLogin()), this, SLOT(backToLoginFromRegisterButton()));
 
 			connect(LoginWindow, SIGNAL(CloseApplicationSignal()), this, SLOT(close()));
+			
+			connect(LoginWindow, SIGNAL(ServerCrashedSignalLogin()), this, SLOT(ServerCrashedDetails()));
 		}
 		else
 		{
@@ -175,6 +177,14 @@ void LoginRegister::backToMenuFromLoginOrRegisterButton()
 void LoginRegister::backToLoginFromRegisterButton()
 {
 	ui.stackedWidget->setCurrentIndex(2);
+}
+
+void LoginRegister::ServerCrashedDetails()
+{
+	ui.stackedWidget->setCurrentIndex(0);
+	
+	ui.serverErrorLabel->show();
+	ui.serverErrorLabel->setText("The server is not responding and has closed automatically. Please try again later!");
 }
 
 void LoginRegister::closeEvent(QCloseEvent* e)

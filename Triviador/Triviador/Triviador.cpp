@@ -27,7 +27,7 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 	ui.changePasswordMessageLabel->hide();
 	ui.changeEmailMessageLabel->hide();
 
-	ui.playersSpinBox->setRange(2, 9);
+	ui.playersSpinBox->setRange(2, 6);
 	ui.roundsSpinBox->setRange(2, 25);
 	ui.mapHeightSpinBox->setRange(3, 25);
 	ui.mapWidthSpinBox->setRange(3, 25);
@@ -48,12 +48,7 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 
 	ui.saveProfileSettingsPushButton->setDisabled(true);
 
-	ui.maximNumberOfPlayers2Label->hide();
-	ui.currentNumberOfPlayers2Label->hide();
-
 	ui.stackedWidget->setCurrentIndex(0);
-
-	UpdateLobbiesDetails();
 }
 
 Triviador::~Triviador()
@@ -250,12 +245,16 @@ void Triviador::on_saveProfileSettingsPushButton_released()
 
 		ui.saveProfileSettingsPushButton->setDisabled(true);
 	}
-	else
+	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
 	{
 		std::string text = "Error: " + std::to_string(responseFromServer.status_code) + "\n" + responseFromServer.text;
-		
-		ui.updateUserDetailsMessageLabel->setText(text.c_str()); 
+
+		ui.updateUserDetailsMessageLabel->setText(text.c_str());
 		ui.updateUserDetailsMessageLabel->show();
+	}
+	else
+	{
+		emit ServerCrashedSignalTriviador();
 	}
 }
 
@@ -375,38 +374,102 @@ void Triviador::UpdateUserDetails()
 
 		ui.userProfileCreationDateLabel->setText(QString::fromStdString(db_user["AccountCreationDate"].s()));
 	}
-	else
+	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
 	{
 		ui.userErrorLabel->setText("Error: " + QString::fromStdString(std::to_string(responseFromServer.status_code)) + "\n" + QString::fromStdString(responseFromServer.text));
 		ui.userErrorLabel->show();
+	}
+	else
+	{
+		emit ServerCrashedSignalTriviador();
 	}
 }
 
 void Triviador::UpdateLobbiesDetails()
 {
-	std::string link = m_ip + "/getAlllobbiesDetails/";
+	GetLobbyDetails("2players");
+	GetLobbyDetails("3players");
+	GetLobbyDetails("4players");
+	GetLobbyDetails("customMode");
+}
+
+void Triviador::GetLobbyDetails(const std::string& lobbyType)
+{	
+	std::string link = m_ip + "/getAvailableLobby/?gameType=" + lobbyType;
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
-	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 400)
 	{
 		auto db_lobbies = crow::json::load(responseFromServer.text);
 
-		if (db_lobbies["game_type"] == "2players")
+		if (lobbyType == "2players")
 		{
-			if (db_lobbies["game_status"] == "Room created" || db_lobbies["game_status"] == "Game started")
-			{
-				ui.twoPlayersLobbyLabel->show();
-				ui.twoPlayersLobbyLabel->setText(QString::fromStdString(db_lobbies["game_status"].s()));
-			}
-			else if (db_lobbies["game_status"] == "Waiting for players")
-			{
-				ui.currentNumberOfPlayers2Label->show();
-				ui.currentNumberOfPlayers2Label->setText("0");
-
-				ui.maximNumberOfPlayers2Label->show();
-			}
+			ui.currentNumberOfPlayers2Label->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayers2Label->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
 		}
+		
+		if (lobbyType == "3players")
+		{
+			ui.currentNumberOfPlayers3Label->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayers3Label->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
+		}
+		
+		if (lobbyType == "4players")
+		{
+			ui.currentNumberOfPlayers4Label->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayers4Label->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
+		}
+		
+		if (lobbyType == "customMode")
+		{
+			ui.currentNumberOfPlayersCustomModeLabel->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayersCustomModeLabel->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
+		}
+	}
+	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
+	{
+		CreateNewLobby(lobbyType);
+	}
+	else
+	{		
+		emit ServerCrashedSignalTriviador();
+	}
+}
+
+void Triviador::CreateNewLobby(const std::string& lobbyType)
+{
+	std::string link = m_ip + "/createNewLobby/?gameType=" + lobbyType;
+
+	auto responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 400)
+	{
+		if (lobbyType == "2players")
+		{
+			ui.twoPlayersLobbyLabel->setText("New lobby created!");
+		}
+
+		if (lobbyType == "3players")
+		{
+			ui.threePlayersLobbyLabel->setText("New lobby created!");
+		}
+
+		if (lobbyType == "4players")
+		{
+			ui.fourPlayersLobbyLabel->setText("New lobby created!");
+		}
+
+		if (lobbyType == "customMode")
+		{
+			ui.customModeLobbyLabel->setText("New lobby created!");
+		}
+
+		GetLobbyDetails(lobbyType);
+	}
+	else
+	{
+		emit ServerCrashedSignalTriviador();
 	}
 }
 

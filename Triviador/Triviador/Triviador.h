@@ -54,11 +54,16 @@ private slots:
 signals:
     void BackToMenuSignal();
     void BackToLoginSignal();
+    
+    void ServerCrashedSignalTriviador();
 
 private:
     void UpdateUserDetails();
 
     void UpdateLobbiesDetails();
+
+    void GetLobbyDetails(const std::string& lobbyType);
+	void CreateNewLobby(const std::string& lobbyType);
 
 	void ShowCustomModeSettings();
 	void HideCustomModeSettings();

@@ -132,7 +132,7 @@ int main()
 			}
 			else
 			{
-				return crow::response(500, "Not acceptable! Complete all fields and try again!");
+				return crow::response(406, "Not acceptable! Complete all fields and try again!");
 			}
 		});
 
@@ -207,7 +207,7 @@ int main()
 			}
 			else
 			{
-				return crow::response(500, "Complete all fields and try again!");
+				return crow::response(406, "Complete all fields and try again!");
 			}
 		});
 
@@ -287,7 +287,7 @@ int main()
 			}
 			else
 			{
-				return crow::response(500, "Not acceptable! Complete all fields and try again!");
+				return crow::response(406, "Not acceptable! Complete all fields and try again!");
 			}
 		});
 

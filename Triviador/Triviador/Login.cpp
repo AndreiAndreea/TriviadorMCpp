@@ -88,6 +88,7 @@ void Login::OnTransferTimerTick()
 		ui.stackedWidget->insertWidget(1, triviadorMenu);
 
 		connect(triviadorMenu, SIGNAL(BackToLoginSignal()), this, SLOT(CloseApplicationSlotFromGame()));
+		connect(triviadorMenu, SIGNAL(ServerCrashedSignalTriviador()), this, SLOT(ServerCrashedSlot()));
 
 		ui.stackedWidget->setCurrentIndex(1);
 
@@ -117,6 +118,13 @@ void Login::CloseApplicationSlotFromGame()
 	ui.loginPushButton->setDisabled(false);
 	
 	ui.stackedWidget->setCurrentIndex(0);
+}
+
+void Login::ServerCrashedSlot()
+{
+	ui.stackedWidget->setCurrentIndex(0);
+
+	emit ServerCrashedSignalLogin();
 }
 
 void Login::StartPauseTimer()

@@ -40,6 +40,8 @@ private slots:
 	void backToMenuFromLoginOrRegisterButton();
 	void backToLoginFromRegisterButton();
 
+	void ServerCrashedDetails();
+
 	void closeEvent(QCloseEvent* e);
 
 private:
