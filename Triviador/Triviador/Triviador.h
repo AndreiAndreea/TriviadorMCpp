@@ -62,7 +62,7 @@ private:
 
     void UpdateLobbiesDetails();
 
-    void GetLobbyDetails(const std::string& lobbyType);
+    void SetLobbyDetails(const std::string& lobbyType);
 	void CreateNewLobby(const std::string& lobbyType);
 
 	void ShowCustomModeSettings();
@@ -75,6 +75,13 @@ private:
     std::string m_ip;
     
 	std::string m_playerUsername;
+
+    uint8_t m_firstEmptyPlayerSeatID;
+
+    int lobbyID;
+
+private:
+    QPushButton* buttonSender;
 
 private:
     Game* triviadorGame;

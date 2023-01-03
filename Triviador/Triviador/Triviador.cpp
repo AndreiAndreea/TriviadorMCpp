@@ -267,6 +267,8 @@ void Triviador::on_twoPlayersPushButton_released()
 		HideCustomModeSettings();
 
 	ui.joinLobbyPushButton->show();
+
+	buttonSender = ui.twoPlayersPushButton;
 }
 
 void Triviador::on_threePlayersPushButton_released()
@@ -278,6 +280,8 @@ void Triviador::on_threePlayersPushButton_released()
 		HideCustomModeSettings();
 
 	ui.joinLobbyPushButton->show();
+
+	buttonSender = ui.threePlayersPushButton;
 }
 
 void Triviador::on_fourPlayersPushButton_released()
@@ -289,6 +293,8 @@ void Triviador::on_fourPlayersPushButton_released()
 		HideCustomModeSettings();
 
 	ui.joinLobbyPushButton->show();
+
+	buttonSender = ui.fourPlayersPushButton;
 }
 
 void Triviador::on_customModePushButton_released()
@@ -299,6 +305,8 @@ void Triviador::on_customModePushButton_released()
 	ShowCustomModeSettings();
 
 	ui.joinLobbyPushButton->show();
+
+	buttonSender = ui.customModePushButton;
 }
 
 void Triviador::on_playersSpinBox_valueChanged(int arg1)
@@ -319,18 +327,121 @@ void Triviador::on_playersSpinBox_valueChanged(int arg1)
 void Triviador::on_joinLobbyPushButton_released()
 {
 	//get the number of players & rounds & map size
+
 	
+	//rest of the code
 	ui.stackedWidget->setCurrentIndex(4);
+
+	ui.playersListWidget->clear();
+
+	QString buttonText = buttonSender->text(); // retrive the text from the button clicked
+
+	std::string lobbyType;
+
+	if (buttonText == "2 players")
+		lobbyType = "2players";
+	else if (buttonText == "3 players")
+		lobbyType = "3players";
+	else if (buttonText == "4 players")
+		lobbyType = "4players";
+	else if (buttonText == "custom")
+		lobbyType = "customMode";
+
+	std::string link = m_ip + "/getAvailableLobby/?gameType=" + lobbyType;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		auto availableLobby = crow::json::load(responseFromServer.text);
+
+		lobbyID = availableLobby["lobbyID"].i();
+		int currentNumberOfPlayers = availableLobby["currentNumberOfPlayers"].i();
+		int maximNumberOfPlayers = availableLobby["maximNumberOfPlayers"].i();
+		std::string roomNumber = availableLobby["roomNumber"].s();
+
+		ui.roomNumberLobbyLabel->setText(QString::fromStdString(availableLobby["roomNumber"].s()));
+
+		ui.idLobbyLabel->setText(QString::fromStdString(std::to_string(availableLobby["lobbyID"].i())));
+
+		link = m_ip + "/getFirstEmptyPlayerSeatID/?lobbyID=" + std::to_string(lobbyID);
+
+		responseFromServer = cpr::Get(cpr::Url(link));
+
+		if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+		{
+			auto lobbyDetails = crow::json::load(responseFromServer.text);
+
+			m_firstEmptyPlayerSeatID = lobbyDetails.i();
+
+			link = m_ip +
+				"/joinLobby/?lobbyID=" + std::to_string(lobbyID) +
+				"&firstEmptyPlayerSeatID=" + std::to_string(m_firstEmptyPlayerSeatID) +
+				"&playerUsername=" + m_playerUsername;
+
+			responseFromServer = cpr::Get(cpr::Url(link));
+
+			if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+			{
+				link = m_ip + "/getAvailableLobby/?gameType=" + lobbyType;
+
+				responseFromServer = cpr::Get(cpr::Url(link));
+
+				availableLobby = crow::json::load(responseFromServer.text);
+
+				//Display all the players in the lobby - needs to update the players in all clients window (maybe create a new method for displaying the users when they join/leave the lobby)
+				for (int playerIndex = 1; playerIndex <= maximNumberOfPlayers; playerIndex++)
+				{
+					std::string playerUsername = availableLobby["player" + std::to_string(playerIndex)].s();
+
+					if (playerUsername.empty() == false)
+					{
+						ui.playersListWidget->addItem(QString::fromStdString(playerUsername));
+					}
+				}
+
+				update();
+			}
+			else if (responseFromServer.status_code >= 500)
+			{
+				emit ServerCrashedSignalTriviador();
+			}
+		}
+		else if (responseFromServer.status_code >= 500)
+		{
+			emit ServerCrashedSignalTriviador();
+		}
+	}
+	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
+	{
+		CreateNewLobby(lobbyType);
+	}
+	else
+	{
+		emit ServerCrashedSignalTriviador();
+	}
+	
+	ui.playersDetailsLobbyLabel->setText(buttonText + " lobby");
 }
 
 void Triviador::on_backToLobbyPushButton_released()
 {
-	//clear the lobby settings
-	TurnAutoExclusiveButtonsForCustomMode(false);
+	std::string link = m_ip + "/leaveLobby/?lobbyID=" + std::to_string(lobbyID) + "&firstEmptyPlayerSeatID=" + std::to_string(m_firstEmptyPlayerSeatID);
 
-	SetCheckedButtonsForLobby(false);
-	
-	ui.stackedWidget->setCurrentIndex(3);
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		ui.stackedWidget->setCurrentIndex(3);
+
+		TurnAutoExclusiveButtonsForCustomMode(false);
+
+		SetCheckedButtonsForLobby(false);
+	}
+	else if (responseFromServer.status_code >= 500)
+	{
+		emit ServerCrashedSignalTriviador();
+	}
 }
 
 void Triviador::on_readyGameLobbyPushButton_released()
@@ -387,13 +498,13 @@ void Triviador::UpdateUserDetails()
 
 void Triviador::UpdateLobbiesDetails()
 {
-	GetLobbyDetails("2players");
-	GetLobbyDetails("3players");
-	GetLobbyDetails("4players");
-	GetLobbyDetails("customMode");
+	SetLobbyDetails("2players");
+	SetLobbyDetails("3players");
+	SetLobbyDetails("4players");
+	SetLobbyDetails("customMode");
 }
 
-void Triviador::GetLobbyDetails(const std::string& lobbyType)
+void Triviador::SetLobbyDetails(const std::string& lobbyType)
 {	
 	std::string link = m_ip + "/getAvailableLobby/?gameType=" + lobbyType;
 
@@ -401,30 +512,30 @@ void Triviador::GetLobbyDetails(const std::string& lobbyType)
 
 	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 400)
 	{
-		auto db_lobbies = crow::json::load(responseFromServer.text);
+		auto availableLobby = crow::json::load(responseFromServer.text);
 
 		if (lobbyType == "2players")
 		{
-			ui.currentNumberOfPlayers2Label->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
-			ui.maximNumberOfPlayers2Label->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
+			ui.currentNumberOfPlayers2Label->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayers2Label->setText("/ " + QString(std::to_string(availableLobby["maximNumberOfPlayers"].i()).c_str()));
 		}
 		
 		if (lobbyType == "3players")
 		{
-			ui.currentNumberOfPlayers3Label->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
-			ui.maximNumberOfPlayers3Label->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
+			ui.currentNumberOfPlayers3Label->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayers3Label->setText("/ " + QString(std::to_string(availableLobby["maximNumberOfPlayers"].i()).c_str()));
 		}
 		
 		if (lobbyType == "4players")
 		{
-			ui.currentNumberOfPlayers4Label->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
-			ui.maximNumberOfPlayers4Label->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
+			ui.currentNumberOfPlayers4Label->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayers4Label->setText("/ " + QString(std::to_string(availableLobby["maximNumberOfPlayers"].i()).c_str()));
 		}
 		
 		if (lobbyType == "customMode")
 		{
-			ui.currentNumberOfPlayersCustomModeLabel->setText(std::to_string(db_lobbies["currentNumberOfPlayers"].i()).c_str());
-			ui.maximNumberOfPlayersCustomModeLabel->setText("/ " + QString(std::to_string(db_lobbies["maximNumberOfPlayers"].i()).c_str()));
+			ui.currentNumberOfPlayersCustomModeLabel->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
+			ui.maximNumberOfPlayersCustomModeLabel->setText("/ " + QString(std::to_string(availableLobby["maximNumberOfPlayers"].i()).c_str()));
 		}
 	}
 	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
@@ -465,7 +576,7 @@ void Triviador::CreateNewLobby(const std::string& lobbyType)
 			ui.customModeLobbyLabel->setText("New lobby created!");
 		}
 
-		GetLobbyDetails(lobbyType);
+		SetLobbyDetails(lobbyType);
 	}
 	else
 	{
