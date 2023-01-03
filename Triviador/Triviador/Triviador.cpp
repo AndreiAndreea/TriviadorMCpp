@@ -434,6 +434,8 @@ void Triviador::on_backToLobbyPushButton_released()
 	{
 		ui.stackedWidget->setCurrentIndex(3);
 
+		UpdateLobbiesDetails();
+
 		TurnAutoExclusiveButtonsForCustomMode(false);
 
 		SetCheckedButtonsForLobby(false);

@@ -743,7 +743,7 @@ int main()
 
 					storage.update(lobby);
 
-					return crow::response("Lobby updated!");
+					return crow::response(playerUsername + "joined the lobby!");
 				}
 				else
 				{
@@ -758,7 +758,7 @@ int main()
 	auto& joinLobby = CROW_ROUTE(app, "/joinLobby").methods(crow::HTTPMethod::POST);
 	joinLobby(DatabaseStorage(storage));
 
-	// Join lobby by lobby ID, firstEmptyPlayerSeatID and playerUsername
+	// Join lobby by lobby ID and firstEmptyPlayerSeatID
 	CROW_ROUTE(app, "/leaveLobby/")(
 		[&storage]
 		(const crow::request& req)
@@ -766,38 +766,38 @@ int main()
 			std::string lobbyID = req.url_params.get("lobbyID");
 			std::string firstEmptyPlayerSeatID = req.url_params.get("firstEmptyPlayerSeatID");
 
-		try {
-			auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+			try {
+				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
 
-			if (firstEmptyPlayerSeatID.empty() == false)
-			{
-				if (firstEmptyPlayerSeatID == "1")
-					lobby.SetPlayer1("");
-				else if (firstEmptyPlayerSeatID == "2")
-					lobby.SetPlayer2("");
-				else if (firstEmptyPlayerSeatID == "3")
-					lobby.SetPlayer3("");
-				else if (firstEmptyPlayerSeatID == "4")
-					lobby.SetPlayer4("");
-				else if (firstEmptyPlayerSeatID == "5")
-					lobby.SetPlayer5("");
-				else if (firstEmptyPlayerSeatID == "6")
-					lobby.SetPlayer6("");
+				if (firstEmptyPlayerSeatID.empty() == false)
+				{
+					if (firstEmptyPlayerSeatID == "1")
+						lobby.SetPlayer1("");
+					else if (firstEmptyPlayerSeatID == "2")
+						lobby.SetPlayer2("");
+					else if (firstEmptyPlayerSeatID == "3")
+						lobby.SetPlayer3("");
+					else if (firstEmptyPlayerSeatID == "4")
+						lobby.SetPlayer4("");
+					else if (firstEmptyPlayerSeatID == "5")
+						lobby.SetPlayer5("");
+					else if (firstEmptyPlayerSeatID == "6")
+						lobby.SetPlayer6("");
 
-				lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
+					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
 
-				storage.update(lobby);
+					storage.update(lobby);
 
-				return crow::response("Lobby updated!");
+					return crow::response("Player left the lobby!");
+				}
+				else
+				{
+					return crow::response(404, "No data to update!");
+				}
 			}
-			else
-			{
-				return crow::response(404, "No data to update!");
+			catch (std::system_error e) {
+				return crow::response(404, "Lobby not found!");
 			}
-		}
-		catch (std::system_error e) {
-			return crow::response(404, "Lobby not found!");
-		}
 
 		});
 
@@ -847,6 +847,61 @@ int main()
 
 	auto& getFirstEmptyPlayerSeatID = CROW_ROUTE(app, "/getFirstEmptyPlayerSeatID").methods(crow::HTTPMethod::POST);
 	getFirstEmptyPlayerSeatID(DatabaseStorage(storage));
+
+	// Leave lobby for playerUsername by closing the game
+	CROW_ROUTE(app, "/leaveLobbyForced/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string playerUsername = req.url_params.get("playerUsername");
+
+			try
+			{
+				auto lobbies = storage.get_all<Lobby>(where(
+					c(&Lobby::GetPlayer1) == playerUsername ||
+					c(&Lobby::GetPlayer2) == playerUsername ||
+					c(&Lobby::GetPlayer3) == playerUsername ||
+					c(&Lobby::GetPlayer4) == playerUsername ||
+					c(&Lobby::GetPlayer5) == playerUsername ||
+					c(&Lobby::GetPlayer6) == playerUsername
+					));
+
+				if (lobbies.size() == 1)
+				{
+					auto lobby = lobbies[0];
+
+					if (lobby.GetPlayer1() == playerUsername)
+						lobby.SetPlayer1("");
+					else if (lobby.GetPlayer2() == playerUsername)
+						lobby.SetPlayer2("");
+					else if (lobby.GetPlayer3() == playerUsername)
+						lobby.SetPlayer3("");
+					else if (lobby.GetPlayer4() == playerUsername)
+						lobby.SetPlayer4("");
+					else if (lobby.GetPlayer5() == playerUsername)
+						lobby.SetPlayer5("");
+					else if (lobby.GetPlayer6() == playerUsername)
+						lobby.SetPlayer6("");
+
+					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
+
+					storage.update(lobby);
+
+					return crow::response(playerUsername + " left the lobby by closing the game!");
+				}
+				else
+				{
+					return crow::response(404, "No data to update!");
+				}
+			}
+			catch (std::system_error e) {
+				return crow::response(404, "Lobby not found!");
+			}
+
+		});
+
+	auto& leaveLobbyForced = CROW_ROUTE(app, "/leaveLobbyForced").methods(crow::HTTPMethod::POST);
+	leaveLobbyForced(DatabaseStorage(storage));
 
 	app.port(18080).multithreaded().run();
 

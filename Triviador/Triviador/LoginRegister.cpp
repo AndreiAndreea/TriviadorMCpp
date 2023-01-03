@@ -206,9 +206,13 @@ void LoginRegister::closeEvent(QCloseEvent* e)
 
 			if (db_status == "Online")
 			{
-				std::string link = "http://" + m_serverIP + ":" + m_serverPort + "/logoutuser/?username=" + m_playerUsername;
+				link = "http://" + m_serverIP + ":" + m_serverPort + "/leaveLobbyForced/?playerUsername=" + m_playerUsername;
 
-				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+				responseFromServer = cpr::Get(cpr::Url(link));
+				
+				link = "http://" + m_serverIP + ":" + m_serverPort + "/logoutuser/?username=" + m_playerUsername;
+
+				responseFromServer = cpr::Get(cpr::Url(link));
 			}
 		}
 	}
