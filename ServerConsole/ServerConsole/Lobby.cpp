@@ -8,6 +8,7 @@ Lobby::Lobby()
 	m_roomNumber = std::string();
 	m_currentNumberOfPlayers = 0;
 	m_maximNumberOfPlayers = 0;
+	m_number_of_ready_players = 0;
 	m_player1 = std::string();
 	m_player2 = std::string();
 	m_player3 = std::string();
@@ -16,13 +17,14 @@ Lobby::Lobby()
 	m_player6 = std::string();
 }
 
-Lobby::Lobby(uint32_t id, const std::string& game_type, const std::string& game_status, const std::string& room_number, numberOfPlayers current_number_of_players, numberOfPlayers maxim_number_of_players, const std::string& player1, const std::string& player2, const std::string& player3, const std::string& player4, const std::string& player5, const std::string& player6)
+Lobby::Lobby(uint32_t id, const std::string& game_type, const std::string& game_status, const std::string& room_number, numberOfPlayers current_number_of_players, numberOfPlayers maxim_number_of_players, numberOfPlayers number_of_ready_players, const std::string& player1, const std::string& player2, const std::string& player3, const std::string& player4, const std::string& player5, const std::string& player6)
 	: m_IDLobby(id),
 	m_gameType(game_type),
 	m_gameStatus(game_status),
 	m_roomNumber(room_number),
 	m_currentNumberOfPlayers(current_number_of_players),
 	m_maximNumberOfPlayers(maxim_number_of_players),
+	m_number_of_ready_players(number_of_ready_players),
 	m_player1(player1),
 	m_player2(player2),
 	m_player3(player3),
@@ -96,6 +98,16 @@ void Lobby::SetMaximNumberOfPlayers(numberOfPlayers maxim_number_of_players)
 numberOfPlayers Lobby::GetMaximNumberOfPlayers() const
 {
 	return m_maximNumberOfPlayers;
+}
+
+void Lobby::SetNumberOfReadyPlayers(numberOfPlayers number_of_ready_players)
+{
+	m_number_of_ready_players = number_of_ready_players;
+}
+
+numberOfPlayers Lobby::GetNumberOfReadyPlayers() const
+{
+	return m_number_of_ready_players;
 }
 
 void Lobby::SetPlayer1(const std::string& player1)

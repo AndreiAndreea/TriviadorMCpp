@@ -581,8 +581,10 @@ int main()
 						{"lobbyID", lobby.GetLobbyID()},
 						{"gameType", lobby.GetGameType()},
 						{"gameStatus", lobby.GetGameStatus()},
+						{"roomNumber", lobby.GetRoomNumber()},
 						{"currentNumberOfPlayers", lobby.GetCurrentNumberOfPlayers()},
 						{"maximNumberOfPlayers", lobby.GetMaximNumberOfPlayers()},
+						{"numberOfReadyPlayers", lobby.GetNumberOfReadyPlayers()},
 						{"player1", lobby.GetPlayer1()},
 						{"player2", lobby.GetPlayer2()},
 						{"player3", lobby.GetPlayer3()},
@@ -605,7 +607,7 @@ int main()
 		{
 			std::string game_type = req.url_params.get("gameType");
 			
-			auto findLobby = storage.get_all<Lobby>(where(c(&Lobby::GetGameType) == game_type and c(&Lobby::GetGameStatus) == "Room created"));
+		auto findLobby = storage.get_all<Lobby>(where(c(&Lobby::GetGameType) == game_type and (c(&Lobby::GetGameStatus) == "Room created" or c(&Lobby::GetGameStatus) == "Waiting for players")));
 
 			if(findLobby.size() == 0)
 				return crow::response(404, "No available lobby found!");
@@ -616,8 +618,10 @@ int main()
 						{"lobbyID", findLobby[0].GetLobbyID()},
 						{"gameType", findLobby[0].GetGameType()},
 						{"gameStatus", findLobby[0].GetGameStatus()},
+						{"roomNumber", findLobby[0].GetRoomNumber()},
 						{"currentNumberOfPlayers", findLobby[0].GetCurrentNumberOfPlayers()},
 						{"maximNumberOfPlayers", findLobby[0].GetMaximNumberOfPlayers()},
+						{"numberOfReadyPlayers", findLobby[0].GetNumberOfReadyPlayers()},
 						{"player1", findLobby[0].GetPlayer1()},
 						{"player2", findLobby[0].GetPlayer2()},
 						{"player3", findLobby[0].GetPlayer3()},
@@ -647,8 +651,10 @@ int main()
 				{"lobbyID", lobby.GetLobbyID()},
 				{"gameType", lobby.GetGameType()},
 				{"gameStatus", lobby.GetGameStatus()},
+				{"roomNumber", lobby.GetRoomNumber()},
 				{"currentNumberOfPlayers", lobby.GetCurrentNumberOfPlayers()},
 				{"maximNumberOfPlayers", lobby.GetMaximNumberOfPlayers()},
+				{"numberOfReadyPlayers", lobby.GetNumberOfReadyPlayers()},
 				{"player1", lobby.GetPlayer1()},
 				{"player2", lobby.GetPlayer2()},
 				{"player3", lobby.GetPlayer3()},
@@ -675,25 +681,25 @@ int main()
 
 			if (game_type == "2players")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 2, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 2, 0, "", "", "", "", "", ""));
 
 				return crow::response(200, "Lobby for '2players' has been created!");
 			}
 			else if (game_type == "3players")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 3, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 3, 0, "", "", "", "", "", ""));
 
 				return crow::response(200, "Lobby for '3players' has been created!");
 			}
 			else if (game_type == "4players")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 4, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 4, 0, "", "", "", "", "", ""));
 
 				return crow::response(200, "Lobby for '4players' has been created!");
 			}
 			else if (game_type == "customMode")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 6, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 6, 0, "", "", "", "", "", ""));
 
 				return crow::response(200, "Lobby for 'custoMode' has been created!");
 			}
@@ -706,62 +712,35 @@ int main()
 	auto& createNewLobby = CROW_ROUTE(app, "/createNewLobby").methods(crow::HTTPMethod::POST);
 	createNewLobby(DatabaseStorage(storage));
 
-	// Update a lobby by ID
-	CROW_ROUTE(app, "/updateLobby/")(
+	// Join lobby by lobby ID, firstEmptyPlayerSeatID and playerUsername
+	CROW_ROUTE(app, "/joinLobby/")(
 		[&storage]
 		(const crow::request& req)
 		{
 			std::string lobbyID = req.url_params.get("lobbyID");
-			std::string gameType = req.url_params.get("gameType");
-			std::string gameStatus = req.url_params.get("gameStatus");
-			std::string roomNumber = req.url_params.get("roomNumber");
-			std::string currentNumberOfPlayers = req.url_params.get("currentNumberOfPlayers");
-			std::string maximNumberOfPlayers = req.url_params.get("maximNumberOfPlayers");
-			std::string player1 = req.url_params.get("player1");
-			std::string player2 = req.url_params.get("player2");
-			std::string player3 = req.url_params.get("player3");
-			std::string player4 = req.url_params.get("player4");
-			std::string player5 = req.url_params.get("player5");
-			std::string player6 = req.url_params.get("player6");
+			std::string firstEmptyPlayerSeatID = req.url_params.get("firstEmptyPlayerSeatID");
+			std::string playerUsername = req.url_params.get("playerUsername");
 			
 			try {
 				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
 
-				if (gameType.empty() == false)
-					lobby.SetGameType(gameType);
-
-				if (gameStatus.empty() == false)
-					lobby.SetGameStatus(gameStatus);
-
-				if (roomNumber.empty() == false)
-					lobby.SetRoomNumber(roomNumber);
-
-				if (currentNumberOfPlayers.empty() == false)
-					lobby.SetCurrentNumberOfPlayers(std::stoi(currentNumberOfPlayers));
-
-				if (maximNumberOfPlayers.empty() == false)
-					lobby.SetMaximNumberOfPlayers(std::stoi(maximNumberOfPlayers));
-
-				if (player1.empty() == false)
-					lobby.SetPlayer1(player1);
-
-				if (player2.empty() == false)
-					lobby.SetPlayer2(player2);
-
-				if (player3.empty() == false)
-					lobby.SetPlayer3(player3);
-
-				if (player4.empty() == false)
-					lobby.SetPlayer4(player4);
-
-				if (player5.empty() == false)
-					lobby.SetPlayer5(player5);
-
-				if (player6.empty() == false)
-					lobby.SetPlayer6(player6);
-
-				if (gameType.empty() == false || gameStatus.empty() == false || roomNumber.empty() == false || currentNumberOfPlayers.empty() == false || maximNumberOfPlayers.empty() == false || player1.empty() == false || player2.empty() == false || player3.empty() == false || player4.empty() == false || player5.empty() == false || player6.empty() == false)
+				if (firstEmptyPlayerSeatID.empty() == false && playerUsername.empty() == false)
 				{
+					if (firstEmptyPlayerSeatID == "1")
+						lobby.SetPlayer1(playerUsername);
+					else if (firstEmptyPlayerSeatID == "2")
+						lobby.SetPlayer2(playerUsername);
+					else if (firstEmptyPlayerSeatID == "3")
+						lobby.SetPlayer3(playerUsername);
+					else if (firstEmptyPlayerSeatID == "4")
+						lobby.SetPlayer4(playerUsername);
+					else if (firstEmptyPlayerSeatID == "5")
+						lobby.SetPlayer5(playerUsername);
+					else if (firstEmptyPlayerSeatID == "6")
+						lobby.SetPlayer6(playerUsername);
+
+					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() + 1);
+
 					storage.update(lobby);
 
 					return crow::response("Lobby updated!");
@@ -776,8 +755,98 @@ int main()
 			}
 		});
 
-	auto& updateLobby = CROW_ROUTE(app, "/updateLobby").methods(crow::HTTPMethod::POST);
-	updateLobby(DatabaseStorage(storage));
+	auto& joinLobby = CROW_ROUTE(app, "/joinLobby").methods(crow::HTTPMethod::POST);
+	joinLobby(DatabaseStorage(storage));
+
+	// Join lobby by lobby ID, firstEmptyPlayerSeatID and playerUsername
+	CROW_ROUTE(app, "/leaveLobby/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string firstEmptyPlayerSeatID = req.url_params.get("firstEmptyPlayerSeatID");
+
+		try {
+			auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+
+			if (firstEmptyPlayerSeatID.empty() == false)
+			{
+				if (firstEmptyPlayerSeatID == "1")
+					lobby.SetPlayer1("");
+				else if (firstEmptyPlayerSeatID == "2")
+					lobby.SetPlayer2("");
+				else if (firstEmptyPlayerSeatID == "3")
+					lobby.SetPlayer3("");
+				else if (firstEmptyPlayerSeatID == "4")
+					lobby.SetPlayer4("");
+				else if (firstEmptyPlayerSeatID == "5")
+					lobby.SetPlayer5("");
+				else if (firstEmptyPlayerSeatID == "6")
+					lobby.SetPlayer6("");
+
+				lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
+
+				storage.update(lobby);
+
+				return crow::response("Lobby updated!");
+			}
+			else
+			{
+				return crow::response(404, "No data to update!");
+			}
+		}
+		catch (std::system_error e) {
+			return crow::response(404, "Lobby not found!");
+		}
+
+		});
+
+	// Get the first empty player seat ID from a lobby by ID
+	CROW_ROUTE(app, "/getFirstEmptyPlayerSeatID/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string lobbyID = req.url_params.get("lobbyID");
+
+			try {
+				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+
+				if (lobby.GetPlayer1().empty() == true)
+				{
+					return crow::response(200, "1");
+				}
+				else if (lobby.GetPlayer2().empty() == true)
+				{
+					return crow::response(200, "2");
+				}
+				else if (lobby.GetPlayer3().empty() == true)
+				{
+					return crow::response(200, "3");
+				}
+				else if (lobby.GetPlayer4().empty() == true)
+				{
+					return crow::response(200, "4");
+				}
+				else if (lobby.GetPlayer5().empty() == true)
+				{
+					return crow::response(200, "5");
+				}
+				else if (lobby.GetPlayer6().empty() == true)
+				{
+					return crow::response(200, "6");
+				}
+				else
+				{
+					return crow::response(401, "Lobby is full!");
+				}
+			}
+			catch (std::system_error e) {
+				return crow::response(404, "Lobby not found!");
+			}
+		});
+
+	auto& getFirstEmptyPlayerSeatID = CROW_ROUTE(app, "/getFirstEmptyPlayerSeatID").methods(crow::HTTPMethod::POST);
+	getFirstEmptyPlayerSeatID(DatabaseStorage(storage));
 
 	app.port(18080).multithreaded().run();
 

@@ -54,6 +54,7 @@ inline auto createStorage(const std::string& filename)
 			make_column("room_number", &Lobby::GetRoomNumber, &Lobby::SetRoomNumber),
 			make_column("current_numbers_of_players", &Lobby::GetCurrentNumberOfPlayers, &Lobby::SetCurrentNumberOfPlayers),
 			make_column("maxim_numbers_of_players", &Lobby::GetMaximNumberOfPlayers, &Lobby::SetMaximNumberOfPlayers),
+			make_column("number_of_ready_players", &Lobby::GetNumberOfReadyPlayers, &Lobby::SetNumberOfReadyPlayers),
 			make_column("player1", &Lobby::GetPlayer1, &Lobby::SetPlayer1),
 			make_column("player2", &Lobby::GetPlayer2, &Lobby::SetPlayer2),
 			make_column("player3", &Lobby::GetPlayer3, &Lobby::SetPlayer3),
