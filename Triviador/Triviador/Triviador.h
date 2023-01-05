@@ -63,6 +63,7 @@ private:
     void UpdateUserDetails();
 
     void UpdateLobbiesDetails();
+    void UpdateCurrentLobbyPlayers();
 
     void SetLobbyDetails(const std::string& lobbyType);
 	void CreateNewLobby(const std::string& lobbyType);

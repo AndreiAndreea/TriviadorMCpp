@@ -884,6 +884,7 @@ int main()
 						lobby.SetPlayer6("");
 
 					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
+					lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() - 1);
 
 					storage.update(lobby);
 
@@ -902,6 +903,30 @@ int main()
 
 	auto& leaveLobbyForced = CROW_ROUTE(app, "/leaveLobbyForced").methods(crow::HTTPMethod::POST);
 	leaveLobbyForced(DatabaseStorage(storage));
+
+	// Route for increasing the number of ready players
+	CROW_ROUTE(app, "/increaseNumberOfReadyPlayers/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string lobbyID = req.url_params.get("lobbyID");
+
+			try {
+				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+
+				lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() + 1);
+
+				storage.update(lobby);
+
+				return crow::response("Number of ready players increased!");
+			}
+			catch (std::system_error e) {
+				return crow::response(404, "Lobby not found!");
+			}
+		});
+
+	auto& increaseNumberOfReadyPlayers = CROW_ROUTE(app, "/increaseNumberOfReadyPlayers").methods(crow::HTTPMethod::POST);
+	increaseNumberOfReadyPlayers(DatabaseStorage(storage));
 
 	app.port(18080).multithreaded().run();
 

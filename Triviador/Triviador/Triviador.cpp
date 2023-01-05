@@ -455,6 +455,15 @@ void Triviador::on_readyGameLobbyPushButton_released()
 	ui.readyGameLobbyPushButton->setDisabled(true);
 	ui.backToLobbyPushButton->setDisabled(true);
 
+	std::string link = m_ip + "/increaseNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 500)
+	{
+		emit ServerCrashedSignalTriviador();
+	}
+
 	ui.startGameLobbyPushButton->show();
 }
 
@@ -476,6 +485,8 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 
 	if (ui.stackedWidget->currentIndex() == 3)
 		UpdateLobbiesDetails();
+	else if (ui.stackedWidget->currentIndex() == 4)
+		UpdateCurrentLobbyPlayers();
 
 	if (timerToUpdateLobbyDetails->remainingTimeAsDuration() <= std::chrono::milliseconds(1))
 	{		
@@ -528,6 +539,36 @@ void Triviador::UpdateLobbiesDetails()
 	SetLobbyDetails("3players");
 	SetLobbyDetails("4players");
 	SetLobbyDetails("customMode");
+}
+
+void Triviador::UpdateCurrentLobbyPlayers()
+{
+	std::string link = m_ip + "/getLobbyDetails/?lobbyID=" + std::to_string(lobbyID);
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	ui.playersListWidget->clear();
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		auto currentLobbyDetails = crow::json::load(responseFromServer.text);
+
+		int maximNumberOfPlayers = currentLobbyDetails["maximNumberOfPlayers"].i();
+
+		for (int playerIndex = 1; playerIndex <= maximNumberOfPlayers; playerIndex++)
+		{
+			std::string playerUsername = currentLobbyDetails["player" + std::to_string(playerIndex)].s();
+
+			if (playerUsername.empty() == false)
+			{
+				ui.playersListWidget->addItem(QString::fromStdString(playerUsername));
+			}
+		}
+	}
+	else if (responseFromServer.status_code >= 500 && responseFromServer.status_code < 600)
+	{
+		emit ServerCrashedSignalTriviador();
+	}
 }
 
 void Triviador::SetLobbyDetails(const std::string& lobbyType)
