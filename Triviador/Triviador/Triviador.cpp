@@ -70,6 +70,10 @@ void Triviador::on_playGamePushButton_released()
 	SetCheckedButtonsForLobby(false);
 
 	ui.joinLobbyPushButton->hide();
+	
+	TimerMethodToUpdateLobbyDetails();
+
+	connect(timerToUpdateLobbyDetails, SIGNAL(timeout()), this, SLOT(TimerMethodToUpdateLobbyDetails()));
 }
 
 void Triviador::on_profilePushButton_released()
@@ -461,6 +465,26 @@ void Triviador::on_startGameLobbyPushButton_released()
 	ui.stackedWidget->insertWidget(4, triviadorGame);
 	
 	ui.stackedWidget->setCurrentIndex(4);
+}
+
+void Triviador::TimerMethodToUpdateLobbyDetails()
+{
+	timerToUpdateLobbyDetails->setInterval(1000);
+	timerToUpdateLobbyDetails->setTimerType(Qt::PreciseTimer);
+
+	timerToUpdateLobbyDetails->start();
+
+	if (ui.stackedWidget->currentIndex() == 3)
+		UpdateLobbiesDetails();
+
+	if (timerToUpdateLobbyDetails->remainingTimeAsDuration() <= std::chrono::milliseconds(1))
+	{		
+		timerToUpdateLobbyDetails->stop();
+
+		timerToUpdateLobbyDetails->disconnect();
+
+		TimerMethodToUpdateLobbyDetails();
+	}
 }
 
 void Triviador::UpdateUserDetails()

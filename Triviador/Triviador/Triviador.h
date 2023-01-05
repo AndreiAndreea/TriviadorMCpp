@@ -50,6 +50,8 @@ private slots:
 
     void on_readyGameLobbyPushButton_released();
     void on_startGameLobbyPushButton_released();
+    
+    void TimerMethodToUpdateLobbyDetails();
 
 signals:
     void BackToMenuSignal();
@@ -82,6 +84,8 @@ private:
 
 private:
     QPushButton* buttonSender;
+
+    QTimer* timerToUpdateLobbyDetails = new QTimer(this);
 
 private:
     Game* triviadorGame;
