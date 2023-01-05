@@ -64,6 +64,7 @@ private:
 
     void UpdateLobbiesDetails();
     void UpdateCurrentLobbyPlayers();
+    bool CheckIfLobbyIsReadyToBegin();
 
     void SetLobbyDetails(const std::string& lobbyType);
 	void CreateNewLobby(const std::string& lobbyType);

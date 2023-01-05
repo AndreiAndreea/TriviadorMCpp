@@ -34,6 +34,8 @@ Login::Login(const std::string& serverIP, const std::string& serverPort)
 	ui.usernameLineEdit->setFocus();
 
 	ui.stackedWidget->setCurrentIndex(0);
+
+	triviadorMenu = new Triviador("", "");//temp fix for reading invalid memory location in Triviador UI
 }
 
 Login::~Login()

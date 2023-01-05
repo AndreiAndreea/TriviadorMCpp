@@ -385,28 +385,7 @@ void Triviador::on_joinLobbyPushButton_released()
 
 			responseFromServer = cpr::Get(cpr::Url(link));
 
-			if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
-			{
-				link = m_ip + "/getAvailableLobby/?gameType=" + lobbyType;
-
-				responseFromServer = cpr::Get(cpr::Url(link));
-
-				availableLobby = crow::json::load(responseFromServer.text);
-
-				//Display all the players in the lobby - needs to update the players in all clients window (maybe create a new method for displaying the users when they join/leave the lobby)
-				for (int playerIndex = 1; playerIndex <= maximNumberOfPlayers; playerIndex++)
-				{
-					std::string playerUsername = availableLobby["player" + std::to_string(playerIndex)].s();
-
-					if (playerUsername.empty() == false)
-					{
-						ui.playersListWidget->addItem(QString::fromStdString(playerUsername));
-					}
-				}
-
-				update();
-			}
-			else if (responseFromServer.status_code >= 500)
+			if (responseFromServer.status_code >= 500)
 			{
 				emit ServerCrashedSignalTriviador();
 			}
@@ -463,8 +442,6 @@ void Triviador::on_readyGameLobbyPushButton_released()
 	{
 		emit ServerCrashedSignalTriviador();
 	}
-
-	ui.startGameLobbyPushButton->show();
 }
 
 void Triviador::on_startGameLobbyPushButton_released()
@@ -486,7 +463,21 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 	if (ui.stackedWidget->currentIndex() == 3)
 		UpdateLobbiesDetails();
 	else if (ui.stackedWidget->currentIndex() == 4)
+	{
 		UpdateCurrentLobbyPlayers();
+		
+		if (CheckIfLobbyIsReadyToBegin() == true)
+		{
+			if (ui.startGameLobbyPushButton->isHidden() == true)
+				ui.startGameLobbyPushButton->show();
+
+			ui.startGameLobbyPushButton->setEnabled(true);
+		}
+		else
+		{
+			ui.startGameLobbyPushButton->setDisabled(true);
+		}
+	}
 
 	if (timerToUpdateLobbyDetails->remainingTimeAsDuration() <= std::chrono::milliseconds(1))
 	{		
@@ -563,6 +554,31 @@ void Triviador::UpdateCurrentLobbyPlayers()
 			{
 				ui.playersListWidget->addItem(QString::fromStdString(playerUsername));
 			}
+		}
+	}
+	else if (responseFromServer.status_code >= 500 && responseFromServer.status_code < 600)
+	{
+		emit ServerCrashedSignalTriviador();
+	}
+}
+
+bool Triviador::CheckIfLobbyIsReadyToBegin()
+{
+	std::string link = m_ip + "/isLobbyReady/?lobbyID=" + std::to_string(lobbyID);
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		//auto isLobbyReady = crow::json::load(responseFromServer.text);
+
+		if (responseFromServer.text == "Game is ready to begin!")
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	else if (responseFromServer.status_code >= 500 && responseFromServer.status_code < 600)

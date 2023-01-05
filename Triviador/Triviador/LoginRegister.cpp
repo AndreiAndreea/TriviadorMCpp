@@ -17,7 +17,7 @@ LoginRegister::LoginRegister()
 
 	ui.serverIPLineEdit->setFocus();
 
-	LoginWindow = new Login("","");//temp fix for reading invalid location in Login UI
+	LoginWindow = new Login("","");//temp fix for reading invalid memory location in Login UI
 }
 
 LoginRegister::~LoginRegister()
