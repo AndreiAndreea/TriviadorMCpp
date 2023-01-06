@@ -99,17 +99,17 @@
     <Filter Include="Header Files\Duel">
       <UniqueIdentifier>{bac833c8-370f-4dc0-b12e-7a4cd9bacb9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game">
-      <UniqueIdentifier>{354681b6-91bb-4ec9-a0ab-564d23a545be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game">
-      <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\GameElementsGenerator">
       <UniqueIdentifier>{feed2159-8efa-49a0-bac5-867b93c785ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\GameElementsGenerator">
       <UniqueIdentifier>{d75d08b3-8629-4526-81a0-e1b122a2f4e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{354681b6-91bb-4ec9-a0ab-564d23a545be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

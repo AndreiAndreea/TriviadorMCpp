@@ -25,13 +25,15 @@ private:
 public:
 	explicit Game();
 	
-	Game(const std::string& ip, const std::string& username);
+	Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth);
 	
 	~Game();
 
 public:
 	bool ClickedOnRegion(const QPointF& coordClick, const QPointF& coordRegion);
 	void AddNewSelectedRegion(const QPointF& coordPos);
+
+	void StartInitializeQuestionsGeneratorTimer();
 
 private:
 	void GenerateRandomColor();
@@ -40,20 +42,13 @@ private:
 
 	void mouseReleaseEvent(QMouseEvent* ev);
 
-	QString CheckMapSize(uint16_t mapHeight ,uint16_t mapWidth, uint16_t numberOfPlayers);
-
 private slots:
-	void on_playersSpinBox_valueChanged(int arg1);
-	void on_twoPlayersPushButton_released();
-	void on_threePlayersPushButton_released();
-	void on_fourPlayersPushButton_released();
-	void on_customModePushButton_released();
-	void on_finishGameModeSetupPushButton_released();
-	
 	void closeEvent(QCloseEvent* e);
 
+	void OnIinitializeQuestionsGeneratorTimerTick();
+
 private:
-	bool gameModeIsSet;
+	QTimer* initializeQuestionsGeneratorTimer;
 
 	Map m_map;
 

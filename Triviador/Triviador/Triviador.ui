@@ -819,8 +819,8 @@
      <widget class="QPushButton" name="startGameLobbyPushButton">
       <property name="geometry">
        <rect>
-        <x>1180</x>
-        <y>620</y>
+        <x>390</x>
+        <y>210</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -983,7 +983,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>

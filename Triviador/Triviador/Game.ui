@@ -22,71 +22,6 @@
      <height>361</height>
     </rect>
    </property>
-   <widget class="QPushButton" name="twoPlayersPushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>2 players</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="threePlayersPushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>3 players</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="fourPlayersPushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>120</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>4 players</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="customModePushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>160</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>custom</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="gameModeLabel">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>191</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Select game mode:</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="existingRegionLabel">
     <property name="geometry">
      <rect>
@@ -100,122 +35,30 @@
      <string>Regiunea deja exista!</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="playersSpinBox">
+   <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>190</y>
-      <width>41</width>
-      <height>22</height>
+      <y>270</y>
+      <width>118</width>
+      <height>23</height>
      </rect>
     </property>
+    <property name="value">
+     <number>24</number>
+    </property>
    </widget>
-   <widget class="QSpinBox" name="roundsSpinBox">
+   <widget class="QLabel" name="progressBarLabel">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>220</y>
-      <width>42</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="mapHeightSpinBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>250</y>
-      <width>42</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="playersLabel">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>190</y>
-      <width>121</width>
-      <height>16</height>
+      <y>300</y>
+      <width>271</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>number of players</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="roundsLabel">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>220</y>
-      <width>121</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>number of rounds</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="mapHeightLabel">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>250</y>
-      <width>121</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>map height</string>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="mapWidthSpinBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>280</y>
-      <width>42</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="mapWidthLabel">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>280</y>
-      <width>121</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>map width</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="finishGameModeSetupPushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>310</y>
-      <width>171</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>finish setup</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="mapSizeErrorLabel">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>240</y>
-      <width>321</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Map size error label</string>
+     <string>Questions will be generated in a few moments!</string>
     </property>
    </widget>
   </widget>

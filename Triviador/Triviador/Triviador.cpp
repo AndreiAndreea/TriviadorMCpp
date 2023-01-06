@@ -315,25 +315,21 @@ void Triviador::on_customModePushButton_released()
 
 void Triviador::on_playersSpinBox_valueChanged(int arg1)
 {
-	ui.roundsSpinBox->setMinimum(arg1 - 1);
+	ui.roundsSpinBox->setMinimum(arg1);
 	ui.roundsSpinBox->setMaximum(arg1 * 3 / 2);
-	ui.roundsSpinBox->setValue(arg1 + 2);
+	ui.roundsSpinBox->setValue(arg1);
 
-	ui.mapWidthSpinBox->setMinimum(arg1 - 1);
+	ui.mapWidthSpinBox->setMinimum(arg1 + 1);
 	ui.mapWidthSpinBox->setMaximum(arg1 * 2);
-	ui.mapWidthSpinBox->setValue(arg1 + 3);
+	ui.mapWidthSpinBox->setValue(arg1 + 1);
 
-	ui.mapHeightSpinBox->setMinimum(arg1 - 1);
+	ui.mapHeightSpinBox->setMinimum(arg1 + 1);
 	ui.mapHeightSpinBox->setMaximum(arg1 * 2);
 	ui.mapHeightSpinBox->setValue(arg1 + 1);
 }
 
 void Triviador::on_joinLobbyPushButton_released()
 {
-	//get the number of players & rounds & map size
-
-	
-	//rest of the code
 	ui.stackedWidget->setCurrentIndex(4);
 
 	ui.playersListWidget->clear();
@@ -342,14 +338,37 @@ void Triviador::on_joinLobbyPushButton_released()
 
 	std::string lobbyType;
 
+	m_numberOfRounds = 0;
+	m_mapHeight = 0;
+	m_mapWidth = 0;
+
 	if (buttonText == "2 players")
+	{
 		lobbyType = "2players";
+
+		m_numberOfPlayers = 2;
+	}	
 	else if (buttonText == "3 players")
+	{
 		lobbyType = "3players";
+
+		m_numberOfPlayers = 3;
+	}
 	else if (buttonText == "4 players")
+	{
 		lobbyType = "4players";
+
+		m_numberOfPlayers = 4;
+	}
 	else if (buttonText == "custom")
+	{
 		lobbyType = "customMode";
+
+		m_numberOfPlayers = ui.playersSpinBox->value();
+		m_numberOfRounds = ui.roundsSpinBox->value();
+		m_mapHeight = ui.mapHeightSpinBox->value();
+		m_mapWidth = ui.mapWidthSpinBox->value();
+	}
 
 	std::string link = m_ip + "/getAvailableLobby/?gameType=" + lobbyType;
 
@@ -446,10 +465,10 @@ void Triviador::on_readyGameLobbyPushButton_released()
 
 void Triviador::on_startGameLobbyPushButton_released()
 {	
-	triviadorGame = new Game(m_ip, m_playerUsername);
+	triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
 
 	ui.stackedWidget->insertWidget(4, triviadorGame);
-	
+
 	ui.stackedWidget->setCurrentIndex(4);
 }
 

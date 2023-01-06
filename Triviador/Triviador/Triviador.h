@@ -80,6 +80,11 @@ private:
     
 	std::string m_playerUsername;
 
+    uint16_t m_numberOfPlayers;
+    uint16_t m_numberOfRounds;
+    uint16_t m_mapHeight;
+    uint16_t m_mapWidth;
+    
     uint8_t m_firstEmptyPlayerSeatID;
 
     int lobbyID;

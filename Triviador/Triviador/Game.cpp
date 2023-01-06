@@ -4,36 +4,34 @@ Game::Game()
 {
 }
 
-Game::Game(const std::string& ip, const std::string& username)
+Game::Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth)
 {
 	m_ip = ip;
 	m_playerUsername = username;
+	m_selectedRegions.clear();
+
+	w.SetNumberOfPlayers(numberOfPlayers);
+
+	if (numberOfRounds == 0 && mapHeight == 0 && mapWidth == 0)
+	{
+		m_map.SetNumberOfPlayers(numberOfPlayers);
+
+		m_map.CreateMap();
+	}
+	else
+	{
+		m_map.CreateMapCustomMode(mapHeight, mapWidth, numberOfPlayers, numberOfRounds);
+	}
 
 	ui.setupUi(this);
-	w.show();
 	ui.existingRegionLabel->hide();
-	ui.mapSizeErrorLabel->hide();
 
-	ui.playersSpinBox->setRange(2, 9);
-	ui.roundsSpinBox->setRange(2, 25);
-	ui.mapHeightSpinBox->setRange(3, 25);
-	ui.mapWidthSpinBox->setRange(3, 25);
-
-	ui.playersSpinBox->hide();
-	ui.roundsSpinBox->hide();
-	ui.mapHeightSpinBox->hide();
-	ui.mapWidthSpinBox->hide();
-
-	ui.playersLabel->hide();
-	ui.roundsLabel->hide();
-	ui.mapHeightLabel->hide();
-	ui.mapWidthLabel->hide();
-
-	ui.finishGameModeSetupPushButton->hide();
-
-	gameModeIsSet = false;
+	ui.progressBar->show();
+	ui.progressBarLabel->show();
 
 	GenerateRandomColor();
+
+	StartInitializeQuestionsGeneratorTimer(); 
 }
 
 Game::~Game()
@@ -53,6 +51,19 @@ void Game::AddNewSelectedRegion(const QPointF& coordPos)
 	m_selectedRegions.push_back(coordPos);
 }
 
+void Game::StartInitializeQuestionsGeneratorTimer()
+{
+	initializeQuestionsGeneratorTimer = new QTimer(this);
+
+	ui.progressBar->setValue(0);
+	initializeQuestionsGeneratorTimer->setInterval(50);
+
+	initializeQuestionsGeneratorTimer->setTimerType(Qt::PreciseTimer);
+
+	connect(initializeQuestionsGeneratorTimer, SIGNAL(timeout()), this, SLOT(OnIinitializeQuestionsGeneratorTimerTick()));
+
+	initializeQuestionsGeneratorTimer->start();
+}
 
 void Game::GenerateRandomColor()
 {
@@ -81,24 +92,21 @@ void Game::paintEvent(QPaintEvent*)
 
 void Game::DrawMap(QPainter& painter)
 {
-	if (gameModeIsSet == true)
+	for (size_t i = 0; i < m_map.GetMapSize().first; i++)
 	{
-		for (size_t i = 0; i < m_map.GetMapSize().first; i++)
+		for (size_t j = 0; j < m_map.GetMapSize().second; j++)
 		{
-			for (size_t j = 0; j < m_map.GetMapSize().second; j++)
-			{
-				QRect square(300 + 50 * j, 70 + 50 * i, 50, 50);
+			QRect square(300 + 50 * j, 70 + 50 * i, 50, 50);
 
-				QPen pen;
+			QPen pen;
 
-				pen.setColor(Qt::black);
+			pen.setColor(Qt::black);
 
-				painter.setPen(pen);
-				painter.drawRect(square);
-			}
+			painter.setPen(pen);
+			painter.drawRect(square);
 		}
-		update();
 	}
+	update();
 }
 
 void Game::mouseReleaseEvent(QMouseEvent* ev)
@@ -136,125 +144,20 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 	}
 }
 
-QString Game::CheckMapSize(uint16_t mapHeight ,uint16_t mapWidth, uint16_t numberOfPlayers)
+void Game::OnIinitializeQuestionsGeneratorTimerTick()
 {
-	uint16_t limit = numberOfPlayers + 1;
-	if (mapHeight < limit || mapWidth < limit)
-		return "Map dimensions have to be at least the number of players + 1 each!";
-	return "Map size is ok!";
-}
+	ui.progressBar->setValue(ui.progressBar->value() + 1);
 
-void Game::on_twoPlayersPushButton_released()
-{
-	ui.threePlayersPushButton->setDisabled(true);
-	ui.fourPlayersPushButton->setDisabled(true);
-	ui.customModePushButton->setDisabled(true);
-
-	m_map.SetNumberOfPlayers(2);
-	w.SetNumberOfPlayers(2);
-
-	gameModeIsSet = true;
-
-	m_map.CreateMap();
-
-	//when a new map is created, we need to clear the colored regions of the previous map
-	m_selectedRegions.clear();
-}
-
-void Game::on_threePlayersPushButton_released()
-{
-	ui.twoPlayersPushButton->setDisabled(true);
-	ui.fourPlayersPushButton->setDisabled(true);
-	ui.customModePushButton->setDisabled(true);
-	
-	m_map.SetNumberOfPlayers(3);
-	w.SetNumberOfPlayers(3);
-
-	gameModeIsSet = true;
-
-	m_map.CreateMap();
-
-	//when a new map is created, we need to clear the colored regions of the previous map
-	m_selectedRegions.clear();
-}
-
-void Game::on_fourPlayersPushButton_released()
-{
-	ui.twoPlayersPushButton->setDisabled(true);
-	ui.threePlayersPushButton->setDisabled(true);
-	ui.customModePushButton->setDisabled(true);
-	
-	m_map.SetNumberOfPlayers(4);
-	w.SetNumberOfPlayers(4);
-
-	gameModeIsSet = true;
-
-	m_map.CreateMap();
-
-	//when a new map is created, we need to clear the colored regions of the previous map
-	m_selectedRegions.clear();
-}
-
-void Game::on_customModePushButton_released()
-{
-	ui.twoPlayersPushButton->setDisabled(true);
-	ui.threePlayersPushButton->setDisabled(true);
-	ui.fourPlayersPushButton->setDisabled(true);
-
-	ui.playersSpinBox->show();
-	ui.roundsSpinBox->show();
-	ui.mapHeightSpinBox->show();
-	ui.mapWidthSpinBox->show();
-
-	ui.playersLabel->show();
-	ui.roundsLabel->show();
-	ui.mapHeightLabel->show();
-	ui.mapWidthLabel->show();
-
-	ui.finishGameModeSetupPushButton->show();
-
-	w.SetNumberOfPlayers(ui.playersSpinBox->value());
-
-	//m_map.SetNumberOfPlayers(ui.playersSpinBox->value());	
-	//m_map.SetNumberOfRounds(ui.roundsSpinBox->value());
-}
-
-void Game::on_playersSpinBox_valueChanged(int arg1)
-{
-	ui.roundsSpinBox->setMinimum(arg1 - 1);
-	ui.roundsSpinBox->setMaximum(arg1 * 3 / 2);
-	ui.roundsSpinBox->setValue(arg1 + 2);
-
-	ui.mapWidthSpinBox->setMinimum(arg1 - 1);
-	ui.mapWidthSpinBox->setMaximum(arg1 * 2);
-	ui.mapWidthSpinBox->setValue(arg1 + 3);
-
-	ui.mapHeightSpinBox->setMinimum(arg1 - 1);
-	ui.mapHeightSpinBox->setMaximum(arg1 * 2);
-	ui.mapHeightSpinBox->setValue(arg1 + 1);
-}
-
-void Game::on_finishGameModeSetupPushButton_released()
-{
-	uint16_t mapHeight = ui.mapHeightSpinBox->value();
-	uint16_t mapWidth = ui.mapWidthSpinBox->value();
-	
-	uint16_t numberOfPlayers = ui.playersSpinBox->value();
-	uint16_t numberOfRounds = ui.roundsSpinBox->value();
-
-	QString mapSizeErrorText = CheckMapSize(mapHeight, mapWidth,numberOfPlayers);
-	
-	if (mapSizeErrorText == "Map size is ok!")
+	if (ui.progressBar->value() >= 100)
 	{
-		ui.mapSizeErrorLabel->hide();
-		gameModeIsSet = true;
-		m_map.CreateMapCustomMode(mapHeight, mapWidth, numberOfPlayers, numberOfRounds);
+		ui.progressBar->hide();
+		ui.progressBarLabel->hide();
+
+		initializeQuestionsGeneratorTimer->disconnect();
+
+		w.show();
 	}
-	else
-	{
-		ui.mapSizeErrorLabel->setText(mapSizeErrorText);
-		ui.mapSizeErrorLabel->show();
-	}
+
 }
 
 void Game::closeEvent(QCloseEvent* e)
