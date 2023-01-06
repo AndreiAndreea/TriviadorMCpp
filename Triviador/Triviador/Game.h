@@ -20,7 +20,6 @@ class Game : public QDialog
 
 private:
 	Ui::Game ui;
-	GameElementsGenerator w;
 
 public:
 	explicit Game();
@@ -37,7 +36,9 @@ public:
 
 private:
 	void GenerateRandomColor();
+
 	void paintEvent(QPaintEvent*);
+	
 	void DrawMap(QPainter& painter);
 
 	void mouseReleaseEvent(QMouseEvent* ev);
@@ -62,5 +63,8 @@ private:
 
 	std::string m_ip;
 	std::string m_playerUsername;
+
+private:
+	GameElementsGenerator* QuestionsWindow;
 };
 

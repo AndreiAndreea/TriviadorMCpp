@@ -29,7 +29,7 @@ private:
 	Ui::GameElementsGenerator ui;
 
 public:
-	explicit GameElementsGenerator();
+	GameElementsGenerator(const std::string& ip, const std::string& playerUsername);
 	~GameElementsGenerator();
     
     //setters and gettters
@@ -87,4 +87,7 @@ private:
 
     std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
 	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
+
+    std::string m_ip;
+    std::string m_playerUsername;
 };

@@ -6,11 +6,17 @@ Game::Game()
 
 Game::Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth)
 {
+	ui.setupUi(this);
+	
 	m_ip = ip;
 	m_playerUsername = username;
+
 	m_selectedRegions.clear();
 
-	w.SetNumberOfPlayers(numberOfPlayers);
+	QuestionsWindow = new GameElementsGenerator(m_ip, m_playerUsername);
+	ui.stackedWidget->insertWidget(1, QuestionsWindow);
+
+	QuestionsWindow->SetNumberOfPlayers(numberOfPlayers);
 
 	if (numberOfRounds == 0 && mapHeight == 0 && mapWidth == 0)
 	{
@@ -22,8 +28,7 @@ Game::Game(const std::string& ip, const std::string& username, const uint16_t nu
 	{
 		m_map.CreateMapCustomMode(mapHeight, mapWidth, numberOfPlayers, numberOfRounds);
 	}
-
-	ui.setupUi(this);
+	
 	ui.existingRegionLabel->hide();
 
 	ui.progressBar->show();
@@ -32,6 +37,8 @@ Game::Game(const std::string& ip, const std::string& username, const uint16_t nu
 	GenerateRandomColor();
 
 	StartInitializeQuestionsGeneratorTimer(); 
+
+	ui.stackedWidget->setCurrentIndex(0);
 }
 
 Game::~Game()
@@ -88,6 +95,9 @@ void Game::paintEvent(QPaintEvent*)
 		QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
 		painter.fillRect(square, m_usedColor);
 	}
+
+	if (ui.stackedWidget->currentIndex() == 1)
+		painter.setOpacity(0.5);
 }
 
 void Game::DrawMap(QPainter& painter)
@@ -111,7 +121,7 @@ void Game::DrawMap(QPainter& painter)
 
 void Game::mouseReleaseEvent(QMouseEvent* ev)
 {
-	if (ev->button() == Qt::LeftButton && w.GetCanChooseTerritory())
+	if (ev->button() == Qt::LeftButton && QuestionsWindow->GetCanChooseTerritory())
 	{
 		int found = 0;
 		QPointF clickPosition = ev->position();
@@ -136,7 +146,7 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 					{
 						AddNewSelectedRegion(regionCoordinates);
 						ui.existingRegionLabel->hide();
-						w.SetCanChooseTerritory(false);
+						QuestionsWindow->SetCanChooseTerritory(false);
 					}
 				}
 			}
@@ -154,8 +164,8 @@ void Game::OnIinitializeQuestionsGeneratorTimerTick()
 		ui.progressBarLabel->hide();
 
 		initializeQuestionsGeneratorTimer->disconnect();
-
-		w.show();
+		
+		ui.stackedWidget->setCurrentIndex(1);
 	}
 
 }
