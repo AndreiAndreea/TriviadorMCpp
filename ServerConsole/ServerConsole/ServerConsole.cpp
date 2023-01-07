@@ -13,6 +13,98 @@ using namespace sqlite_orm;
 * https://stackoverflow.com/a/630475/12388382
 */
 
+std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch(Storage& storage, uint8_t amountOfQuestions, std::vector<bool> &m_selectedSingleChoiceQuestions, std::vector<QuestionSingleChoice> &m_randomSingleChoiceQuestionsVector)
+{
+	//initializing the question usage check vector
+	auto countSingleQuestions = storage.count<QuestionSingleChoice>();
+
+	if (m_selectedSingleChoiceQuestions.size() != countSingleQuestions)
+		m_selectedSingleChoiceQuestions.resize(countSingleQuestions + 1);
+
+	//if there is an available batch to take
+	if (m_randomSingleChoiceQuestionsVector.size() <= countSingleQuestions - amountOfQuestions)
+	{
+		std::vector<crow::json::wvalue> questionJson;
+		
+		for (uint8_t index = 0; index < amountOfQuestions; index++)
+		{
+			uint8_t randomID = rand() % countSingleQuestions + 1;
+
+			while (m_selectedSingleChoiceQuestions[randomID] == true)
+			{
+				randomID = rand() % countSingleQuestions + 1;
+			}
+			
+			m_randomSingleChoiceQuestionsVector.push_back(storage.get<QuestionSingleChoice>(randomID));
+
+			auto question = m_randomSingleChoiceQuestionsVector.back();
+			
+			questionJson.push_back(crow::json::wvalue
+				{
+					{"question", question.GetQuestionText()},
+					{"correctAnswer", question.GetAnswer()}
+				});
+
+			m_selectedSingleChoiceQuestions[randomID] = true;
+		}
+
+		return questionJson;
+	}
+	else
+	{
+		std::vector<crow::json::wvalue> questionJson;
+		return questionJson;
+	}
+}
+
+std::vector<crow::json::wvalue> getAMultipleChoiceQuestionBatch(Storage& storage, uint8_t amountOfQuestions, std::vector<bool>& m_selectedMultiplChoiceQuestions, std::vector<QuestionMultipleChoice>& m_randomMultipleChoiceQuestionsVector)
+{
+	//initializing the question usage check vector
+	auto countMultipleQuestions = storage.count<QuestionMultipleChoice>();
+
+	if (m_selectedMultiplChoiceQuestions.size() != countMultipleQuestions)
+		m_selectedMultiplChoiceQuestions.resize(countMultipleQuestions + 1);
+
+	//if there is an available batch to take
+	if (m_randomMultipleChoiceQuestionsVector.size() <= countMultipleQuestions - amountOfQuestions)
+	{
+		std::vector<crow::json::wvalue> questionJson;
+
+		for (uint8_t index = 0; index < amountOfQuestions; index++)
+		{
+			uint8_t randomID = rand() % countMultipleQuestions + 1;
+
+			while (m_selectedMultiplChoiceQuestions[randomID] == true)
+			{
+				randomID = rand() % countMultipleQuestions + 1;
+			}
+
+			m_randomMultipleChoiceQuestionsVector.push_back(storage.get<QuestionMultipleChoice>(randomID));
+
+			auto question = m_randomMultipleChoiceQuestionsVector.back();
+
+			questionJson.push_back(crow::json::wvalue
+				{
+					{"question", question.GetQuestionText()},
+					{"correctAnswer", question.GetCorrectAnswer()},
+					{"answer1", question.GetAnswer1()},
+					{"answer2", question.GetAnswer2()},
+					{"answer3", question.GetAnswer3()},
+					{"answer4", question.GetAnswer4()}
+				});
+
+			m_selectedMultiplChoiceQuestions[randomID] = true;
+		}
+
+		return questionJson;
+	}
+	else
+	{
+		std::vector<crow::json::wvalue> questionJson;
+		return questionJson;
+	}
+}
+
 bool isValidEmail(const std::string& email)
 {
 	std::regex validEmailPattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
@@ -41,13 +133,13 @@ void SetAllOnlineUsersToOfflineStatus(Storage& storage)
 int main()
 {	
 	uint8_t amountOfQuestions = 5;
-
+	
 	std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
 	std::vector<bool> m_selectedSingleChoiceQuestions;
 
 	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
-	std::vector<bool> m_selectedMultiplChoiceQuestions;
-
+	std::vector<bool> m_selectedMultipleChoiceQuestions;
+	
 	std::string dataFilesPath = "resources/data_files";
 
 	std::string filePathForSingleChoiceQuestion = dataFilesPath + "/questions/SingleChoiceQuestions.txt";
@@ -58,6 +150,9 @@ int main()
 	Storage storage = createStorage(filePathForDatabase);
 	storage.sync_schema();
 
+	std::vector<crow::json::wvalue> batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
+	std::vector<crow::json::wvalue> batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
+	
 	std::ifstream databaseFile(filePathForDatabase);
 
 	if (databaseFile.bad() == false)
@@ -429,6 +524,7 @@ int main()
 
 	// Get a specific amount of single choice questions 
 	// * BUG maybe from json : the ID of questions isn't get correctly from DB *
+	/*
 	CROW_ROUTE(app, "/getAmountOfSingleQuestions")(
 		[&storage, &amountOfQuestions, &m_selectedSingleChoiceQuestions, &m_randomSingleChoiceQuestionsVector]
 		()
@@ -477,6 +573,52 @@ int main()
 
 	auto& getAmountOfSingleQuestions = CROW_ROUTE(app, "/getAmountOfSingleQuestions").methods(crow::HTTPMethod::POST);
 	getAmountOfSingleQuestions(DatabaseStorage(storage));
+	*/
+	
+	// Get the same single choice question - needed to sync generated questions for players
+	CROW_ROUTE(app, "/getASingleChoiceQuestion")(
+		[&storage, &batchOfSingleQuestions]
+		()
+		{
+			return crow::response(crow::json::wvalue{ batchOfSingleQuestions[batchOfSingleQuestions.size() - 1] });
+		});
+
+	auto& getASingleChoiceQuestion = CROW_ROUTE(app, "/getASingleChoiceQuestion").methods(crow::HTTPMethod::POST);
+	getASingleChoiceQuestion(DatabaseStorage(storage));
+
+	CROW_ROUTE(app, "/getRandomSingleQuestion")(
+		[&storage, &amountOfQuestions, &m_selectedSingleChoiceQuestions, &m_randomSingleChoiceQuestionsVector, &batchOfSingleQuestions]
+		()
+		{
+			//checking if the batch needs repopulating
+			if (batchOfSingleQuestions.size() <= 1)
+				batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
+			
+			//after getting / repopulating the batch of questions we select a random one
+			
+			//uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
+			uint16_t randomPosition = rand() % batchOfSingleQuestions.size();
+			int index = m_randomSingleChoiceQuestionsVector.size() - randomPosition;
+
+			crow::json::wvalue SCQuestion = (crow::json::wvalue
+				{
+					//{"question",  m_randomSingleChoiceQuestionsVector.at(randomPosition).GetQuestionText()},
+					//{"correctAnswer", m_randomSingleChoiceQuestionsVector.at(randomPosition).GetAnswer()}
+					
+					{"question", m_randomSingleChoiceQuestionsVector.at(index).GetQuestionText()},
+					{"correctAnswer", m_randomSingleChoiceQuestionsVector.at(index).GetAnswer()}
+				});
+
+			m_selectedSingleChoiceQuestions[index] = true;
+
+			batchOfSingleQuestions.erase(batchOfSingleQuestions.begin() + randomPosition);
+
+			return crow::response(crow::json::wvalue{ SCQuestion });
+		}
+		);
+
+	auto& getRandomSingleQuestion = CROW_ROUTE(app, "/getRandomSingleQuestion").methods(crow::HTTPMethod::POST);
+	getRandomSingleQuestion(DatabaseStorage(storage));
 
 	// Get all multiple choice questions
 	CROW_ROUTE(app, "/getMultipleQuestions")(
@@ -508,6 +650,7 @@ int main()
 
 	// Get a specific amount of multiple choice questions 
 	// * BUG maybe from json : the ID of questions isn't get correctly from DB *
+	/*
 	CROW_ROUTE(app, "/getAmountOfMultipleQuestions")(
 		[&storage, &amountOfQuestions, &m_selectedMultiplChoiceQuestions, &m_randomMultipleChoiceQuestionsVector]
 		()
@@ -560,6 +703,51 @@ int main()
 
 	auto& getAmountOfMultipleQuestions = CROW_ROUTE(app, "/getAmountOfMultipleQuestions").methods(crow::HTTPMethod::POST);
 	getAmountOfMultipleQuestions(DatabaseStorage(storage));
+	*/
+
+	// Get the same multiple choice question - needed to sync generated questions for players
+	CROW_ROUTE(app, "/getAMultipleChoiceQuestion")(
+		[&storage, &batchOfMultipleQuestions]
+		()
+		{
+			return crow::response(crow::json::wvalue{ batchOfMultipleQuestions[batchOfMultipleQuestions.size() - 1] });
+		});
+
+	auto& getAMultipleChoiceQuestion = CROW_ROUTE(app, "/getAMultipleChoiceQuestion").methods(crow::HTTPMethod::POST);
+	getAMultipleChoiceQuestion(DatabaseStorage(storage));
+
+	CROW_ROUTE(app, "/getRandomMultipleQuestion")(
+		[&storage, &amountOfQuestions, &m_selectedMultipleChoiceQuestions, &m_randomMultipleChoiceQuestionsVector, &batchOfMultipleQuestions]
+		()
+		{
+			//checking if the batch needs repopulating
+			if (batchOfMultipleQuestions.size() <= 1)
+				batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
+
+			//after getting / repopulating the batch of questions we select a random one
+			uint16_t randomPosition = rand() % batchOfMultipleQuestions.size();
+			int index = m_randomMultipleChoiceQuestionsVector.size() - randomPosition;
+
+			crow::json::wvalue MCQuestion = (crow::json::wvalue
+				{
+					{"question", m_randomMultipleChoiceQuestionsVector.at(index).GetQuestionText()},
+					{"correctAnswer", m_randomMultipleChoiceQuestionsVector.at(index).GetCorrectAnswer()},
+					{"answer1", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer1()},
+					{"answer2", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer2()},
+					{"answer3", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer3()},
+					{"answer4", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer4()}
+				});
+
+			m_selectedMultipleChoiceQuestions[index] = true;
+
+			batchOfMultipleQuestions.erase(batchOfMultipleQuestions.begin() + randomPosition);
+
+			return crow::response(crow::json::wvalue{ MCQuestion });
+		}
+		);
+
+	auto& getRandomMultipleQuestion = CROW_ROUTE(app, "/getRandomMultipleQuestion").methods(crow::HTTPMethod::POST);
+	getRandomMultipleQuestion(DatabaseStorage(storage));
 
 	/*
 	==================

@@ -49,8 +49,8 @@
     <widget class="QLabel" name="progressBarLabel">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>340</y>
+       <x>20</x>
+       <y>420</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -62,8 +62,8 @@
     <widget class="QProgressBar" name="progressBar">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>310</y>
+       <x>20</x>
+       <y>400</y>
        <width>118</width>
        <height>23</height>
       </rect>

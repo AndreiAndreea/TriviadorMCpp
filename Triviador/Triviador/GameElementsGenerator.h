@@ -21,6 +21,9 @@
 
 #include "DataBase.h"
 
+#include <curl/curl.h>
+#include <cpr/cpr.h>
+
 class GameElementsGenerator : public QDialog
 {
 	Q_OBJECT
@@ -74,7 +77,7 @@ private slots:
 private:
     bool m_answerHasBeenSelected;
 
-    uint16_t m_amountOfRandomQuestionsFromDatabase;
+    //uint16_t m_amountOfRandomQuestionsFromDatabase;
 
     Questions m_questions;
     std::string m_currentAnswer;
@@ -85,8 +88,8 @@ private:
     QTimer* timer;
     QElapsedTimer elapsedTime;
 
-    std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
-	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
+    //std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
+	//std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
 
     std::string m_ip;
     std::string m_playerUsername;

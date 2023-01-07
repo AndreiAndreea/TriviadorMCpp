@@ -106,7 +106,7 @@ void Game::DrawMap(QPainter& painter)
 	{
 		for (size_t j = 0; j < m_map.GetMapSize().second; j++)
 		{
-			QRect square(300 + 50 * j, 70 + 50 * i, 50, 50);
+			QRect square(600 + 50 * j, 170 + 50 * i, 50, 50);
 
 			QPen pen;
 

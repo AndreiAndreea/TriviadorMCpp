@@ -7,6 +7,7 @@ GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::s
 	m_ip = ip;
 	m_playerUsername = playerUsername;
 
+	/*
 	m_amountOfRandomQuestionsFromDatabase = 5;
 
 	DatabaseStorage storage("SingleChoiceQuestions.txt", "MultipleChoiceQuestions.txt");
@@ -17,7 +18,8 @@ GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::s
 
 	m_randomSingleChoiceQuestionsVector = m_questions.GetAFewRandomSingleChoiceQuestions(m_amountOfRandomQuestionsFromDatabase);
 	m_randomMultipleChoiceQuestionsVector = m_questions.GetAFewRandomMultipleChoiceQuestions(m_amountOfRandomQuestionsFromDatabase);
-
+	*/
+	
 	ui.titleLabel->setText(" ");
 
 	ui.errorLabel->hide();
@@ -205,7 +207,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.offerAnswersAdvantageButton->setDisabled(false);
 				ui.suggestAnswerAdvantageButton->setDisabled(false);
 
-				uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
+				/*uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
 
 				QuestionSingleChoice SCQuestion = m_randomSingleChoiceQuestionsVector.at(randomPosition);
 				m_randomSingleChoiceQuestionsVector.erase(m_randomSingleChoiceQuestionsVector.begin() + randomPosition);
@@ -213,7 +215,20 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
 
 				QString scq = QString::fromStdString(SCQuestion.GetQuestionText());
-				ui.titleLabel->setText(scq);
+				ui.titleLabel->setText(scq);*/
+
+				std::string link = m_ip + "/getRandomSingleQuestion";
+
+				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+				if (responseFromServer.status_code == 200)
+				{
+					auto questionDetails = crow::json::load(responseFromServer.text);
+
+					std::string quetionText = questionDetails["question"].s();
+					ui.titleLabel->setText(QString::fromStdString(quetionText));
+					m_currentAnswer = std::to_string(questionDetails["correctAnswer"].i());
+				}
 
 				StartTimer();
 
@@ -244,6 +259,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.checkAnswerSelection->show();
 				m_answerHasBeenSelected = false;
 
+				/*
 				uint16_t randomPosition = rand() % m_randomMultipleChoiceQuestionsVector.size();
 
 				QuestionMultipleChoice MCQuestion = m_randomMultipleChoiceQuestionsVector.at(randomPosition);
@@ -264,7 +280,33 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.multipleChoiceAnswer3Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
 				ui.multipleChoiceAnswer4Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
 				QString answers = QString::fromStdString(ss.str());
+				*/
+				
+				std::string link = m_ip + "/getRandomMultipleQuestion";
 
+				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+				if (responseFromServer.status_code == 200)
+				{
+					auto questionDetails = crow::json::load(responseFromServer.text);
+
+					std::string quetionText = questionDetails["question"].s();
+					ui.titleLabel->setText(QString::fromStdString(quetionText));
+					
+					m_currentAnswer = questionDetails["correctAnswer"].s();
+
+					std::stringstream ss;
+					ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:light;");
+					ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:light;");
+					ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:light;");
+					ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:light;");
+					ui.multipleChoiceAnswer1Button->setText(QString::fromStdString(questionDetails["answer1"].s()));
+					ui.multipleChoiceAnswer2Button->setText(QString::fromStdString(questionDetails["answer2"].s()));
+					ui.multipleChoiceAnswer3Button->setText(QString::fromStdString(questionDetails["answer3"].s()));
+					ui.multipleChoiceAnswer4Button->setText(QString::fromStdString(questionDetails["answer4"].s()));
+					QString answers = QString::fromStdString(ss.str());
+				}
+				
 				StartTimer();
 
 				update();
