@@ -5,6 +5,8 @@
 #include "Game.h"
 
 #include <QDebug>
+#include <QTableWidgetItem>
+#include <QTableWidget>
 
 #include <curl/curl.h>
 #include <cpr/cpr.h>
@@ -61,6 +63,7 @@ signals:
 
 private:
     void UpdateUserDetails();
+    void UpdateGamesHistory();
 
     void UpdateLobbiesDetails();
     void UpdateCurrentLobbyPlayers();

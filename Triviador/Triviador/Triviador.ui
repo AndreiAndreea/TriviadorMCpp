@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1286</width>
+    <width>1287</width>
     <height>724</height>
    </rect>
   </property>
@@ -271,6 +271,29 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="gamesHistoryLabel">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>220</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Games History:</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="gamesHistoryTableWidget">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>250</y>
+        <width>1231</width>
+        <height>321</height>
+       </rect>
       </property>
      </widget>
     </widget>
@@ -982,8 +1005,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1286</width>
-     <height>22</height>
+     <width>1287</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

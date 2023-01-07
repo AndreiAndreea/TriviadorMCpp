@@ -79,6 +79,7 @@ void Triviador::on_playGamePushButton_released()
 void Triviador::on_profilePushButton_released()
 {
 	UpdateUserDetails();
+	UpdateGamesHistory();
 }
 
 void Triviador::on_backToMenuPushButton_released()
@@ -540,6 +541,68 @@ void Triviador::UpdateUserDetails()
 	else
 	{
 		emit ServerCrashedSignalTriviador();
+	}
+}
+
+void Triviador::UpdateGamesHistory()
+{
+	ui.gamesHistoryTableWidget->setRowCount(6);
+	ui.gamesHistoryTableWidget->setColumnCount(10);
+	
+	QTableWidgetItem* item0 = new QTableWidgetItem("game_type");
+	ui.gamesHistoryTableWidget->setItem(0, 0, item0);
+	QTableWidgetItem* item1 = new QTableWidgetItem("room_number");
+	ui.gamesHistoryTableWidget->setItem(0, 1, item1);
+	QTableWidgetItem* item2 = new QTableWidgetItem("number_of_players");
+	ui.gamesHistoryTableWidget->setItem(0, 2, item2);
+	QTableWidgetItem* item3 = new QTableWidgetItem("player1");
+	ui.gamesHistoryTableWidget->setItem(0, 3, item3);
+	QTableWidgetItem* item4 = new QTableWidgetItem("player2");
+	ui.gamesHistoryTableWidget->setItem(0, 4, item4);
+	QTableWidgetItem* item5 = new QTableWidgetItem("player3");
+	ui.gamesHistoryTableWidget->setItem(0, 5, item5);
+	QTableWidgetItem* item6 = new QTableWidgetItem("player4");
+	ui.gamesHistoryTableWidget->setItem(0, 6, item6);
+	QTableWidgetItem* item7 = new QTableWidgetItem("player5");
+	ui.gamesHistoryTableWidget->setItem(0, 7, item7);
+	QTableWidgetItem* item8 = new QTableWidgetItem("player6");
+	ui.gamesHistoryTableWidget->setItem(0, 8, item8);
+	QTableWidgetItem* item9 = new QTableWidgetItem("winner");
+	ui.gamesHistoryTableWidget->setItem(0, 9, item9);
+	
+	//the last five games will be displayed
+	for (int i = 1; i < 6; i++) {
+		std::string text = std::to_string(i + 1) + "players";
+		QTableWidgetItem* item0 = new QTableWidgetItem(text.c_str());
+		ui.gamesHistoryTableWidget->setItem(i, 0, item0);
+		
+		text = std::to_string(i + 1) + "P_" + std::to_string(i);
+		QTableWidgetItem* item1 = new QTableWidgetItem(text.c_str());
+		ui.gamesHistoryTableWidget->setItem(i, 1, item1);
+		
+		QTableWidgetItem* item2 = new QTableWidgetItem(std::to_string(i + 1).c_str());
+		ui.gamesHistoryTableWidget->setItem(i, 2, item2);
+		
+		QTableWidgetItem* item3 = new QTableWidgetItem("Ana");
+		ui.gamesHistoryTableWidget->setItem(i, 3, item3);
+		
+		QTableWidgetItem* item4 = new QTableWidgetItem("Maria");
+		ui.gamesHistoryTableWidget->setItem(i, 4, item4);
+		
+		QTableWidgetItem* item5 = new QTableWidgetItem("Andreea");
+		ui.gamesHistoryTableWidget->setItem(i, 5, item5);
+		
+		QTableWidgetItem* item6 = new QTableWidgetItem("Theo");
+		ui.gamesHistoryTableWidget->setItem(i, 6, item6);
+		
+		QTableWidgetItem* item7 = new QTableWidgetItem("Cosmin");
+		ui.gamesHistoryTableWidget->setItem(i, 7, item7);
+		
+		QTableWidgetItem* item8 = new QTableWidgetItem("-");
+		ui.gamesHistoryTableWidget->setItem(i, 8, item8);
+		
+		QTableWidgetItem* item9 = new QTableWidgetItem("Maria");
+		ui.gamesHistoryTableWidget->setItem(i, 9, item9);
 	}
 }
 

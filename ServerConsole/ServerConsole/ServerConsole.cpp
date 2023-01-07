@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <ctime>
 #include <vector>
 #include <string>
 #include <regex>
@@ -128,6 +130,37 @@ void SetAllOnlineUsersToOfflineStatus(Storage& storage)
 
 		std::cout << (allUsers.size() > 1 ? "All" : "The") << " online user" << (allUsers.size() > 1 ? "s are" : " is") << " now offline!\n";
 	}
+}
+
+std::string GenerateRoomNumber(std::string &game_type)
+{
+	std::string room_number = "";
+	
+	if (std::regex_match(game_type, std::regex(".*\\d+.*")))
+	{
+		for (const auto& c : game_type)
+		{
+			if (isdigit(c))
+			{
+				room_number += c;
+			}
+		}
+		room_number += "P_";
+	}
+	else
+	{
+		room_number += "CM_";
+	}
+
+	auto t = std::time(nullptr);
+	auto tm = *std::localtime(&t);
+
+	std::ostringstream oss;
+	oss << std::put_time(&tm, "%m%d%Y%M%H%S");
+	
+	room_number += oss.str();
+	
+	return room_number;
 }
 
 int main()
@@ -865,7 +898,9 @@ int main()
 			std::string game_type = req.url_params.get("gameType");
 
 			std::string game_status = "Room created";
-			std::string room_number = "RANDOM_GENERATED_NUMBER";
+			//std::string room_number = "RANDOM_GENERATED_NUMBER";
+			std::string room_number = GenerateRoomNumber(game_type);
+			
 
 			if (game_type == "2players")
 			{
