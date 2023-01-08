@@ -8,6 +8,7 @@
 #include <QTableWidgetItem>
 #include <QTableWidget>
 
+#include <regex>
 #include <curl/curl.h>
 #include <cpr/cpr.h>
 
@@ -24,21 +25,24 @@ private:
 	Ui::TriviadorClass ui;
 
 private slots:
+    /*MENU*/
     void on_playGamePushButton_released();
-    void on_backToMenuPushButton_released();
+    void on_profilePushButton_released();
     void on_quitPushButton_clicked();
     
-    void on_profilePushButton_released();
+    /*PLAYER PROFILE*/
     void on_profileSettingsPushButton_released();
+    void on_backToMenuPushButton_released();
 
-    void on_backToProfileButton_released();
-    void on_backToMenuPushButton_2_released();
-
+    /*CHANGE CREDENTIALS*/
     void on_changeUsernamePushButton_released();
     void on_changePasswordPushButton_released();
     void on_changeEmailPushButton_released();
-
     void on_saveProfileSettingsPushButton_released();
+    void on_backToProfileButton_released();
+
+    /*AVAILABLE LOBBIES*/
+    void on_backToMenuPushButton_2_released();
     
     void on_twoPlayersPushButton_released();
 	void on_threePlayersPushButton_released();
@@ -46,14 +50,14 @@ private slots:
     void on_customModePushButton_released();
 
     void on_playersSpinBox_valueChanged(int arg1);
-
     void on_joinLobbyPushButton_released();
+
+    /*LOBBY DETAILS*/
     void on_backToLobbyPushButton_released();
 
     void on_readyGameLobbyPushButton_released();
     void on_startGameLobbyPushButton_released();
     
-    void TimerMethodToUpdateLobbyDetails();
 
 signals:
     void BackToMenuSignal();
@@ -62,21 +66,27 @@ signals:
     void ServerCrashedSignalTriviador();
 
 private:
+    /*PLAYER PROFILE*/
     void UpdateUserDetails();
     void UpdateGamesHistory();
+    bool isValidEmail(const std::string& email);
 
-    void UpdateLobbiesDetails();
-    void UpdateCurrentLobbyPlayers();
-    bool CheckIfLobbyIsReadyToBegin();
-
-    void SetLobbyDetails(const std::string& lobbyType);
-	void CreateNewLobby(const std::string& lobbyType);
+    /*AVAILABLE LOBBIES*/
+	void TurnAutoExclusiveButtonsForCustomMode(bool state);
+	void SetCheckedButtonsForLobby(bool state);
 
 	void ShowCustomModeSettings();
 	void HideCustomModeSettings();
+    
+    /*LOBBY DETAILS*/
+    void UpdateLobbiesDetails();
+    void UpdateCurrentLobbyPlayers();
+    void TimerMethodToUpdateLobbyDetails();
 
-	void TurnAutoExclusiveButtonsForCustomMode(bool state);
-	void SetCheckedButtonsForLobby(bool state);
+    bool CheckIfLobbyIsReadyToBegin();
+    void SetLobbyDetails(const std::string& lobbyType);
+	void CreateNewLobby(const std::string& lobbyType);
+
 
 private:
     std::string m_ip;

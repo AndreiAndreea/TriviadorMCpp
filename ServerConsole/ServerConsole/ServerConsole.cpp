@@ -15,7 +15,10 @@ using namespace sqlite_orm;
 * https://stackoverflow.com/a/630475/12388382
 */
 
-std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch(Storage& storage, uint8_t amountOfQuestions, std::vector<bool> &m_selectedSingleChoiceQuestions, std::vector<QuestionSingleChoice> &m_randomSingleChoiceQuestionsVector)
+std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch
+	(Storage& storage, uint8_t amountOfQuestions, 
+	std::vector<bool> &m_selectedSingleChoiceQuestions,
+	std::vector<QuestionSingleChoice> &m_randomSingleChoiceQuestionsVector)
 {
 	//initializing the question usage check vector
 	auto countSingleQuestions = storage.count<QuestionSingleChoice>();
@@ -59,7 +62,10 @@ std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch(Storage& storage, 
 	}
 }
 
-std::vector<crow::json::wvalue> getAMultipleChoiceQuestionBatch(Storage& storage, uint8_t amountOfQuestions, std::vector<bool>& m_selectedMultiplChoiceQuestions, std::vector<QuestionMultipleChoice>& m_randomMultipleChoiceQuestionsVector)
+std::vector<crow::json::wvalue> getAMultipleChoiceQuestionBatch
+	(Storage& storage, uint8_t amountOfQuestions, 
+	std::vector<bool>& m_selectedMultiplChoiceQuestions, 
+	std::vector<QuestionMultipleChoice>& m_randomMultipleChoiceQuestionsVector)
 {
 	//initializing the question usage check vector
 	auto countMultipleQuestions = storage.count<QuestionMultipleChoice>();

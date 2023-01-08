@@ -21,24 +21,6 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Header Files\Player">
-      <UniqueIdentifier>{cdef60bb-bb30-43d5-94cc-1baf91a69e15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Player">
-      <UniqueIdentifier>{1bbf470d-e6f3-4b50-bfae-0d8c124e1421}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Login">
-      <UniqueIdentifier>{db9b61c5-dfa3-450d-8ea7-a8df6ca88681}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Login">
-      <UniqueIdentifier>{2807758e-0b15-466d-be56-af3070d4598d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Register">
-      <UniqueIdentifier>{00539f3d-e3ff-4430-b38c-4efb4e00d74e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Register">
-      <UniqueIdentifier>{fa5d9b7d-b3fb-4e64-98fd-93a87dfdae11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\LoginRegister">
       <UniqueIdentifier>{d4d13715-1e25-4ce2-ba14-838e1bb44856}</UniqueIdentifier>
     </Filter>
@@ -57,30 +39,6 @@
     <Filter Include="Resource Files\Questions in file">
       <UniqueIdentifier>{5c5b215e-191b-43f8-be43-c082edf39731}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Multiple Choice Question">
-      <UniqueIdentifier>{f383a339-ee4d-4948-a67a-2f6af4db2374}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Multiple Choice Question">
-      <UniqueIdentifier>{91dbf4a3-7b8d-4fd0-aa16-590871c3280b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Single Choice Question">
-      <UniqueIdentifier>{f7e84398-e7e2-427a-83aa-bbd30e37033e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Single Choice Question">
-      <UniqueIdentifier>{c4a6351d-62cd-44f5-9660-ddd1d7c53006}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Question">
-      <UniqueIdentifier>{83421a44-b871-4ae7-9fa0-927c4a405b46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Question">
-      <UniqueIdentifier>{7690012f-69d1-4a26-8e6b-717784d1d940}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Map">
-      <UniqueIdentifier>{033a00a4-429d-41cd-959c-92d9be65591d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Map">
-      <UniqueIdentifier>{a4f21332-a0aa-46a0-83e8-e1364187e617}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{d8e940d9-eb6d-4ee0-b751-c1a585fd28c8}</UniqueIdentifier>
     </Filter>
@@ -93,23 +51,17 @@
     <Filter Include="Header Files\Database">
       <UniqueIdentifier>{af537f92-50e0-452e-8e98-fe46e72349a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Duel">
-      <UniqueIdentifier>{4f24da5a-5777-44bb-a85d-4eae80fe02e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Duel">
-      <UniqueIdentifier>{bac833c8-370f-4dc0-b12e-7a4cd9bacb9a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameElementsGenerator">
-      <UniqueIdentifier>{feed2159-8efa-49a0-bac5-867b93c785ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameElementsGenerator">
-      <UniqueIdentifier>{d75d08b3-8629-4526-81a0-e1b122a2f4e0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Game">
       <UniqueIdentifier>{354681b6-91bb-4ec9-a0ab-564d23a545be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Questions">
+      <UniqueIdentifier>{83421a44-b871-4ae7-9fa0-927c4a405b46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Questions">
+      <UniqueIdentifier>{7690012f-69d1-4a26-8e6b-717784d1d940}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -121,73 +73,73 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Player</Filter>
+    <ClCompile Include="Questions.cpp">
+      <Filter>Source Files\Questions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionMultipleChoice.cpp">
+      <Filter>Source Files\Questions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionSingleChoice.cpp">
+      <Filter>Source Files\Questions</Filter>
     </ClCompile>
     <ClCompile Include="Login.cpp">
-      <Filter>Source Files\Login</Filter>
-    </ClCompile>
-    <ClCompile Include="Register.cpp">
-      <Filter>Source Files\Register</Filter>
+      <Filter>Source Files\LoginRegister</Filter>
     </ClCompile>
     <ClCompile Include="LoginRegister.cpp">
       <Filter>Source Files\LoginRegister</Filter>
     </ClCompile>
-    <ClCompile Include="Triviador.cpp">
-      <Filter>Source Files\Triviador</Filter>
+    <ClCompile Include="Register.cpp">
+      <Filter>Source Files\LoginRegister</Filter>
     </ClCompile>
-    <ClCompile Include="QuestionMultipleChoice.cpp">
-      <Filter>Source Files\Multiple Choice Question</Filter>
-    </ClCompile>
-    <ClCompile Include="QuestionSingleChoice.cpp">
-      <Filter>Source Files\Single Choice Question</Filter>
-    </ClCompile>
-    <ClCompile Include="Questions.cpp">
-      <Filter>Source Files\Question</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Duel.cpp">
-      <Filter>Source Files\Duel</Filter>
+    <ClCompile Include="GameElementsGenerator.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="GameElementsGenerator.cpp">
-      <Filter>Source Files\GameElementsGenerator</Filter>
+    <ClCompile Include="Duel.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="DataBase.cpp">
       <Filter>Source Files\Database</Filter>
     </ClCompile>
+    <ClCompile Include="Triviador.cpp">
+      <Filter>Source Files\Triviador</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QuestionSingleChoice.h">
-      <Filter>Header Files\Single Choice Question</Filter>
+      <Filter>Header Files\Questions</Filter>
+    </ClInclude>
+    <ClInclude Include="Questions.h">
+      <Filter>Header Files\Questions</Filter>
     </ClInclude>
     <ClInclude Include="QuestionMultipleChoice.h">
-      <Filter>Header Files\Multiple Choice Question</Filter>
+      <Filter>Header Files\Questions</Filter>
+    </ClInclude>
+    <ClInclude Include="Duel.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Questions.h">
-      <Filter>Header Files\Question</Filter>
-    </ClInclude>
-    <ClInclude Include="Duel.h">
-      <Filter>Header Files\Duel</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files\Map</Filter>
-    </ClInclude>
     <ClInclude Include="DataBase.h">
       <Filter>Header Files\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,23 +171,23 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="Register.h">
+      <Filter>Header Files\LoginRegister</Filter>
+    </QtMoc>
     <QtMoc Include="Login.h">
-      <Filter>Header Files\Login</Filter>
+      <Filter>Header Files\LoginRegister</Filter>
     </QtMoc>
     <QtMoc Include="LoginRegister.h">
       <Filter>Header Files\LoginRegister</Filter>
-    </QtMoc>
-    <QtMoc Include="Triviador.h">
-      <Filter>Header Files\Triviador</Filter>
-    </QtMoc>
-    <QtMoc Include="Register.h">
-      <Filter>Header Files\Register</Filter>
     </QtMoc>
     <QtMoc Include="Game.h">
       <Filter>Header Files\Game</Filter>
     </QtMoc>
     <QtMoc Include="GameElementsGenerator.h">
-      <Filter>Header Files\GameElementsGenerator</Filter>
+      <Filter>Header Files\Game</Filter>
+    </QtMoc>
+    <QtMoc Include="Triviador.h">
+      <Filter>Header Files\Triviador</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

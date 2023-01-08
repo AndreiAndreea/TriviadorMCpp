@@ -56,6 +56,7 @@ Triviador::~Triviador()
 	
 }
 
+/*MENU*/
 void Triviador::on_playGamePushButton_released()
 {
 	ui.stackedWidget->setCurrentIndex(3);
@@ -82,28 +83,6 @@ void Triviador::on_profilePushButton_released()
 	UpdateGamesHistory();
 }
 
-void Triviador::on_backToMenuPushButton_released()
-{
-	ui.stackedWidget->setCurrentIndex(0);
-}
-
-void Triviador::on_profileSettingsPushButton_released()
-{
-	ui.stackedWidget->setCurrentIndex(2);
-}
-
-void Triviador::on_backToProfileButton_released()
-{
-	ui.stackedWidget->setCurrentIndex(1);
-
-	UpdateUserDetails();
-}
-
-void Triviador::on_backToMenuPushButton_2_released()
-{
-	ui.stackedWidget->setCurrentIndex(0);
-}
-
 void Triviador::on_quitPushButton_clicked()
 {
 	std::string link = m_ip + "/logoutuser/?username=" + m_playerUsername;
@@ -112,6 +91,119 @@ void Triviador::on_quitPushButton_clicked()
 
 	emit BackToLoginSignal();
 }
+
+
+/*PLAYER PROFILE*/
+
+void Triviador::on_profileSettingsPushButton_released()
+{
+	ui.stackedWidget->setCurrentIndex(2);
+}
+
+void Triviador::on_backToMenuPushButton_released()
+{
+	ui.stackedWidget->setCurrentIndex(0);
+}
+
+void Triviador::UpdateUserDetails()
+{
+	ui.userErrorLabel->hide();
+
+	ui.stackedWidget->setCurrentIndex(1);
+
+	std::string link = m_ip + "/getuserdata/?username=" + m_playerUsername;
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		auto db_user = crow::json::load(responseFromServer.text);
+
+		ui.userProfileUsernameLabel->setText(QString::fromStdString(db_user["Username"].s()));
+
+		ui.userProfileEmailLabel->setText(QString::fromStdString(db_user["Email"].s()));
+
+		ui.userProfilePlayedGamesLabel->setText(QString::fromStdString(db_user["PlayedGames"].s()));
+
+		ui.userProfileWonGamesLabel->setText(QString::fromStdString(db_user["WonGames"].s()));
+
+		ui.userProfileCreationDateLabel->setText(QString::fromStdString(db_user["AccountCreationDate"].s()));
+	}
+	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
+	{
+		ui.userErrorLabel->setText("Error: " + QString::fromStdString(std::to_string(responseFromServer.status_code)) + "\n" + QString::fromStdString(responseFromServer.text));
+		ui.userErrorLabel->show();
+	}
+	else
+	{
+		emit ServerCrashedSignalTriviador();
+	}
+}
+
+void Triviador::UpdateGamesHistory()
+{
+	ui.gamesHistoryTableWidget->setRowCount(6);
+	ui.gamesHistoryTableWidget->setColumnCount(10);
+	
+	QTableWidgetItem* item0 = new QTableWidgetItem("game_type");
+	ui.gamesHistoryTableWidget->setItem(0, 0, item0);
+	QTableWidgetItem* item1 = new QTableWidgetItem("room_number");
+	ui.gamesHistoryTableWidget->setItem(0, 1, item1);
+	QTableWidgetItem* item2 = new QTableWidgetItem("number_of_players");
+	ui.gamesHistoryTableWidget->setItem(0, 2, item2);
+	QTableWidgetItem* item3 = new QTableWidgetItem("player1");
+	ui.gamesHistoryTableWidget->setItem(0, 3, item3);
+	QTableWidgetItem* item4 = new QTableWidgetItem("player2");
+	ui.gamesHistoryTableWidget->setItem(0, 4, item4);
+	QTableWidgetItem* item5 = new QTableWidgetItem("player3");
+	ui.gamesHistoryTableWidget->setItem(0, 5, item5);
+	QTableWidgetItem* item6 = new QTableWidgetItem("player4");
+	ui.gamesHistoryTableWidget->setItem(0, 6, item6);
+	QTableWidgetItem* item7 = new QTableWidgetItem("player5");
+	ui.gamesHistoryTableWidget->setItem(0, 7, item7);
+	QTableWidgetItem* item8 = new QTableWidgetItem("player6");
+	ui.gamesHistoryTableWidget->setItem(0, 8, item8);
+	QTableWidgetItem* item9 = new QTableWidgetItem("winner");
+	ui.gamesHistoryTableWidget->setItem(0, 9, item9);
+	
+	//the last five games will be displayed
+	for (int i = 1; i < 6; i++) {
+		std::string text = std::to_string(i + 1) + "players";
+		QTableWidgetItem* item0 = new QTableWidgetItem(text.c_str());
+		ui.gamesHistoryTableWidget->setItem(i, 0, item0);
+		
+		text = std::to_string(i + 1) + "P_" + std::to_string(i);
+		QTableWidgetItem* item1 = new QTableWidgetItem(text.c_str());
+		ui.gamesHistoryTableWidget->setItem(i, 1, item1);
+		
+		QTableWidgetItem* item2 = new QTableWidgetItem(std::to_string(i + 1).c_str());
+		ui.gamesHistoryTableWidget->setItem(i, 2, item2);
+		
+		QTableWidgetItem* item3 = new QTableWidgetItem("Ana");
+		ui.gamesHistoryTableWidget->setItem(i, 3, item3);
+		
+		QTableWidgetItem* item4 = new QTableWidgetItem("Maria");
+		ui.gamesHistoryTableWidget->setItem(i, 4, item4);
+		
+		QTableWidgetItem* item5 = new QTableWidgetItem("Andreea");
+		ui.gamesHistoryTableWidget->setItem(i, 5, item5);
+		
+		QTableWidgetItem* item6 = new QTableWidgetItem("Theo");
+		ui.gamesHistoryTableWidget->setItem(i, 6, item6);
+		
+		QTableWidgetItem* item7 = new QTableWidgetItem("Cosmin");
+		ui.gamesHistoryTableWidget->setItem(i, 7, item7);
+		
+		QTableWidgetItem* item8 = new QTableWidgetItem("-");
+		ui.gamesHistoryTableWidget->setItem(i, 8, item8);
+		
+		QTableWidgetItem* item9 = new QTableWidgetItem("Maria");
+		ui.gamesHistoryTableWidget->setItem(i, 9, item9);
+	}
+}
+
+
+/*CHANGE CREDENTIALS*/
 
 void Triviador::on_changeUsernamePushButton_released()
 {
@@ -189,30 +281,42 @@ void Triviador::on_changeEmailPushButton_released()
 
 	std::string newEmail = ui.changeEmailLineEdit->text().toLocal8Bit().constData();
 
-	std::string link = m_ip + "/findemailduplicate/?new_email=" + newEmail;
-
-	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
-
-	if (responseFromServer.status_code == 404)
+	if (isValidEmail(newEmail) == true) 
 	{
-		if (newEmail != "")
+		std::string link = m_ip + "/findemailduplicate/?new_email=" + newEmail;
+
+		cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+		if (responseFromServer.status_code == 404)
 		{
-			ui.changeEmailMessageLabel->setText("Valid choice!");
-			ui.saveProfileSettingsPushButton->setDisabled(false);
+			if (newEmail != "")
+			{
+				ui.changeEmailMessageLabel->setText("Valid choice!");
+				ui.saveProfileSettingsPushButton->setDisabled(false);
+			}
+			else
+			{
+				ui.changeEmailMessageLabel->setText("Enter a new valid password and press the change password button!");
+				ui.saveProfileSettingsPushButton->setDisabled(true);
+			}
 		}
 		else
 		{
-			ui.changeEmailMessageLabel->setText("Enter a new valid password and press the change password button!");
+			ui.changeEmailMessageLabel->setText("This password is already used!");
 			ui.saveProfileSettingsPushButton->setDisabled(true);
 		}
 	}
 	else
-	{
-		ui.changeEmailMessageLabel->setText("This password is already used!");
-		ui.saveProfileSettingsPushButton->setDisabled(true);
-	}
+		ui.changeEmailMessageLabel->setText("Invalid email!");
 
 	ui.changeEmailMessageLabel->show();
+}
+
+bool Triviador::isValidEmail(const std::string& email)
+{
+	std::regex validEmailPattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
+
+	return regex_match(email, validEmailPattern);
 }
 
 void Triviador::on_saveProfileSettingsPushButton_released()
@@ -263,6 +367,21 @@ void Triviador::on_saveProfileSettingsPushButton_released()
 	}
 }
 
+void Triviador::on_backToProfileButton_released()
+{
+	ui.stackedWidget->setCurrentIndex(1);
+
+	UpdateUserDetails();
+}
+
+
+/*AVAILABLE LOBBIES*/
+
+void Triviador::on_backToMenuPushButton_2_released()
+{
+	ui.stackedWidget->setCurrentIndex(0);
+}
+
 void Triviador::on_twoPlayersPushButton_released()
 {
 	if (ui.twoPlayersPushButton->autoExclusive() == false)
@@ -302,6 +421,24 @@ void Triviador::on_fourPlayersPushButton_released()
 	buttonSender = ui.fourPlayersPushButton;
 }
 
+void Triviador::TurnAutoExclusiveButtonsForCustomMode(bool state)
+{
+	ui.twoPlayersPushButton->setAutoExclusive(state);
+	ui.threePlayersPushButton->setAutoExclusive(state);
+	ui.fourPlayersPushButton->setAutoExclusive(state);
+
+	ui.customModePushButton->setAutoExclusive(state);
+}
+
+void Triviador::SetCheckedButtonsForLobby(bool state)
+{
+	ui.twoPlayersPushButton->setChecked(state);
+	ui.threePlayersPushButton->setChecked(state);
+	ui.fourPlayersPushButton->setChecked(state);
+
+	ui.customModePushButton->setChecked(state);
+}
+
 void Triviador::on_customModePushButton_released()
 {
 	if (ui.twoPlayersPushButton->autoExclusive() == false)
@@ -312,6 +449,32 @@ void Triviador::on_customModePushButton_released()
 	ui.joinLobbyPushButton->show();
 
 	buttonSender = ui.customModePushButton;
+}
+
+void Triviador::ShowCustomModeSettings()
+{
+	ui.playersSpinBox->show();
+	ui.roundsSpinBox->show();
+	ui.mapHeightSpinBox->show();
+	ui.mapWidthSpinBox->show();
+
+	ui.playersLabel->show();
+	ui.roundsLabel->show();
+	ui.mapHeightLabel->show();
+	ui.mapWidthLabel->show();
+}
+
+void Triviador::HideCustomModeSettings()
+{
+	ui.playersSpinBox->hide();
+	ui.roundsSpinBox->hide();
+	ui.mapHeightSpinBox->hide();
+	ui.mapWidthSpinBox->hide();
+
+	ui.playersLabel->hide();
+	ui.roundsLabel->hide();
+	ui.mapHeightLabel->hide();
+	ui.mapWidthLabel->hide();
 }
 
 void Triviador::on_playersSpinBox_valueChanged(int arg1)
@@ -427,6 +590,9 @@ void Triviador::on_joinLobbyPushButton_released()
 	ui.playersDetailsLobbyLabel->setText(buttonText + " lobby");
 }
 
+
+/*LOBBY DETAILS*/
+
 void Triviador::on_backToLobbyPushButton_released()
 {
 	std::string link = m_ip + "/leaveLobby/?lobbyID=" + std::to_string(lobbyID) + "&firstEmptyPlayerSeatID=" + std::to_string(m_firstEmptyPlayerSeatID);
@@ -506,103 +672,6 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 		timerToUpdateLobbyDetails->disconnect();
 
 		TimerMethodToUpdateLobbyDetails();
-	}
-}
-
-void Triviador::UpdateUserDetails()
-{
-	ui.userErrorLabel->hide();
-
-	ui.stackedWidget->setCurrentIndex(1);
-
-	std::string link = m_ip + "/getuserdata/?username=" + m_playerUsername;
-
-	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
-
-	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
-	{
-		auto db_user = crow::json::load(responseFromServer.text);
-
-		ui.userProfileUsernameLabel->setText(QString::fromStdString(db_user["Username"].s()));
-
-		ui.userProfileEmailLabel->setText(QString::fromStdString(db_user["Email"].s()));
-
-		ui.userProfilePlayedGamesLabel->setText(QString::fromStdString(db_user["PlayedGames"].s()));
-
-		ui.userProfileWonGamesLabel->setText(QString::fromStdString(db_user["WonGames"].s()));
-
-		ui.userProfileCreationDateLabel->setText(QString::fromStdString(db_user["AccountCreationDate"].s()));
-	}
-	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
-	{
-		ui.userErrorLabel->setText("Error: " + QString::fromStdString(std::to_string(responseFromServer.status_code)) + "\n" + QString::fromStdString(responseFromServer.text));
-		ui.userErrorLabel->show();
-	}
-	else
-	{
-		emit ServerCrashedSignalTriviador();
-	}
-}
-
-void Triviador::UpdateGamesHistory()
-{
-	ui.gamesHistoryTableWidget->setRowCount(6);
-	ui.gamesHistoryTableWidget->setColumnCount(10);
-	
-	QTableWidgetItem* item0 = new QTableWidgetItem("game_type");
-	ui.gamesHistoryTableWidget->setItem(0, 0, item0);
-	QTableWidgetItem* item1 = new QTableWidgetItem("room_number");
-	ui.gamesHistoryTableWidget->setItem(0, 1, item1);
-	QTableWidgetItem* item2 = new QTableWidgetItem("number_of_players");
-	ui.gamesHistoryTableWidget->setItem(0, 2, item2);
-	QTableWidgetItem* item3 = new QTableWidgetItem("player1");
-	ui.gamesHistoryTableWidget->setItem(0, 3, item3);
-	QTableWidgetItem* item4 = new QTableWidgetItem("player2");
-	ui.gamesHistoryTableWidget->setItem(0, 4, item4);
-	QTableWidgetItem* item5 = new QTableWidgetItem("player3");
-	ui.gamesHistoryTableWidget->setItem(0, 5, item5);
-	QTableWidgetItem* item6 = new QTableWidgetItem("player4");
-	ui.gamesHistoryTableWidget->setItem(0, 6, item6);
-	QTableWidgetItem* item7 = new QTableWidgetItem("player5");
-	ui.gamesHistoryTableWidget->setItem(0, 7, item7);
-	QTableWidgetItem* item8 = new QTableWidgetItem("player6");
-	ui.gamesHistoryTableWidget->setItem(0, 8, item8);
-	QTableWidgetItem* item9 = new QTableWidgetItem("winner");
-	ui.gamesHistoryTableWidget->setItem(0, 9, item9);
-	
-	//the last five games will be displayed
-	for (int i = 1; i < 6; i++) {
-		std::string text = std::to_string(i + 1) + "players";
-		QTableWidgetItem* item0 = new QTableWidgetItem(text.c_str());
-		ui.gamesHistoryTableWidget->setItem(i, 0, item0);
-		
-		text = std::to_string(i + 1) + "P_" + std::to_string(i);
-		QTableWidgetItem* item1 = new QTableWidgetItem(text.c_str());
-		ui.gamesHistoryTableWidget->setItem(i, 1, item1);
-		
-		QTableWidgetItem* item2 = new QTableWidgetItem(std::to_string(i + 1).c_str());
-		ui.gamesHistoryTableWidget->setItem(i, 2, item2);
-		
-		QTableWidgetItem* item3 = new QTableWidgetItem("Ana");
-		ui.gamesHistoryTableWidget->setItem(i, 3, item3);
-		
-		QTableWidgetItem* item4 = new QTableWidgetItem("Maria");
-		ui.gamesHistoryTableWidget->setItem(i, 4, item4);
-		
-		QTableWidgetItem* item5 = new QTableWidgetItem("Andreea");
-		ui.gamesHistoryTableWidget->setItem(i, 5, item5);
-		
-		QTableWidgetItem* item6 = new QTableWidgetItem("Theo");
-		ui.gamesHistoryTableWidget->setItem(i, 6, item6);
-		
-		QTableWidgetItem* item7 = new QTableWidgetItem("Cosmin");
-		ui.gamesHistoryTableWidget->setItem(i, 7, item7);
-		
-		QTableWidgetItem* item8 = new QTableWidgetItem("-");
-		ui.gamesHistoryTableWidget->setItem(i, 8, item8);
-		
-		QTableWidgetItem* item9 = new QTableWidgetItem("Maria");
-		ui.gamesHistoryTableWidget->setItem(i, 9, item9);
 	}
 }
 
@@ -747,48 +816,4 @@ void Triviador::CreateNewLobby(const std::string& lobbyType)
 	{
 		emit ServerCrashedSignalTriviador();
 	}
-}
-
-void Triviador::ShowCustomModeSettings()
-{
-	ui.playersSpinBox->show();
-	ui.roundsSpinBox->show();
-	ui.mapHeightSpinBox->show();
-	ui.mapWidthSpinBox->show();
-
-	ui.playersLabel->show();
-	ui.roundsLabel->show();
-	ui.mapHeightLabel->show();
-	ui.mapWidthLabel->show();
-}
-
-void Triviador::HideCustomModeSettings()
-{
-	ui.playersSpinBox->hide();
-	ui.roundsSpinBox->hide();
-	ui.mapHeightSpinBox->hide();
-	ui.mapWidthSpinBox->hide();
-
-	ui.playersLabel->hide();
-	ui.roundsLabel->hide();
-	ui.mapHeightLabel->hide();
-	ui.mapWidthLabel->hide();
-}
-
-void Triviador::TurnAutoExclusiveButtonsForCustomMode(bool state)
-{
-	ui.twoPlayersPushButton->setAutoExclusive(state);
-	ui.threePlayersPushButton->setAutoExclusive(state);
-	ui.fourPlayersPushButton->setAutoExclusive(state);
-
-	ui.customModePushButton->setAutoExclusive(state);
-}
-
-void Triviador::SetCheckedButtonsForLobby(bool state)
-{
-	ui.twoPlayersPushButton->setChecked(state);
-	ui.threePlayersPushButton->setChecked(state);
-	ui.fourPlayersPushButton->setChecked(state);
-
-	ui.customModePushButton->setChecked(state);
 }
