@@ -11,14 +11,14 @@ using namespace sqlite_orm;
 
 /*
 * What should I use between POST and PUT ? Check out the link below to understand the difference:
-* 
+*
 * https://stackoverflow.com/a/630475/12388382
 */
 
 std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch
 	(Storage& storage, uint8_t amountOfQuestions, 
-	std::vector<bool> &m_selectedSingleChoiceQuestions,
-	std::vector<QuestionSingleChoice> &m_randomSingleChoiceQuestionsVector)
+	std::vector<bool>& m_selectedSingleChoiceQuestions, 
+	std::vector<QuestionSingleChoice>& m_randomSingleChoiceQuestionsVector)
 {
 	//initializing the question usage check vector
 	auto countSingleQuestions = storage.count<QuestionSingleChoice>();
@@ -30,7 +30,7 @@ std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch
 	if (m_randomSingleChoiceQuestionsVector.size() <= countSingleQuestions - amountOfQuestions)
 	{
 		std::vector<crow::json::wvalue> questionJson;
-		
+
 		for (uint8_t index = 0; index < amountOfQuestions; index++)
 		{
 			uint8_t randomID = rand() % countSingleQuestions + 1;
@@ -39,11 +39,11 @@ std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch
 			{
 				randomID = rand() % countSingleQuestions + 1;
 			}
-			
+
 			m_randomSingleChoiceQuestionsVector.push_back(storage.get<QuestionSingleChoice>(randomID));
 
 			auto question = m_randomSingleChoiceQuestionsVector.back();
-			
+
 			questionJson.push_back(crow::json::wvalue
 				{
 					{"question", question.GetQuestionText()},
@@ -127,7 +127,7 @@ void SetAllOnlineUsersToOfflineStatus(Storage& storage)
 	if (allUsers.size() > 0)
 	{
 		std::cout << "Found " << allUsers.size() << " online user" << (allUsers.size() > 1 ? "s" : "") << ". Setting " << (allUsers.size() > 1 ? "them" : "it") << " to offline status...\n";
-		
+
 		for (auto& user : allUsers)
 		{
 			user.SetConnectStatus("Offline");
@@ -138,10 +138,10 @@ void SetAllOnlineUsersToOfflineStatus(Storage& storage)
 	}
 }
 
-std::string GenerateRoomNumber(std::string &game_type)
+std::string GenerateRoomNumber(std::string& game_type)
 {
 	std::string room_number = "";
-	
+
 	if (std::regex_match(game_type, std::regex(".*\\d+.*")))
 	{
 		for (const auto& c : game_type)
@@ -163,27 +163,27 @@ std::string GenerateRoomNumber(std::string &game_type)
 
 	std::ostringstream oss;
 	oss << std::put_time(&tm, "%m%d%Y%M%H%S");
-	
+
 	room_number += oss.str();
-	
+
 	return room_number;
 }
 
 int main()
-{	
+{
 	uint8_t amountOfQuestions = 5;
-	
+
 	std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
 	std::vector<bool> m_selectedSingleChoiceQuestions;
 
 	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
 	std::vector<bool> m_selectedMultipleChoiceQuestions;
-	
+
 	std::string dataFilesPath = "resources/data_files";
 
 	std::string filePathForSingleChoiceQuestion = dataFilesPath + "/questions/SingleChoiceQuestions.txt";
 	std::string filePathForMultipleChoiceQuestion = dataFilesPath + "/questions/MultipleChoiceQuestions.txt";
-	
+
 	std::string filePathForDatabase = dataFilesPath + "/database/triviador.sqlite";
 
 	Storage storage = createStorage(filePathForDatabase);
@@ -191,7 +191,7 @@ int main()
 
 	std::vector<crow::json::wvalue> batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
 	std::vector<crow::json::wvalue> batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
-	
+
 	std::ifstream databaseFile(filePathForDatabase);
 
 	if (databaseFile.bad() == false)
@@ -202,8 +202,8 @@ int main()
 
 		std::cout << "\n";
 	}
-	
-	if(databaseFile.good() == true)
+
+	if (databaseFile.good() == true)
 	{
 		std::cout << "Loading the database...\n";
 
@@ -240,17 +240,17 @@ int main()
 			for (const auto& user : storage.iterate<User>())
 			{
 				usersJson.push_back(crow::json::wvalue
-				{
-					{"ID", user.GetID()},
-					{"Username", user.GetUsername()},
-					{"Password", user.GetPassword()},
-					{"Email", user.GetEmail()},
-					{"AccountCreationDate", user.GetAccountCreationDate()},
-					{"TotalScore", user.GetTotalScore()},
-					{"PlayedGames", user.GetPlayedGames()},
-					{"WonGames", user.GetWonGames()},
-					{"ConnectStatus", user.GetConnectStatus()}
-				});
+					{
+						{"ID", user.GetID()},
+						{"Username", user.GetUsername()},
+						{"Password", user.GetPassword()},
+						{"Email", user.GetEmail()},
+						{"AccountCreationDate", user.GetAccountCreationDate()},
+						{"TotalScore", user.GetTotalScore()},
+						{"PlayedGames", user.GetPlayedGames()},
+						{"WonGames", user.GetWonGames()},
+						{"ConnectStatus", user.GetConnectStatus()}
+					});
 			}
 
 			return crow::json::wvalue{ usersJson };
@@ -367,12 +367,12 @@ int main()
 					}
 					else
 					{
-						return crow::response(409,"An account already exists with this username or email!");
+						return crow::response(409, "An account already exists with this username or email!");
 					}
 				}
 				else
 				{
-					return crow::response(404,"Invalid email!");
+					return crow::response(404, "Invalid email!");
 				}
 			}
 			else
@@ -513,19 +513,19 @@ int main()
 	CROW_ROUTE(app, "/findemailduplicate/")(
 		[&storage]
 		(const crow::request& req)
+			{
+				std::string newEmail = req.url_params.get("new_email");
+
+		auto users = storage.get_all<User>(where(c(&User::GetEmail) == newEmail));
+
+		if (users.size() == 1)
 		{
-			std::string newEmail = req.url_params.get("new_email");
-
-			auto users = storage.get_all<User>(where(c(&User::GetEmail) == newEmail));
-
-			if (users.size() == 1)
-			{
-				return crow::response(200, "Email already exists!");
-			}
-			else
-			{
-				return crow::response(404, "Email not found!");
-			}
+			return crow::response(200, "Email already exists!");
+		}
+		else
+		{
+			return crow::response(404, "Email not found!");
+		}
 		});
 
 	auto& findEmailDuplicate = CROW_ROUTE(app, "/findemailduplicate").methods(crow::HTTPMethod::POST);
@@ -556,7 +556,7 @@ int main()
 
 			return crow::json::wvalue{ usersJson };
 		}
-		);
+	);
 
 	auto& getSingleQuestions = CROW_ROUTE(app, "/getSingleQuestions").methods(crow::HTTPMethod::POST);
 	getSingleQuestions(DatabaseStorage(storage));
@@ -572,7 +572,7 @@ int main()
 
 			if(m_selectedSingleChoiceQuestions.size() != countSingleQuestions)
 				m_selectedSingleChoiceQuestions.resize(countSingleQuestions + 1);
-		
+
 			if (m_randomSingleChoiceQuestionsVector.size() <= countSingleQuestions - amountOfQuestions)
 			{
 				for (uint8_t index = 0; index < amountOfQuestions; index++)
@@ -613,7 +613,7 @@ int main()
 	auto& getAmountOfSingleQuestions = CROW_ROUTE(app, "/getAmountOfSingleQuestions").methods(crow::HTTPMethod::POST);
 	getAmountOfSingleQuestions(DatabaseStorage(storage));
 	*/
-	
+
 	// Get the same single choice question - needed to sync generated questions for players
 	CROW_ROUTE(app, "/getASingleChoiceQuestion")(
 		[&storage, &batchOfSingleQuestions]
@@ -631,10 +631,10 @@ int main()
 		{
 			//checking if the batch needs repopulating
 			if (batchOfSingleQuestions.size() <= 1)
-				batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
-			
+			batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
+
 			//after getting / repopulating the batch of questions we select a random one
-			
+
 			//uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
 			uint16_t randomPosition = rand() % batchOfSingleQuestions.size();
 			int index = m_randomSingleChoiceQuestionsVector.size() - randomPosition;
@@ -643,7 +643,7 @@ int main()
 				{
 					//{"question",  m_randomSingleChoiceQuestionsVector.at(randomPosition).GetQuestionText()},
 					//{"correctAnswer", m_randomSingleChoiceQuestionsVector.at(randomPosition).GetAnswer()}
-					
+
 					{"question", m_randomSingleChoiceQuestionsVector.at(index).GetQuestionText()},
 					{"correctAnswer", m_randomSingleChoiceQuestionsVector.at(index).GetAnswer()}
 				});
@@ -654,7 +654,7 @@ int main()
 
 			return crow::response(crow::json::wvalue{ SCQuestion });
 		}
-		);
+	);
 
 	auto& getRandomSingleQuestion = CROW_ROUTE(app, "/getRandomSingleQuestion").methods(crow::HTTPMethod::POST);
 	getRandomSingleQuestion(DatabaseStorage(storage));
@@ -682,10 +682,10 @@ int main()
 
 			return crow::json::wvalue{ usersJson };
 		}
-		);
+	);
 
-		auto& getMultipleQuestions = CROW_ROUTE(app, "/getMultipleQuestions").methods(crow::HTTPMethod::POST);
-		getMultipleQuestions(DatabaseStorage(storage));
+	auto& getMultipleQuestions = CROW_ROUTE(app, "/getMultipleQuestions").methods(crow::HTTPMethod::POST);
+	getMultipleQuestions(DatabaseStorage(storage));
 
 	// Get a specific amount of multiple choice questions 
 	// * BUG maybe from json : the ID of questions isn't get correctly from DB *
@@ -761,7 +761,7 @@ int main()
 		{
 			//checking if the batch needs repopulating
 			if (batchOfMultipleQuestions.size() <= 1)
-				batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
+			batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
 
 			//after getting / repopulating the batch of questions we select a random one
 			uint16_t randomPosition = rand() % batchOfMultipleQuestions.size();
@@ -783,7 +783,7 @@ int main()
 
 			return crow::response(crow::json::wvalue{ MCQuestion });
 		}
-		);
+	);
 
 	auto& getRandomMultipleQuestion = CROW_ROUTE(app, "/getRandomMultipleQuestion").methods(crow::HTTPMethod::POST);
 	getRandomMultipleQuestion(DatabaseStorage(storage));
@@ -827,35 +827,35 @@ int main()
 	auto& getAllLobbiesDetails = CROW_ROUTE(app, "/getAlllobbiesDetails").methods(crow::HTTPMethod::POST);
 	getAllLobbiesDetails(DatabaseStorage(storage));
 
-	// Check if a lobby 
+	// Get the first available lobby for the player by game type
 	CROW_ROUTE(app, "/getAvailableLobby/")(
 		[&storage]
 		(const crow::request& req)
 		{
 			std::string game_type = req.url_params.get("gameType");
-			
-		auto findLobby = storage.get_all<Lobby>(where(c(&Lobby::GetGameType) == game_type and (c(&Lobby::GetGameStatus) == "Room created" or c(&Lobby::GetGameStatus) == "Waiting for players")));
+
+			auto findLobby = storage.get_all<Lobby>(where(c(&Lobby::GetGameType) == game_type and (c(&Lobby::GetGameStatus) == "Room created" or c(&Lobby::GetGameStatus) == "Waiting for players")));
 
 			if(findLobby.size() == 0)
 				return crow::response(404, "No available lobby found!");
 			else
 			{
 				crow::json::wvalue firstAvailableLobby = crow::json::wvalue
-					{
-						{"lobbyID", findLobby[0].GetLobbyID()},
-						{"gameType", findLobby[0].GetGameType()},
-						{"gameStatus", findLobby[0].GetGameStatus()},
-						{"roomNumber", findLobby[0].GetRoomNumber()},
-						{"currentNumberOfPlayers", findLobby[0].GetCurrentNumberOfPlayers()},
-						{"maximNumberOfPlayers", findLobby[0].GetMaximNumberOfPlayers()},
-						{"numberOfReadyPlayers", findLobby[0].GetNumberOfReadyPlayers()},
-						{"player1", findLobby[0].GetPlayer1()},
-						{"player2", findLobby[0].GetPlayer2()},
-						{"player3", findLobby[0].GetPlayer3()},
-						{"player4", findLobby[0].GetPlayer4()},
-						{"player5", findLobby[0].GetPlayer5()},
-						{"player6", findLobby[0].GetPlayer6()}
-					};
+				{
+					{"lobbyID", findLobby[0].GetLobbyID()},
+					{"gameType", findLobby[0].GetGameType()},
+					{"gameStatus", findLobby[0].GetGameStatus()},
+					{"roomNumber", findLobby[0].GetRoomNumber()},
+					{"currentNumberOfPlayers", findLobby[0].GetCurrentNumberOfPlayers()},
+					{"maximNumberOfPlayers", findLobby[0].GetMaximNumberOfPlayers()},
+					{"numberOfReadyPlayers", findLobby[0].GetNumberOfReadyPlayers()},
+					{"player1", findLobby[0].GetPlayer1()},
+					{"player2", findLobby[0].GetPlayer2()},
+					{"player3", findLobby[0].GetPlayer3()},
+					{"player4", findLobby[0].GetPlayer4()},
+					{"player5", findLobby[0].GetPlayer5()},
+					{"player6", findLobby[0].GetPlayer6()}
+				};
 
 				return crow::response(crow::json::wvalue{ firstAvailableLobby });
 			}
@@ -906,7 +906,7 @@ int main()
 			std::string game_status = "Room created";
 			//std::string room_number = "RANDOM_GENERATED_NUMBER";
 			std::string room_number = GenerateRoomNumber(game_type);
-			
+
 
 			if (game_type == "2players")
 			{
@@ -949,7 +949,7 @@ int main()
 			std::string lobbyID = req.url_params.get("lobbyID");
 			std::string firstEmptyPlayerSeatID = req.url_params.get("firstEmptyPlayerSeatID");
 			std::string playerUsername = req.url_params.get("playerUsername");
-			
+
 			try {
 				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
 
@@ -1027,7 +1027,6 @@ int main()
 			catch (std::system_error e) {
 				return crow::response(404, "Lobby not found!");
 			}
-
 		});
 
 	// Get the first empty player seat ID from a lobby by ID
@@ -1113,7 +1112,9 @@ int main()
 						lobby.SetPlayer6("");
 
 					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
-					lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() - 1);
+
+					if (lobby.GetNumberOfReadyPlayers() > 0)
+						lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() - 1);
 
 					storage.update(lobby);
 
@@ -1127,7 +1128,6 @@ int main()
 			catch (std::system_error e) {
 				return crow::response(404, "Lobby not found!");
 			}
-
 		});
 
 	auto& leaveLobbyForced = CROW_ROUTE(app, "/leaveLobbyForced").methods(crow::HTTPMethod::POST);
@@ -1143,11 +1143,18 @@ int main()
 			try {
 				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
 
-				lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() + 1);
+				if (lobby.GetMaximNumberOfPlayers() > lobby.GetNumberOfReadyPlayers())
+				{
+					lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() + 1);
 
-				storage.update(lobby);
+					storage.update(lobby);
 
-				return crow::response("Number of ready players increased!");
+					return crow::response("Number of ready players increased!");
+				}
+				else
+				{
+					return crow::response(208, "Maximum number of ready players reached!");
+				}
 			}
 			catch (std::system_error e) {
 				return crow::response(404, "Lobby not found!");
@@ -1156,6 +1163,35 @@ int main()
 
 	auto& increaseNumberOfReadyPlayers = CROW_ROUTE(app, "/increaseNumberOfReadyPlayers").methods(crow::HTTPMethod::POST);
 	increaseNumberOfReadyPlayers(DatabaseStorage(storage));
+
+	// Route for decreasing the number of ready players
+	CROW_ROUTE(app, "/resetNumberOfReadyPlayers/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string lobbyID = req.url_params.get("lobbyID");
+
+			try {
+				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+
+				if (lobby.GetNumberOfReadyPlayers() == 0)
+					return crow::response(208, "Number of ready players is already 0!");
+				else
+				{
+					lobby.SetNumberOfReadyPlayers(0);
+
+					storage.update(lobby);
+
+					return crow::response("Number of ready players has been reset!");
+				}
+			}
+			catch (std::system_error e) {
+				return crow::response(404, "Lobby not found!");
+			}
+		});
+
+	auto& resetNumberOfReadyPlayers = CROW_ROUTE(app, "/resetNumberOfReadyPlayers").methods(crow::HTTPMethod::POST);
+	resetNumberOfReadyPlayers(DatabaseStorage(storage));
 
 	// Route to see if a lobby is ready to begin
 	CROW_ROUTE(app, "/isLobbyReady/")(

@@ -15,6 +15,8 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 	m_ip = ip;
 	m_playerUsername = playerUsername;
 
+	m_isLobbyReadyToBegin = false;
+
 	ui.startGameLobbyPushButton->hide();
 
 	ui.changeUsernameLineEdit->hide();
@@ -658,10 +660,26 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 				ui.startGameLobbyPushButton->show();
 
 			ui.startGameLobbyPushButton->setEnabled(true);
+
+			m_isLobbyReadyToBegin = true;
 		}
-		else
+		else if (m_isLobbyReadyToBegin == true)
 		{
-			ui.startGameLobbyPushButton->setDisabled(true);
+			std::string link = m_ip + "/resetNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
+
+			cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+			if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+			{
+				ui.startGameLobbyPushButton->setDisabled(true);
+
+				ui.startGameLobbyPushButton->hide();
+
+				ui.readyGameLobbyPushButton->setDisabled(false);
+				ui.backToLobbyPushButton->setDisabled(false);
+			}
+
+			m_isLobbyReadyToBegin = false;
 		}
 	}
 

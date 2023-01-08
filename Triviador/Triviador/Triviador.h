@@ -57,8 +57,9 @@ private slots:
 
     void on_readyGameLobbyPushButton_released();
     void on_startGameLobbyPushButton_released();
-    
 
+    void TimerMethodToUpdateLobbyDetails();
+    
 signals:
     void BackToMenuSignal();
     void BackToLoginSignal();
@@ -81,7 +82,6 @@ private:
     /*LOBBY DETAILS*/
     void UpdateLobbiesDetails();
     void UpdateCurrentLobbyPlayers();
-    void TimerMethodToUpdateLobbyDetails();
 
     bool CheckIfLobbyIsReadyToBegin();
     void SetLobbyDetails(const std::string& lobbyType);
@@ -101,6 +101,8 @@ private:
     uint8_t m_firstEmptyPlayerSeatID;
 
     int lobbyID;
+
+    bool m_isLobbyReadyToBegin;
 
 private:
     QPushButton* buttonSender;
