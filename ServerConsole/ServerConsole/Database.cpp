@@ -19,12 +19,12 @@ void DatabaseStorage::Initialize()
 	m_database.sync_schema();
 
 	auto initQuestionsCount = m_database.count<User>();
-	
+
 	if (initQuestionsCount == 0)
 	{
 		m_questions.GetSingleChoiceQuestionsFromFile(m_filePathForSingleChoiceQuestion);
 		m_questions.GetMultipleChoiceQuestionsFromFile(m_filePathForMultipeChoiceQuestion);
-		
+
 		PopulateDatabaseWithData();
 
 		std::cout << "Database was successfully created!\n";
@@ -61,7 +61,7 @@ crow::response DatabaseStorage::operator()(const crow::request& request) const
 	else
 	{
 		return crow::response(400);
-	}	
+	}
 }
 
 void DatabaseStorage::PopulateDatabaseWithData()
@@ -83,7 +83,7 @@ void DatabaseStorage::PopulateDatabaseWithData()
 		multipleChoiceQuestionsVector.emplace_back(QuestionMultipleChoice{ 0, question.GetQuestionText(), question.GetAnswers()[0], question.GetAnswers()[1], question.GetAnswers()[2], question.GetAnswers()[3], question.GetAnswers()[4] });
 
 	m_database.insert_range(multipleChoiceQuestionsVector.begin(), multipleChoiceQuestionsVector.end());
-		
+
 	m_database.insert(User(0, "Admin", "Admin28!", "admin@blue-zone.ro", "08/10/2022 at 12:12:00", "999999999", "5", "2", "Offline"));
 	m_database.insert(User(0, "Test", "test", "test@blue-zone.ro", "01/01/2023 at 12:00:00", "0", "0", "0", "Offline"));
 	m_database.insert(User(0, "Andre", "andre", "contact@blue-zone.ro", "01/01/2024 at 12:00:00", "0", "0", "0", "Offline"));
@@ -92,4 +92,8 @@ void DatabaseStorage::PopulateDatabaseWithData()
 	m_database.insert(Lobby(0, "3players", "Room created", "3P_12302022120600", 0, 3, 0, "", "", "", "", "", ""));
 	m_database.insert(Lobby(0, "4players", "Room created", "4P_12302022130700", 0, 4, 0, "", "", "", "", "", ""));
 	m_database.insert(Lobby(0, "customMode", "Room created", "CM_12302022140800", 0, 6, 0, "", "", "", "", "", ""));
+
+	m_database.insert(Match(0, "2P_12302022110500", "Admin", 2, "Andre", "Admin", "", "", "", ""));
+	m_database.insert(Match(0, "3P_12302022120600", "Andre", 2, "Andre", "Admin", "Test", "", "", ""));
+	m_database.insert(Match(0, "2P_12302022110501", "Test", 2, "Test", "Admin", "", "", "", ""));
 }

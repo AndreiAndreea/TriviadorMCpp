@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="Match.cpp" />
     <ClCompile Include="QuestionMultipleChoice.cpp" />
     <ClCompile Include="Questions.cpp" />
     <ClCompile Include="QuestionSingleChoice.cpp" />
@@ -140,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Database.h" />
     <ClInclude Include="Lobby.h" />
+    <ClInclude Include="Match.h" />
     <ClInclude Include="QuestionMultipleChoice.h" />
     <ClInclude Include="Questions.h" />
     <ClInclude Include="QuestionSingleChoice.h" />

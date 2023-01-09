@@ -63,6 +63,9 @@
     <ClCompile Include="Lobby.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Match.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files\Questions</Filter>
     </ClInclude>
     <ClInclude Include="Lobby.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Match.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
