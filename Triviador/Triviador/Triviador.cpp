@@ -43,7 +43,7 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 	ui.roundsLabel->hide();
 	ui.mapHeightLabel->hide();
 	ui.mapWidthLabel->hide();
-	
+
 	ui.updateUserDetailsMessageLabel->hide();
 
 	ui.joinLobbyPushButton->hide();
@@ -55,7 +55,7 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 
 Triviador::~Triviador()
 {
-	
+
 }
 
 /*MENU*/
@@ -73,7 +73,7 @@ void Triviador::on_playGamePushButton_released()
 	SetCheckedButtonsForLobby(false);
 
 	ui.joinLobbyPushButton->hide();
-	
+
 	TimerMethodToUpdateLobbyDetails();
 
 	connect(timerToUpdateLobbyDetails, SIGNAL(timeout()), this, SLOT(TimerMethodToUpdateLobbyDetails()));
@@ -146,7 +146,7 @@ void Triviador::UpdateGamesHistory()
 {
 	ui.gamesHistoryTableWidget->setRowCount(6);
 	ui.gamesHistoryTableWidget->setColumnCount(10);
-	
+
 	QTableWidgetItem* item0 = new QTableWidgetItem("game_type");
 	ui.gamesHistoryTableWidget->setItem(0, 0, item0);
 	QTableWidgetItem* item1 = new QTableWidgetItem("room_number");
@@ -167,38 +167,38 @@ void Triviador::UpdateGamesHistory()
 	ui.gamesHistoryTableWidget->setItem(0, 8, item8);
 	QTableWidgetItem* item9 = new QTableWidgetItem("winner");
 	ui.gamesHistoryTableWidget->setItem(0, 9, item9);
-	
+
 	//the last five games will be displayed
 	for (int i = 1; i < 6; i++) {
 		std::string text = std::to_string(i + 1) + "players";
 		QTableWidgetItem* item0 = new QTableWidgetItem(text.c_str());
 		ui.gamesHistoryTableWidget->setItem(i, 0, item0);
-		
+
 		text = std::to_string(i + 1) + "P_" + std::to_string(i);
 		QTableWidgetItem* item1 = new QTableWidgetItem(text.c_str());
 		ui.gamesHistoryTableWidget->setItem(i, 1, item1);
-		
+
 		QTableWidgetItem* item2 = new QTableWidgetItem(std::to_string(i + 1).c_str());
 		ui.gamesHistoryTableWidget->setItem(i, 2, item2);
-		
+
 		QTableWidgetItem* item3 = new QTableWidgetItem("Ana");
 		ui.gamesHistoryTableWidget->setItem(i, 3, item3);
-		
+
 		QTableWidgetItem* item4 = new QTableWidgetItem("Maria");
 		ui.gamesHistoryTableWidget->setItem(i, 4, item4);
-		
+
 		QTableWidgetItem* item5 = new QTableWidgetItem("Andreea");
 		ui.gamesHistoryTableWidget->setItem(i, 5, item5);
-		
+
 		QTableWidgetItem* item6 = new QTableWidgetItem("Theo");
 		ui.gamesHistoryTableWidget->setItem(i, 6, item6);
-		
+
 		QTableWidgetItem* item7 = new QTableWidgetItem("Cosmin");
 		ui.gamesHistoryTableWidget->setItem(i, 7, item7);
-		
+
 		QTableWidgetItem* item8 = new QTableWidgetItem("-");
 		ui.gamesHistoryTableWidget->setItem(i, 8, item8);
-		
+
 		QTableWidgetItem* item9 = new QTableWidgetItem("Maria");
 		ui.gamesHistoryTableWidget->setItem(i, 9, item9);
 	}
@@ -283,7 +283,7 @@ void Triviador::on_changeEmailPushButton_released()
 
 	std::string newEmail = ui.changeEmailLineEdit->text().toLocal8Bit().constData();
 
-	if (isValidEmail(newEmail) == true) 
+	if (isValidEmail(newEmail) == true)
 	{
 		std::string link = m_ip + "/findemailduplicate/?new_email=" + newEmail;
 
@@ -327,7 +327,7 @@ void Triviador::on_saveProfileSettingsPushButton_released()
 	std::string newUsername = ui.changeUsernameLineEdit->text().toStdString();
 	std::string newPassword = ui.changePasswordLineEdit->text().toStdString();
 	std::string newEmail = ui.changeEmailLineEdit->text().toStdString();
-	
+
 	std::string link = m_ip + "/updateuser/?current_username=" + currentUsername + "&new_username=" + newUsername + "&new_password=" + newPassword + "&new_email=" + newEmail;
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
@@ -389,7 +389,7 @@ void Triviador::on_twoPlayersPushButton_released()
 	if (ui.twoPlayersPushButton->autoExclusive() == false)
 		TurnAutoExclusiveButtonsForCustomMode(true);
 
-	if(ui.playersSpinBox->isHidden() == false)
+	if (ui.playersSpinBox->isHidden() == false)
 		HideCustomModeSettings();
 
 	ui.joinLobbyPushButton->show();
@@ -401,7 +401,7 @@ void Triviador::on_threePlayersPushButton_released()
 {
 	if (ui.twoPlayersPushButton->autoExclusive() == false)
 		TurnAutoExclusiveButtonsForCustomMode(true);
-	
+
 	if (ui.playersSpinBox->isHidden() == false)
 		HideCustomModeSettings();
 
@@ -414,7 +414,7 @@ void Triviador::on_fourPlayersPushButton_released()
 {
 	if (ui.twoPlayersPushButton->autoExclusive() == false)
 		TurnAutoExclusiveButtonsForCustomMode(true);
-	
+
 	if (ui.playersSpinBox->isHidden() == false)
 		HideCustomModeSettings();
 
@@ -445,7 +445,7 @@ void Triviador::on_customModePushButton_released()
 {
 	if (ui.twoPlayersPushButton->autoExclusive() == false)
 		TurnAutoExclusiveButtonsForCustomMode(true);
-	
+
 	ShowCustomModeSettings();
 
 	ui.joinLobbyPushButton->show();
@@ -499,6 +499,9 @@ void Triviador::on_joinLobbyPushButton_released()
 	ui.stackedWidget->setCurrentIndex(4);
 
 	ui.playersListWidget->clear();
+	
+	ui.progressBar->hide();
+	ui.gameStartLabel->hide();
 
 	QString buttonText = buttonSender->text(); // retrive the text from the button clicked
 
@@ -513,7 +516,7 @@ void Triviador::on_joinLobbyPushButton_released()
 		lobbyType = "2players";
 
 		m_numberOfPlayers = 2;
-	}	
+	}
 	else if (buttonText == "3 players")
 	{
 		lobbyType = "3players";
@@ -588,7 +591,7 @@ void Triviador::on_joinLobbyPushButton_released()
 	{
 		emit ServerCrashedSignalTriviador();
 	}
-	
+
 	ui.playersDetailsLobbyLabel->setText(buttonText + " lobby");
 }
 
@@ -622,6 +625,8 @@ void Triviador::on_readyGameLobbyPushButton_released()
 	ui.readyGameLobbyPushButton->setDisabled(true);
 	ui.backToLobbyPushButton->setDisabled(true);
 
+	StartTransferToGameTimer();
+
 	std::string link = m_ip + "/increaseNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
@@ -633,7 +638,7 @@ void Triviador::on_readyGameLobbyPushButton_released()
 }
 
 void Triviador::on_startGameLobbyPushButton_released()
-{	
+{
 	triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
 
 	ui.stackedWidget->insertWidget(4, triviadorGame);
@@ -653,13 +658,15 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 	else if (ui.stackedWidget->currentIndex() == 4)
 	{
 		UpdateCurrentLobbyPlayers();
-		
+
 		if (CheckIfLobbyIsReadyToBegin() == true)
 		{
-			if (ui.startGameLobbyPushButton->isHidden() == true)
-				ui.startGameLobbyPushButton->show();
+			//commented because we have a new method of starting the game
 
-			ui.startGameLobbyPushButton->setEnabled(true);
+			//if (ui.startGameLobbyPushButton->isHidden() == true)
+			//	ui.startGameLobbyPushButton->show();
+
+			//ui.startGameLobbyPushButton->setEnabled(true);
 
 			m_isLobbyReadyToBegin = true;
 		}
@@ -684,12 +691,53 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 	}
 
 	if (timerToUpdateLobbyDetails->remainingTimeAsDuration() <= std::chrono::milliseconds(1))
-	{		
+	{
 		timerToUpdateLobbyDetails->stop();
 
 		timerToUpdateLobbyDetails->disconnect();
 
 		TimerMethodToUpdateLobbyDetails();
+	}
+}
+
+void Triviador::StartTransferToGameTimer()
+{
+	ui.progressBar->setValue(0);
+
+	transferToGameTimer = new QTimer(this);
+
+	transferToGameTimer->setInterval(30);
+	transferToGameTimer->setTimerType(Qt::PreciseTimer);
+
+	connect(transferToGameTimer, SIGNAL(timeout()), this, SLOT(OnTransferToGameTimerTick()));
+
+	transferToGameTimer->start();
+}
+
+void Triviador::OnTransferToGameTimerTick()
+{
+	if (CheckIfLobbyIsReadyToBegin() == true)
+	{
+		ui.progressBar->show();
+		ui.gameStartLabel->show();
+		
+		if (ui.progressBar->value() < 100)
+			ui.progressBar->setValue(ui.progressBar->value() + 1);
+		else
+		{
+			triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
+
+			ui.stackedWidget->insertWidget(4, triviadorGame);
+
+			ui.stackedWidget->setCurrentIndex(4);
+
+			connect(triviadorGame, SIGNAL(BackToLoginSignal()), this, SLOT(CloseApplicationSlotFromGame()));
+			connect(triviadorGame, SIGNAL(ServerCrashedSignalTriviador()), this, SLOT(ServerCrashedSlot()));
+
+			transferToGameTimer->stop();
+
+			transferToGameTimer->disconnect();
+		}
 	}
 }
 
@@ -757,7 +805,7 @@ bool Triviador::CheckIfLobbyIsReadyToBegin()
 }
 
 void Triviador::SetLobbyDetails(const std::string& lobbyType)
-{	
+{
 	std::string link = m_ip + "/getAvailableLobby/?gameType=" + lobbyType;
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
@@ -771,19 +819,19 @@ void Triviador::SetLobbyDetails(const std::string& lobbyType)
 			ui.currentNumberOfPlayers2Label->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
 			ui.maximNumberOfPlayers2Label->setText("/ " + QString(std::to_string(availableLobby["maximNumberOfPlayers"].i()).c_str()));
 		}
-		
+
 		if (lobbyType == "3players")
 		{
 			ui.currentNumberOfPlayers3Label->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
 			ui.maximNumberOfPlayers3Label->setText("/ " + QString(std::to_string(availableLobby["maximNumberOfPlayers"].i()).c_str()));
 		}
-		
+
 		if (lobbyType == "4players")
 		{
 			ui.currentNumberOfPlayers4Label->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
 			ui.maximNumberOfPlayers4Label->setText("/ " + QString(std::to_string(availableLobby["maximNumberOfPlayers"].i()).c_str()));
 		}
-		
+
 		if (lobbyType == "customMode")
 		{
 			ui.currentNumberOfPlayersCustomModeLabel->setText(std::to_string(availableLobby["currentNumberOfPlayers"].i()).c_str());
@@ -795,7 +843,7 @@ void Triviador::SetLobbyDetails(const std::string& lobbyType)
 		CreateNewLobby(lobbyType);
 	}
 	else
-	{		
+	{
 		emit ServerCrashedSignalTriviador();
 	}
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1093</width>
-    <height>724</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,26 +17,26 @@
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>20</x>
       <y>0</y>
-      <width>1280</width>
-      <height>720</height>
+      <width>1031</width>
+      <height>551</height>
      </rect>
     </property>
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="w0_menu">
      <widget class="QPushButton" name="profilePushButton">
       <property name="geometry">
        <rect>
-        <x>600</x>
-        <y>310</y>
+        <x>470</x>
+        <y>250</y>
         <width>75</width>
-        <height>24</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
@@ -46,10 +46,10 @@
      <widget class="QPushButton" name="playGamePushButton">
       <property name="geometry">
        <rect>
-        <x>600</x>
-        <y>260</y>
+        <x>470</x>
+        <y>200</y>
         <width>75</width>
-        <height>24</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
@@ -59,10 +59,10 @@
      <widget class="QPushButton" name="quitPushButton">
       <property name="geometry">
        <rect>
-        <x>600</x>
-        <y>360</y>
+        <x>470</x>
+        <y>300</y>
         <width>75</width>
-        <height>24</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
@@ -291,7 +291,7 @@
        <rect>
         <x>20</x>
         <y>270</y>
-        <width>1071</width>
+        <width>1051</width>
         <height>301</height>
        </rect>
       </property>
@@ -301,8 +301,8 @@
      <widget class="QLineEdit" name="changeUsernameLineEdit">
       <property name="geometry">
        <rect>
-        <x>590</x>
-        <y>250</y>
+        <x>400</x>
+        <y>180</y>
         <width>131</width>
         <height>21</height>
        </rect>
@@ -311,8 +311,8 @@
      <widget class="QPushButton" name="changeEmailPushButton">
       <property name="geometry">
        <rect>
-        <x>440</x>
-        <y>330</y>
+        <x>250</x>
+        <y>260</y>
         <width>131</width>
         <height>24</height>
        </rect>
@@ -324,8 +324,8 @@
      <widget class="QLineEdit" name="changeEmailLineEdit">
       <property name="geometry">
        <rect>
-        <x>590</x>
-        <y>330</y>
+        <x>400</x>
+        <y>260</y>
         <width>131</width>
         <height>21</height>
        </rect>
@@ -334,8 +334,8 @@
      <widget class="QPushButton" name="changeUsernamePushButton">
       <property name="geometry">
        <rect>
-        <x>440</x>
-        <y>250</y>
+        <x>250</x>
+        <y>180</y>
         <width>131</width>
         <height>24</height>
        </rect>
@@ -347,8 +347,8 @@
      <widget class="QPushButton" name="changePasswordPushButton">
       <property name="geometry">
        <rect>
-        <x>440</x>
-        <y>290</y>
+        <x>250</x>
+        <y>220</y>
         <width>131</width>
         <height>24</height>
        </rect>
@@ -360,8 +360,8 @@
      <widget class="QPushButton" name="saveProfileSettingsPushButton">
       <property name="geometry">
        <rect>
-        <x>1120</x>
-        <y>620</y>
+        <x>760</x>
+        <y>440</y>
         <width>131</width>
         <height>24</height>
        </rect>
@@ -373,8 +373,8 @@
      <widget class="QLineEdit" name="changePasswordLineEdit">
       <property name="geometry">
        <rect>
-        <x>590</x>
-        <y>290</y>
+        <x>400</x>
+        <y>220</y>
         <width>131</width>
         <height>21</height>
        </rect>
@@ -383,8 +383,8 @@
      <widget class="QLabel" name="updateUserDetailsMessageLabel">
       <property name="geometry">
        <rect>
-        <x>590</x>
-        <y>370</y>
+        <x>400</x>
+        <y>300</y>
         <width>121</width>
         <height>91</height>
        </rect>
@@ -399,8 +399,8 @@
      <widget class="QPushButton" name="backToProfileButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>620</y>
+        <x>140</x>
+        <y>450</y>
         <width>131</width>
         <height>24</height>
        </rect>
@@ -412,8 +412,8 @@
      <widget class="QLabel" name="changeUsernameMessageLabel">
       <property name="geometry">
        <rect>
-        <x>740</x>
-        <y>250</y>
+        <x>550</x>
+        <y>180</y>
         <width>521</width>
         <height>16</height>
        </rect>
@@ -425,8 +425,8 @@
      <widget class="QLabel" name="changePasswordMessageLabel">
       <property name="geometry">
        <rect>
-        <x>740</x>
-        <y>290</y>
+        <x>550</x>
+        <y>220</y>
         <width>521</width>
         <height>16</height>
        </rect>
@@ -438,8 +438,8 @@
      <widget class="QLabel" name="changeEmailMessageLabel">
       <property name="geometry">
        <rect>
-        <x>740</x>
-        <y>330</y>
+        <x>550</x>
+        <y>260</y>
         <width>521</width>
         <height>16</height>
        </rect>
@@ -453,8 +453,8 @@
      <widget class="QPushButton" name="twoPlayersPushButton">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>120</y>
+        <x>120</x>
+        <y>70</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -487,8 +487,8 @@
      <widget class="QLabel" name="mapHeightLabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>410</y>
+        <x>200</x>
+        <y>360</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -500,8 +500,8 @@
      <widget class="QSpinBox" name="roundsSpinBox">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>380</y>
+        <x>140</x>
+        <y>330</y>
         <width>42</width>
         <height>22</height>
        </rect>
@@ -510,8 +510,8 @@
      <widget class="QPushButton" name="customModePushButton">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>240</y>
+        <x>120</x>
+        <y>190</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -532,8 +532,8 @@
      <widget class="QLabel" name="gameModeLabel">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>80</y>
+        <x>100</x>
+        <y>30</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -545,8 +545,8 @@
      <widget class="QSpinBox" name="mapHeightSpinBox">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>410</y>
+        <x>140</x>
+        <y>360</y>
         <width>42</width>
         <height>22</height>
        </rect>
@@ -555,8 +555,8 @@
      <widget class="QLabel" name="mapWidthLabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>440</y>
+        <x>200</x>
+        <y>390</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -568,8 +568,8 @@
      <widget class="QSpinBox" name="playersSpinBox">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>350</y>
+        <x>140</x>
+        <y>300</y>
         <width>41</width>
         <height>22</height>
        </rect>
@@ -578,8 +578,8 @@
      <widget class="QLabel" name="roundsLabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>380</y>
+        <x>200</x>
+        <y>330</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -591,8 +591,8 @@
      <widget class="QPushButton" name="fourPlayersPushButton">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>200</y>
+        <x>120</x>
+        <y>150</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -613,8 +613,8 @@
      <widget class="QPushButton" name="threePlayersPushButton">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>160</y>
+        <x>120</x>
+        <y>110</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -635,8 +635,8 @@
      <widget class="QLabel" name="playersLabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>350</y>
+        <x>200</x>
+        <y>300</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -648,8 +648,8 @@
      <widget class="QSpinBox" name="mapWidthSpinBox">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>440</y>
+        <x>140</x>
+        <y>390</y>
         <width>42</width>
         <height>22</height>
        </rect>
@@ -658,8 +658,8 @@
      <widget class="QLabel" name="twoPlayersLobbyLabel">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>120</y>
+        <x>260</x>
+        <y>70</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -671,8 +671,8 @@
      <widget class="QLabel" name="threePlayersLobbyLabel">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>160</y>
+        <x>260</x>
+        <y>110</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -684,8 +684,8 @@
      <widget class="QLabel" name="fourPlayersLobbyLabel">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>200</y>
+        <x>260</x>
+        <y>150</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -697,8 +697,8 @@
      <widget class="QPushButton" name="joinLobbyPushButton">
       <property name="geometry">
        <rect>
-        <x>1180</x>
-        <y>620</y>
+        <x>790</x>
+        <y>480</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -710,8 +710,8 @@
      <widget class="QPushButton" name="backToMenuPushButton_2">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>620</y>
+        <x>60</x>
+        <y>480</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -723,8 +723,8 @@
      <widget class="QLabel" name="currentNumberOfPlayers2Label">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>120</y>
+        <x>50</x>
+        <y>70</y>
         <width>20</width>
         <height>20</height>
        </rect>
@@ -736,8 +736,8 @@
      <widget class="QLabel" name="maximNumberOfPlayers2Label">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>120</y>
+        <x>60</x>
+        <y>70</y>
         <width>20</width>
         <height>21</height>
        </rect>
@@ -749,8 +749,8 @@
      <widget class="QLabel" name="maximNumberOfPlayers3Label">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>160</y>
+        <x>60</x>
+        <y>110</y>
         <width>20</width>
         <height>21</height>
        </rect>
@@ -762,8 +762,8 @@
      <widget class="QLabel" name="currentNumberOfPlayers3Label">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>160</y>
+        <x>50</x>
+        <y>110</y>
         <width>20</width>
         <height>20</height>
        </rect>
@@ -775,8 +775,8 @@
      <widget class="QLabel" name="currentNumberOfPlayers4Label">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>200</y>
+        <x>50</x>
+        <y>150</y>
         <width>20</width>
         <height>20</height>
        </rect>
@@ -788,8 +788,8 @@
      <widget class="QLabel" name="maximNumberOfPlayers4Label">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>200</y>
+        <x>60</x>
+        <y>150</y>
         <width>20</width>
         <height>21</height>
        </rect>
@@ -801,8 +801,8 @@
      <widget class="QLabel" name="maximNumberOfPlayersCustomModeLabel">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>240</y>
+        <x>60</x>
+        <y>190</y>
         <width>20</width>
         <height>21</height>
        </rect>
@@ -814,8 +814,8 @@
      <widget class="QLabel" name="currentNumberOfPlayersCustomModeLabel">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>240</y>
+        <x>50</x>
+        <y>190</y>
         <width>20</width>
         <height>20</height>
        </rect>
@@ -827,8 +827,8 @@
      <widget class="QLabel" name="customModeLobbyLabel">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>240</y>
+        <x>260</x>
+        <y>190</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -855,8 +855,8 @@
      <widget class="QPushButton" name="backToLobbyPushButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>620</y>
+        <x>50</x>
+        <y>490</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -995,6 +995,44 @@
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;lobby ID&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>320</y>
+        <width>271</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>1</number>
+      </property>
+      <property name="textVisible">
+       <bool>false</bool>
+      </property>
+      <property name="textDirection">
+       <enum>QProgressBar::BottomToTop</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="gameStartLabel">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>290</y>
+        <width>121</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string> All players are ready, the game is starting</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
