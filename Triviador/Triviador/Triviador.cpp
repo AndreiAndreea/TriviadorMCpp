@@ -17,6 +17,8 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 
 	m_isLobbyReadyToBegin = false;
 
+	m_startingGame = GameState::NotStarted;
+
 	ui.startGameLobbyPushButton->hide();
 
 	ui.changeUsernameLineEdit->hide();
@@ -625,8 +627,6 @@ void Triviador::on_readyGameLobbyPushButton_released()
 	ui.readyGameLobbyPushButton->setDisabled(true);
 	ui.backToLobbyPushButton->setDisabled(true);
 
-	StartTransferToGameTimer();
-
 	std::string link = m_ip + "/increaseNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
@@ -639,11 +639,11 @@ void Triviador::on_readyGameLobbyPushButton_released()
 
 void Triviador::on_startGameLobbyPushButton_released()
 {
-	triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
+	//triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
 
-	ui.stackedWidget->insertWidget(4, triviadorGame);
+	//ui.stackedWidget->insertWidget(5, triviadorGame);
 
-	ui.stackedWidget->setCurrentIndex(4);
+	//ui.stackedWidget->setCurrentIndex(4);
 }
 
 void Triviador::TimerMethodToUpdateLobbyDetails()
@@ -659,34 +659,61 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 	{
 		UpdateCurrentLobbyPlayers();
 
-		if (CheckIfLobbyIsReadyToBegin() == true)
+		if (m_startingGame == GameState::InProgress)
 		{
-			//commented because we have a new method of starting the game
-
-			//if (ui.startGameLobbyPushButton->isHidden() == true)
-			//	ui.startGameLobbyPushButton->show();
-
-			//ui.startGameLobbyPushButton->setEnabled(true);
-
-			m_isLobbyReadyToBegin = true;
+			StartTransferToGameTimer();
+			
+			m_startingGame = GameState::Started;
 		}
-		else if (m_isLobbyReadyToBegin == true)
+		else
 		{
-			std::string link = m_ip + "/resetNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
-
-			cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
-
-			if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+			if (m_startingGame != GameState::Started)
 			{
-				ui.startGameLobbyPushButton->setDisabled(true);
+				if (CheckIfLobbyIsReadyToBegin() == true)
+				{
+					//commented because we have a new method of starting the game
 
-				ui.startGameLobbyPushButton->hide();
+					m_startingGame = GameState::InProgress;
 
-				ui.readyGameLobbyPushButton->setDisabled(false);
-				ui.backToLobbyPushButton->setDisabled(false);
+					//if (ui.startGameLobbyPushButton->isHidden() == true)
+					//	ui.startGameLobbyPushButton->show();
+
+					//ui.startGameLobbyPushButton->setEnabled(true);
+
+					m_isLobbyReadyToBegin = true;
+				}
 			}
+			/*else if (m_isLobbyReadyToBegin == true)*/
+			else
+			{
+				if (CheckIfLobbyIsReadyToBegin() == false)
+				{
+					std::string link = m_ip + "/resetNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
 
-			m_isLobbyReadyToBegin = false;
+					cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+					if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+					{
+						//ui.startGameLobbyPushButton->setDisabled(true);
+
+						//ui.startGameLobbyPushButton->hide();
+
+						ui.readyGameLobbyPushButton->setDisabled(false);
+						ui.backToLobbyPushButton->setDisabled(false);
+					}
+
+					m_isLobbyReadyToBegin = false;
+
+					m_startingGame = GameState::NotStarted;
+
+					transferToGameTimer->stop();
+
+					transferToGameTimer->disconnect();
+					
+					ui.progressBar->hide();
+					ui.gameStartLabel->hide();
+				}
+			}
 		}
 	}
 
@@ -704,8 +731,6 @@ void Triviador::StartTransferToGameTimer()
 {
 	ui.progressBar->setValue(0);
 
-	transferToGameTimer = new QTimer(this);
-
 	transferToGameTimer->setInterval(30);
 	transferToGameTimer->setTimerType(Qt::PreciseTimer);
 
@@ -716,8 +741,8 @@ void Triviador::StartTransferToGameTimer()
 
 void Triviador::OnTransferToGameTimerTick()
 {
-	if (CheckIfLobbyIsReadyToBegin() == true)
-	{
+	//if (CheckIfLobbyIsReadyToBegin() == true)
+	//{
 		ui.progressBar->show();
 		ui.gameStartLabel->show();
 		
@@ -727,18 +752,15 @@ void Triviador::OnTransferToGameTimerTick()
 		{
 			triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
 
-			ui.stackedWidget->insertWidget(4, triviadorGame);
+			ui.stackedWidget->insertWidget(5, triviadorGame);
 
-			ui.stackedWidget->setCurrentIndex(4);
-
-			connect(triviadorGame, SIGNAL(BackToLoginSignal()), this, SLOT(CloseApplicationSlotFromGame()));
-			connect(triviadorGame, SIGNAL(ServerCrashedSignalTriviador()), this, SLOT(ServerCrashedSlot()));
+			ui.stackedWidget->setCurrentIndex(5);
 
 			transferToGameTimer->stop();
 
 			transferToGameTimer->disconnect();
 		}
-	}
+	//}
 }
 
 void Triviador::UpdateLobbiesDetails()
@@ -802,6 +824,8 @@ bool Triviador::CheckIfLobbyIsReadyToBegin()
 	{
 		emit ServerCrashedSignalTriviador();
 	}
+
+	return false;
 }
 
 void Triviador::SetLobbyDetails(const std::string& lobbyType)

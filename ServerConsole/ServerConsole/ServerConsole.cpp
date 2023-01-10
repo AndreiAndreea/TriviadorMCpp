@@ -840,24 +840,36 @@ int main()
 				return crow::response(404, "No available lobby found!");
 			else
 			{
-				crow::json::wvalue firstAvailableLobby = crow::json::wvalue
-				{
-					{"lobbyID", findLobby[0].GetLobbyID()},
-					{"gameType", findLobby[0].GetGameType()},
-					{"gameStatus", findLobby[0].GetGameStatus()},
-					{"roomNumber", findLobby[0].GetRoomNumber()},
-					{"currentNumberOfPlayers", findLobby[0].GetCurrentNumberOfPlayers()},
-					{"maximNumberOfPlayers", findLobby[0].GetMaximNumberOfPlayers()},
-					{"numberOfReadyPlayers", findLobby[0].GetNumberOfReadyPlayers()},
-					{"player1", findLobby[0].GetPlayer1()},
-					{"player2", findLobby[0].GetPlayer2()},
-					{"player3", findLobby[0].GetPlayer3()},
-					{"player4", findLobby[0].GetPlayer4()},
-					{"player5", findLobby[0].GetPlayer5()},
-					{"player6", findLobby[0].GetPlayer6()}
-				};
+				bool found = false;
 
-				return crow::response(crow::json::wvalue{ firstAvailableLobby });
+				for (auto& lobby : findLobby)
+				{
+					if (lobby.GetCurrentNumberOfPlayers() < lobby.GetMaximNumberOfPlayers())
+					{
+						found = true;
+						return crow::response(crow::json::wvalue
+							{
+								{"lobbyID", lobby.GetLobbyID()},
+								{"gameType", lobby.GetGameType()},
+								{"gameStatus", lobby.GetGameStatus()},
+								{"roomNumber", lobby.GetRoomNumber()},
+								{"currentNumberOfPlayers", lobby.GetCurrentNumberOfPlayers()},
+								{"maximNumberOfPlayers", lobby.GetMaximNumberOfPlayers()},
+								{"numberOfReadyPlayers", lobby.GetNumberOfReadyPlayers()},
+								{"player1", lobby.GetPlayer1()},
+								{"player2", lobby.GetPlayer2()},
+								{"player3", lobby.GetPlayer3()},
+								{"player4", lobby.GetPlayer4()},
+								{"player5", lobby.GetPlayer5()},
+								{"player6", lobby.GetPlayer6()}
+							});
+					}
+					else
+						continue;
+				}
+				
+				if (!found)
+					return crow::response(404, "No available lobby found!");
 			}
 		});
 

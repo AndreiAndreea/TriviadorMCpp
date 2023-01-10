@@ -12,6 +12,14 @@
 #include <curl/curl.h>
 #include <cpr/cpr.h>
 
+//declare an enum to store the current state of the game
+enum class GameState
+{
+	NotStarted,
+	InProgress,
+	Started
+};
+
 class Triviador : public QMainWindow
 {
 	Q_OBJECT
@@ -59,6 +67,7 @@ private slots:
 	void on_startGameLobbyPushButton_released();
 
 	void TimerMethodToUpdateLobbyDetails();
+	
 	void StartTransferToGameTimer();
 	void OnTransferToGameTimerTick();
 
@@ -105,6 +114,7 @@ private:
 	int lobbyID;
 
 	bool m_isLobbyReadyToBegin;
+	GameState m_startingGame;
 
 private:
 	QPushButton* buttonSender;
