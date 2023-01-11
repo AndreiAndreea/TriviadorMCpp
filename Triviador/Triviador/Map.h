@@ -1,16 +1,29 @@
 #pragma once
 #include <vector>
+#include <utility>
+#include <unordered_map>
+#include <functional>
 
 #include <QPainter>
 #include <QPaintEvent>
 
 #include "ui_Game.h"
 
+struct pair_hash {
+	template <class T1, class T2>
+	std::size_t operator () (const std::pair<T1, T2>& p) const {
+		auto h1 = std::hash<T1>{}(p.first);
+		auto h2 = std::hash<T2>{}(p.second);
+		return h1 ^ h2;
+	}
+};
+
 class Map
 {
-public: 
+public:
 	using Coords = std::pair<uint8_t, uint8_t>;
-
+	using Unordered_map = std::unordered_map<Coords, int, pair_hash>;
+	
 public:
 	void SetNumberOfPlayers(uint16_t numberOfPlayers);
 	void SetNumberOfRounds(uint16_t numberOfRounds);
@@ -20,7 +33,7 @@ public:
 	void CreateMapCustomMode(uint16_t mapHeight, uint16_t mapWidth, uint16_t numberOfPlayers, uint16_t numberOfRounds);
 
 	bool IsRegionAvailable(Coords coords);
-	void RemoveUnusedRegion(uint8_t position);
+	//void RemoveUnusedRegion(uint8_t position);
 
 public:
 	uint16_t GetNumberOfPlayers() const;
@@ -31,5 +44,6 @@ private:
 	uint16_t m_numberOfRounds;
 	std::pair<uint16_t, uint16_t> m_mapSize;
 
-	std::vector<Coords> m_unusedRegions;
+	//std::vector<Coords> m_unusedRegions; - in loc sa cautam in regiunile nefolosite
+	Unordered_map m_usedRegions; //avem o mapa cu regiunile utilizate, cand se alege o baza/teriutoriu se va insera
 };
