@@ -4,16 +4,17 @@ Game::Game()
 {
 }
 
-Game::Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth)
+Game::Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth, int lobbyID)
 {
 	ui.setupUi(this);
-	
+
 	m_ip = ip;
 	m_playerUsername = username;
+	m_lobbyID = lobbyID;
 
 	m_selectedRegions.clear();
 
-	QuestionsWindow = new GameElementsGenerator(m_ip, m_playerUsername);
+	QuestionsWindow = new GameElementsGenerator(m_ip, m_playerUsername, m_lobbyID);
 	ui.stackedWidget->insertWidget(1, QuestionsWindow);
 
 	QuestionsWindow->SetNumberOfPlayers(numberOfPlayers);
@@ -28,7 +29,7 @@ Game::Game(const std::string& ip, const std::string& username, const uint16_t nu
 	{
 		m_map.CreateMapCustomMode(mapHeight, mapWidth, numberOfPlayers, numberOfRounds);
 	}
-	
+
 	ui.existingRegionLabel->hide();
 
 	ui.progressBar->show();
@@ -36,7 +37,7 @@ Game::Game(const std::string& ip, const std::string& username, const uint16_t nu
 
 	GenerateRandomColor();
 
-	StartInitializeQuestionsGeneratorTimer(); 
+	StartInitializeQuestionsGeneratorTimer();
 
 	ui.stackedWidget->setCurrentIndex(0);
 }
@@ -83,21 +84,25 @@ void Game::GenerateRandomColor()
 
 void Game::paintEvent(QPaintEvent*)
 {
-	QPainter painter(this);
-
-	painter.setRenderHint(QPainter::Antialiasing, true);
-
-	DrawMap(painter);
-
-	//coloring the selected regions of the map
-	for (const auto& coordRegion : m_selectedRegions)
+	if (ui.stackedWidget->currentIndex() == 0)
 	{
-		QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
-		painter.fillRect(square, m_usedColor);
+		QPainter painter(this);
+
+		painter.setRenderHint(QPainter::Antialiasing, true);
+
+		DrawMap(painter);
+
+		//coloring the selected regions of the map
+		for (const auto& coordRegion : m_selectedRegions)
+		{
+			QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
+			painter.fillRect(square, m_usedColor);
+		}
+
+		if (ui.stackedWidget->currentIndex() == 1)
+			painter.setOpacity(0.5);
 	}
 
-	if (ui.stackedWidget->currentIndex() == 1)
-		painter.setOpacity(0.5);
 }
 
 void Game::DrawMap(QPainter& painter)
@@ -164,8 +169,10 @@ void Game::OnIinitializeQuestionsGeneratorTimerTick()
 		ui.progressBarLabel->hide();
 
 		initializeQuestionsGeneratorTimer->disconnect();
-		
+
 		ui.stackedWidget->setCurrentIndex(1);
+	
+		QuestionsWindow->TimerMethodToRequestDataFromServer(100);
 	}
 
 }

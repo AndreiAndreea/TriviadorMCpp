@@ -111,7 +111,7 @@ private:
 
 	uint8_t m_firstEmptyPlayerSeatID;
 
-	int lobbyID;
+	int m_lobbyID;
 
 	bool m_isLobbyReadyToBegin;
 	GameState m_startingGame;

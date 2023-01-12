@@ -24,7 +24,7 @@ private:
 public:
 	explicit Game();
 	
-	Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth);
+	Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth, int lobbyID);
 	
 	~Game();
 
@@ -63,6 +63,8 @@ private:
 
 	std::string m_ip;
 	std::string m_playerUsername;
+
+	int m_lobbyID;
 
 private:
 	GameElementsGenerator* QuestionsWindow;

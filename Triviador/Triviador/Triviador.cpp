@@ -549,7 +549,7 @@ void Triviador::on_joinLobbyPushButton_released()
 	{
 		auto availableLobby = crow::json::load(responseFromServer.text);
 
-		lobbyID = availableLobby["lobbyID"].i();
+		m_lobbyID = availableLobby["lobbyID"].i();
 		int currentNumberOfPlayers = availableLobby["currentNumberOfPlayers"].i();
 		int maximNumberOfPlayers = availableLobby["maximNumberOfPlayers"].i();
 		std::string roomNumber = availableLobby["roomNumber"].s();
@@ -558,7 +558,7 @@ void Triviador::on_joinLobbyPushButton_released()
 
 		ui.idLobbyLabel->setText(QString::fromStdString(std::to_string(availableLobby["lobbyID"].i())));
 
-		link = m_ip + "/getFirstEmptyPlayerSeatID/?lobbyID=" + std::to_string(lobbyID);
+		link = m_ip + "/getFirstEmptyPlayerSeatID/?lobbyID=" + std::to_string(m_lobbyID);
 
 		responseFromServer = cpr::Get(cpr::Url(link));
 
@@ -569,7 +569,7 @@ void Triviador::on_joinLobbyPushButton_released()
 			m_firstEmptyPlayerSeatID = lobbyDetails.i();
 
 			link = m_ip +
-				"/joinLobby/?lobbyID=" + std::to_string(lobbyID) +
+				"/joinLobby/?lobbyID=" + std::to_string(m_lobbyID) +
 				"&firstEmptyPlayerSeatID=" + std::to_string(m_firstEmptyPlayerSeatID) +
 				"&playerUsername=" + m_playerUsername;
 
@@ -602,7 +602,7 @@ void Triviador::on_joinLobbyPushButton_released()
 
 void Triviador::on_backToLobbyPushButton_released()
 {
-	std::string link = m_ip + "/leaveLobby/?lobbyID=" + std::to_string(lobbyID) + "&firstEmptyPlayerSeatID=" + std::to_string(m_firstEmptyPlayerSeatID);
+	std::string link = m_ip + "/leaveLobby/?lobbyID=" + std::to_string(m_lobbyID) + "&firstEmptyPlayerSeatID=" + std::to_string(m_firstEmptyPlayerSeatID);
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
@@ -627,7 +627,7 @@ void Triviador::on_readyGameLobbyPushButton_released()
 	ui.readyGameLobbyPushButton->setDisabled(true);
 	ui.backToLobbyPushButton->setDisabled(true);
 
-	std::string link = m_ip + "/increaseNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
+	std::string link = m_ip + "/increaseNumberOfReadyPlayers/?lobbyID=" + std::to_string(m_lobbyID);
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
@@ -648,7 +648,7 @@ void Triviador::on_startGameLobbyPushButton_released()
 
 void Triviador::TimerMethodToUpdateLobbyDetails()
 {
-	timerToUpdateLobbyDetails->setInterval(1000);
+	timerToUpdateLobbyDetails->setInterval(200);
 	timerToUpdateLobbyDetails->setTimerType(Qt::PreciseTimer);
 
 	timerToUpdateLobbyDetails->start();
@@ -688,7 +688,7 @@ void Triviador::TimerMethodToUpdateLobbyDetails()
 			{
 				if (CheckIfLobbyIsReadyToBegin() == false)
 				{
-					std::string link = m_ip + "/resetNumberOfReadyPlayers/?lobbyID=" + std::to_string(lobbyID);
+					std::string link = m_ip + "/resetNumberOfReadyPlayers/?lobbyID=" + std::to_string(m_lobbyID);
 
 					cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
@@ -750,7 +750,7 @@ void Triviador::OnTransferToGameTimerTick()
 			ui.progressBar->setValue(ui.progressBar->value() + 1);
 		else
 		{
-			triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
+			triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth, m_lobbyID);
 
 			ui.stackedWidget->insertWidget(5, triviadorGame);
 
@@ -773,7 +773,7 @@ void Triviador::UpdateLobbiesDetails()
 
 void Triviador::UpdateCurrentLobbyPlayers()
 {
-	std::string link = m_ip + "/getLobbyDetails/?lobbyID=" + std::to_string(lobbyID);
+	std::string link = m_ip + "/getLobbyDetails/?lobbyID=" + std::to_string(m_lobbyID);
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
@@ -803,7 +803,7 @@ void Triviador::UpdateCurrentLobbyPlayers()
 
 bool Triviador::CheckIfLobbyIsReadyToBegin()
 {
-	std::string link = m_ip + "/isLobbyReady/?lobbyID=" + std::to_string(lobbyID);
+	std::string link = m_ip + "/isLobbyReady/?lobbyID=" + std::to_string(m_lobbyID);
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 

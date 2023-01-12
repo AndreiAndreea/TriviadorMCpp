@@ -19,6 +19,9 @@
 
 #include "Questions.h"
 
+#include "QuestionSingleChoice.h"
+#include "QuestionMultipleChoice.h"
+
 #include "DataBase.h"
 
 #include <curl/curl.h>
@@ -32,7 +35,7 @@ private:
 	Ui::GameElementsGenerator ui;
 
 public:
-	GameElementsGenerator(const std::string& ip, const std::string& playerUsername);
+	GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int lobbyID);
 	~GameElementsGenerator();
     
     //setters and gettters
@@ -50,6 +53,11 @@ private:
     bool CheckQStringToAnswer(const QString text);
     
 	void HideOfferedAnswers(bool hide);
+
+    void GetSingleChoiceQuestion();
+
+public:
+    void TimerMethodToRequestDataFromServer(int time);
 
 private slots:
     void on_getRandomQuestionButton_released();
@@ -73,6 +81,8 @@ private slots:
     void SubmitSingleChoiceAnswer(uint16_t inputAnswer, uint16_t currentAnswer);
 
     void OnTimerTick();
+    
+    void TickMethodToRequestDataFromServer();
 
 private:
     bool m_answerHasBeenSelected;
@@ -93,4 +103,16 @@ private:
 
     std::string m_ip;
     std::string m_playerUsername;
+    
+	int m_lobbyID;
+
+private:
+    bool gotQuestion;
+    bool gotSingleQuestion, gotMultipleQuestion;
+
+    QuestionSingleChoice m_singleChoiceQuestion;
+	QuestionMultipleChoice m_multipleChoiceQuestion;
+
+private:
+	QTimer* timerToCheckServer = new QTimer(this);
 };

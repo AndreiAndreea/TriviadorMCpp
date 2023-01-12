@@ -1,11 +1,12 @@
 #include "GameElementsGenerator.h"
 
-GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::string& playerUsername)
+GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int lobbyID)
 {
 	ui.setupUi(this);
 
 	m_ip = ip;
 	m_playerUsername = playerUsername;
+	m_lobbyID = lobbyID;
 
 	/*
 	m_amountOfRandomQuestionsFromDatabase = 5;
@@ -48,6 +49,14 @@ GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::s
 	m_answerHasBeenSelected = false;
 
 	m_canChooseTerritory = false;
+
+	gotQuestion = false;
+	gotSingleQuestion = false;
+
+	m_singleChoiceQuestion = QuestionSingleChoice();
+	m_multipleChoiceQuestion = QuestionMultipleChoice();
+
+	GetSingleChoiceQuestion();
 }
 
 GameElementsGenerator::~GameElementsGenerator()
@@ -67,6 +76,140 @@ void GameElementsGenerator::OnTimerTick()
 		timer->disconnect();
 		ui.offerAnswersAdvantageButton->setDisabled(true);
 		ui.suggestAnswerAdvantageButton->setDisabled(true);
+
+		// generate just a new question with a route to server
+		// get the question from the server
+
+		gotQuestion = false;
+
+		gotSingleQuestion = false;
+		gotMultipleQuestion = false;
+	}
+}
+
+void GameElementsGenerator::TimerMethodToRequestDataFromServer(int time)
+{
+	timerToCheckServer->setInterval(time);
+
+	timerToCheckServer->setTimerType(Qt::PreciseTimer);
+
+	timerToCheckServer->start();
+
+	connect(timerToCheckServer, SIGNAL(timeout()), this, SLOT(TickMethodToRequestDataFromServer()));
+}
+
+void GameElementsGenerator::GetSingleChoiceQuestion()
+{
+	std::string link = m_ip + "/getASingleChoiceQuestion";
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+	
+	if (responseFromServer.status_code == 200)
+	{
+		auto questionDetails = crow::json::load(responseFromServer.text);
+		
+		m_singleChoiceQuestion.SetQuestionText(questionDetails["question"].s());
+		m_singleChoiceQuestion.SetAnswer(questionDetails["correctAnswer"].i());
+
+		gotSingleQuestion = true;
+		gotQuestion = true;
+	}
+}
+
+void GameElementsGenerator::TickMethodToRequestDataFromServer()
+{	
+	if (gotQuestion == true)
+	{
+		if (gotSingleQuestion == true)
+		{
+			ui.inputAnswerLineEdit->clear();
+			ui.displayProximityCorrectAnswerLabel->clear();
+
+			ui.inputAnswerLineEdit->setDisabled(false);
+			ui.submitAnswerButton->setDisabled(false);
+
+			ui.submitAnswerButton->show();
+			ui.inputAnswerLineEdit->show();
+
+			//radio buttons from mc choice are hidden
+			ui.multipleChoiceAnswer1Button->hide();
+			ui.multipleChoiceAnswer2Button->hide();
+			ui.multipleChoiceAnswer3Button->hide();
+			ui.multipleChoiceAnswer4Button->hide();
+
+			ui.fifty_fiftyAdvantageButton->hide();
+			ui.suggestAnswerAdvantageButton->show();
+			ui.suggestAnswerAdvantageLabel->hide();
+			ui.offerAnswersAdvantageButton->show();
+			HideOfferedAnswers(true);
+
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
+
+			ui.checkAnswerSelection->hide();
+			ui.chooseTerritoryLabel->hide();
+
+			ui.offerAnswersAdvantageButton->setDisabled(false);
+			ui.suggestAnswerAdvantageButton->setDisabled(false);
+
+			//display the question
+			ui.titleLabel->setText(QString::fromStdString(m_singleChoiceQuestion.GetQuestionText()));
+			m_currentAnswer = m_singleChoiceQuestion.GetAnswer();
+
+			StartTimer();
+
+			update();
+		}
+		else if (gotMultipleQuestion == true)
+		{
+			ui.submitAnswerButton->hide();
+			ui.inputAnswerLineEdit->hide();
+			ui.errorLabel->hide();
+			ui.displayProximityCorrectAnswerLabel->hide();
+			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
+			ui.chooseTerritoryLabel->hide();
+
+			ui.multipleChoiceAnswer1Button->show();
+			ui.multipleChoiceAnswer2Button->show();
+			ui.multipleChoiceAnswer3Button->show();
+			ui.multipleChoiceAnswer4Button->show();
+
+			ui.fifty_fiftyAdvantageButton->show();
+			ui.suggestAnswerAdvantageButton->hide();
+			ui.suggestAnswerAdvantageLabel->hide();
+			ui.offerAnswersAdvantageButton->hide();
+			HideOfferedAnswers(true);
+
+			ui.checkAnswerSelection->setText("");
+			ui.checkAnswerSelection->show();
+			m_answerHasBeenSelected = false;
+			
+			ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:light;");
+			ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:light;");
+			ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:light;");
+			ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:light;");
+
+			//display the question
+			ui.titleLabel->setText(QString::fromStdString(m_multipleChoiceQuestion.GetQuestionText()));
+			
+			ui.multipleChoiceAnswer1Button->setText(QString::fromStdString(m_multipleChoiceQuestion.GetAnswer1()));
+			ui.multipleChoiceAnswer2Button->setText(QString::fromStdString(m_multipleChoiceQuestion.GetAnswer2()));
+			ui.multipleChoiceAnswer3Button->setText(QString::fromStdString(m_multipleChoiceQuestion.GetAnswer3()));
+			ui.multipleChoiceAnswer4Button->setText(QString::fromStdString(m_multipleChoiceQuestion.GetAnswer4()));
+
+			StartTimer();
+
+			update();
+		}
+
+		ToggleAnswers(false);
+		DisableAdvantageOfferedAnswers(false);
+
+		elapsedTime.start();
+
+		gotSingleQuestion = false;
+		gotQuestion = false;
 	}
 }
 
