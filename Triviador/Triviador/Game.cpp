@@ -4,17 +4,17 @@ Game::Game()
 {
 }
 
-Game::Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth, int lobbyID)
+Game::Game(const std::string& ip, const std::string& username, const uint16_t numberOfPlayers, const uint16_t numberOfRounds, const uint16_t mapHeight, const uint16_t mapWidth, int roomID)
 {
 	ui.setupUi(this);
 
 	m_ip = ip;
 	m_playerUsername = username;
-	m_lobbyID = lobbyID;
+	m_roomID = roomID;
 
 	m_selectedRegions.clear();
 
-	QuestionsWindow = new GameElementsGenerator(m_ip, m_playerUsername, m_lobbyID);
+	QuestionsWindow = new GameElementsGenerator(m_ip, m_playerUsername, m_roomID);
 	ui.stackedWidget->insertWidget(1, QuestionsWindow);
 
 	QuestionsWindow->SetNumberOfPlayers(numberOfPlayers);

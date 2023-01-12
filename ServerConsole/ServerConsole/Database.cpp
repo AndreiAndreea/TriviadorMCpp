@@ -36,7 +36,7 @@ crow::response DatabaseStorage::operator()(const crow::request& request) const
 	auto bodyArgs = ParseUrlArgs(request.body); //id=2&quantity=3&...
 	auto end = bodyArgs.end();
 
-	auto lobbyID = bodyArgs.find("lobby_id");
+	auto roomID = bodyArgs.find("room_id");
 	auto gameType = bodyArgs.find("game_type");
 	auto gameStatus = bodyArgs.find("game_status");
 	auto roomNumber = bodyArgs.find("room_number");
@@ -50,20 +50,11 @@ crow::response DatabaseStorage::operator()(const crow::request& request) const
 	auto player5 = bodyArgs.find("player5");
 	auto player6 = bodyArgs.find("player6");
 
-	if (lobbyID != end && roomNumber != end && gameType != end && gameStatus != end
-		&& currentNumberOfPlayers != end && maximNumberOfPlayers != end && numberOfReadyPlayers != end
-		&& player1 != end && player2 != end && player3 != end
-		&& player4 != end && player5 != end && player6 != end)
+	if (roomID != end && gameType != end && gameStatus != end && roomNumber != end && currentNumberOfPlayers != end && maximNumberOfPlayers != end && numberOfReadyPlayers != end && player1 != end && player2 != end && player3 != end && player4 != end && player5 != end && player6 != end)
 	{
-		Lobby lobby(std::stoi(lobbyID->second), roomNumber->second,
-			std::stoi(currentNumberOfPlayers->second),
-			player1->second, player2->second, player3->second,
-			player4->second, player5->second, player6->second,
-			gameType->second, gameStatus->second,
-			std::stoi(maximNumberOfPlayers->second),
-			std::stoi(numberOfReadyPlayers->second));
+		Room room(std::stoi(roomID->second), gameType->second, gameStatus->second, roomNumber->second, std::stoi(currentNumberOfPlayers->second), std::stoi(maximNumberOfPlayers->second), std::stoi(numberOfReadyPlayers->second), player1->second, player2->second, player3->second, player4->second, player5->second, player6->second);
 
-		m_database.update(lobby);
+		m_database.update(room);
 
 		return crow::response(200);
 	}
@@ -94,16 +85,13 @@ void DatabaseStorage::PopulateDatabaseWithData()
 	m_database.insert_range(multipleChoiceQuestionsVector.begin(), multipleChoiceQuestionsVector.end());
 
 	m_database.insert(User(0, "Admin", "Admin28!", "admin@blue-zone.ro", "08/10/2022 at 12:12:00", "999999999", "5", "2", "Offline"));
-	m_database.insert(User(0, "Test", "test", "test@blue-zone.ro", "01/01/2023 at 12:00:00", "0", "0", "0", "Offline"));
-	m_database.insert(User(0, "Andre", "andre", "contact@blue-zone.ro", "01/01/2024 at 12:00:00", "0", "0", "0", "Offline"));
+	m_database.insert(User(0, "test", "test", "test@blue-zone.ro", "01/01/2023 at 12:00:00", "0", "0", "0", "Offline"));
+	m_database.insert(User(0, "andre", "andre", "contact@blue-zone.ro", "01/01/2024 at 12:00:00", "0", "0", "0", "Offline"));
+	m_database.insert(User(0, "alex", "alex", "contact@blue-zone.ro", "01/01/2025 at 12:00:00", "0", "0", "0", "Offline"));
+	m_database.insert(User(0, "asd", "asd", "contact@blue-zone.ro", "01/01/2026 at 12:00:00", "0", "0", "0", "Offline"));
 
-
-	m_database.insert(Lobby(0, "2P_12302022110500", 0, "", "", "", "", "", "", "2players", "Room created", 2, 0));
-	m_database.insert(Lobby(0, "3P_12302022120600", 0, "", "", "", "", "", "", "3players", "Room created", 3, 0));
-	m_database.insert(Lobby(0, "4P_12302022130700", 0, "", "", "", "", "", "", "4players", "Room created", 4, 0));
-	m_database.insert(Lobby(0, "CM_12302022140800", 0, "", "", "", "", "", "", "customMode", "Room created", 6, 0));
-
-	m_database.insert(Match(0, "2P_12302022110500", 2, "Andre", "Admin", "", "", "", "", "Admin"));
-	m_database.insert(Match(0, "3P_12302022120600", 2, "Andre", "Admin", "Test", "", "", "", "Andre"));
-	m_database.insert(Match(0, "2P_12302022110501", 2, "Test", "Admin", "", "", "", "", "Test"));
+	m_database.insert(Room(0, "2players", EnumGameStatusToString(ROOM_CREATED), "2P_12302022110500", 0, 2, 0, "", "", "", "", "", ""));
+	m_database.insert(Room(0, "3players", EnumGameStatusToString(ROOM_CREATED), "3P_12302022120600", 0, 3, 0, "", "", "", "", "", ""));
+	m_database.insert(Room(0, "4players", EnumGameStatusToString(ROOM_CREATED), "4P_12302022130700", 0, 4, 0, "", "", "", "", "", ""));
+	m_database.insert(Room(0, "customMode", EnumGameStatusToString(ROOM_CREATED), "CM_12302022140800", 0, 6, 0, "", "", "", "", "", ""));
 }

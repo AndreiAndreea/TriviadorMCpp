@@ -1,12 +1,12 @@
 #include "GameElementsGenerator.h"
 
-GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int lobbyID)
+GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int roomID)
 {
 	ui.setupUi(this);
 
 	m_ip = ip;
 	m_playerUsername = playerUsername;
-	m_lobbyID = lobbyID;
+	m_roomID = roomID;
 
 	/*
 	m_amountOfRandomQuestionsFromDatabase = 5;

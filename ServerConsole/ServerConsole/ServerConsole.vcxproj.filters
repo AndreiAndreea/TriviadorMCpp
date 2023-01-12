@@ -66,12 +66,6 @@
     <ClCompile Include="QuestionMultipleChoice.cpp">
       <Filter>Source Files\Questions</Filter>
     </ClCompile>
-    <ClCompile Include="Lobby.cpp">
-      <Filter>Source Files\Player Management</Filter>
-    </ClCompile>
-    <ClCompile Include="Match.cpp">
-      <Filter>Source Files\Player Management</Filter>
-    </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\Player Management</Filter>
     </ClCompile>
@@ -94,12 +88,6 @@
     </ClInclude>
     <ClInclude Include="QuestionMultipleChoice.h">
       <Filter>Header Files\Questions</Filter>
-    </ClInclude>
-    <ClInclude Include="Lobby.h">
-      <Filter>Header Files\Player Management</Filter>
-    </ClInclude>
-    <ClInclude Include="Match.h">
-      <Filter>Header Files\Player Management</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>Header Files\Player Management</Filter>

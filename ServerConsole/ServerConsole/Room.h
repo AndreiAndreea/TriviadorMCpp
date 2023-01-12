@@ -8,29 +8,44 @@ class Room
 {
 public:
 	Room();
-
 	Room(uint32_t id,
-		const std::string& roomNumber,
-		numberOfPlayers currentNumberOfPlayers,
+		const std::string& game_type,
+		const std::string& game_status,
+		const std::string& room_number,
+		numberOfPlayers current_number_of_players,
+		numberOfPlayers maxim_number_of_players,
+		numberOfPlayers number_of_ready_players,
 		const std::string& player1,
 		const std::string& player2,
 		const std::string& player3,
 		const std::string& player4,
 		const std::string& player5,
-		const std::string& player6);
+		const std::string& player6
+	);
 
-	virtual ~Room();
-
+	~Room();
 
 public:
 	void SetRoomID(uint32_t id);
 	uint32_t GetRoomID() const;
 
-	void SetRoomNumber(const std::string& matchNumber);
+	void SetGameType(const std::string& game_type);
+	const std::string& GetGameType() const;
+
+	void SetGameStatus(const std::string& game_status);
+	const std::string& GetGameStatus() const;
+
+	void SetRoomNumber(const std::string& room_number);
 	const std::string& GetRoomNumber() const;
 
-	void SetCurrentNumberOfPlayers(numberOfPlayers currentNumberOfPlayers);
+	void SetCurrentNumberOfPlayers(numberOfPlayers current_number_of_players);
 	numberOfPlayers GetCurrentNumberOfPlayers() const;
+
+	void SetMaximNumberOfPlayers(numberOfPlayers maxim_number_of_players);
+	numberOfPlayers GetMaximNumberOfPlayers() const;
+
+	void SetNumberOfReadyPlayers(numberOfPlayers number_of_ready_players);
+	numberOfPlayers GetNumberOfReadyPlayers() const;
 
 	void SetPlayer1(const std::string& player1);
 	const std::string& GetPlayer1() const;
@@ -51,11 +66,11 @@ public:
 	const std::string& GetPlayer6() const;
 
 private:
-	uint32_t m_IDRoom;
+	uint32_t m_roomID;
 
-	std::string m_roomNumber;
+	std::string m_gameType, m_gameStatus, m_roomNumber;
 
-	numberOfPlayers m_currentNumberOfPlayers;
+	numberOfPlayers m_currentNumberOfPlayers, m_maximNumberOfPlayers, m_number_of_ready_players;
 
 	std::string m_player1, m_player2, m_player3, m_player4, m_player5, m_player6;
 };

@@ -3,11 +3,13 @@
 #include <vector>
 #include <string>
 #include <regex>
-#include<iostream>
+#include <iostream>
 
 #include "Database.h"
 
 using namespace sqlite_orm;
+
+uint8_t amountOfQuestions = 5;
 
 /*
 * What should I use between POST and PUT ? Check out the link below to understand the difference:
@@ -16,8 +18,8 @@ using namespace sqlite_orm;
 */
 
 std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch
-	(Storage& storage, uint8_t amountOfQuestions, 
-	std::vector<bool>& m_selectedSingleChoiceQuestions, 
+(Storage& storage, uint8_t amountOfQuestions,
+	std::vector<bool>& m_selectedSingleChoiceQuestions,
 	std::vector<QuestionSingleChoice>& m_randomSingleChoiceQuestionsVector)
 {
 	//initializing the question usage check vector
@@ -63,8 +65,8 @@ std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch
 }
 
 std::vector<crow::json::wvalue> getAMultipleChoiceQuestionBatch
-	(Storage& storage, uint8_t amountOfQuestions, 
-	std::vector<bool>& m_selectedMultiplChoiceQuestions, 
+(Storage& storage, uint8_t amountOfQuestions,
+	std::vector<bool>& m_selectedMultiplChoiceQuestions,
 	std::vector<QuestionMultipleChoice>& m_randomMultipleChoiceQuestionsVector)
 {
 	//initializing the question usage check vector
@@ -171,8 +173,6 @@ std::string GenerateRoomNumber(std::string& game_type)
 
 int main()
 {
-	uint8_t amountOfQuestions = 5;
-
 	std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
 	std::vector<bool> m_selectedSingleChoiceQuestions;
 
@@ -188,9 +188,6 @@ int main()
 
 	Storage storage = createStorage(filePathForDatabase);
 	storage.sync_schema();
-
-	std::vector<crow::json::wvalue> batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
-	std::vector<crow::json::wvalue> batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
 
 	std::ifstream databaseFile(filePathForDatabase);
 
@@ -211,6 +208,9 @@ int main()
 	}
 
 	std::cout << "\n";
+
+	std::vector<crow::json::wvalue> batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
+	std::vector<crow::json::wvalue> batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
 
 	crow::SimpleApp app;
 
@@ -513,19 +513,19 @@ int main()
 	CROW_ROUTE(app, "/findemailduplicate/")(
 		[&storage]
 		(const crow::request& req)
+		{
+			std::string newEmail = req.url_params.get("new_email");
+
+			auto users = storage.get_all<User>(where(c(&User::GetEmail) == newEmail));
+
+			if (users.size() == 1)
 			{
-				std::string newEmail = req.url_params.get("new_email");
-
-		auto users = storage.get_all<User>(where(c(&User::GetEmail) == newEmail));
-
-		if (users.size() == 1)
-		{
-			return crow::response(200, "Email already exists!");
-		}
-		else
-		{
-			return crow::response(404, "Email not found!");
-		}
+				return crow::response(200, "Email already exists!");
+			}
+			else
+			{
+				return crow::response(404, "Email not found!");
+			}
 		});
 
 	auto& findEmailDuplicate = CROW_ROUTE(app, "/findemailduplicate").methods(crow::HTTPMethod::POST);
@@ -536,6 +536,10 @@ int main()
 	=  QUESTIONS ROUTES  =
 	======================
 	*/
+
+	//=======================\\
+	//Single choice questions\\
+	//=======================\\
 
 	// Get all single choice questions
 	CROW_ROUTE(app, "/getSingleQuestions")(
@@ -555,64 +559,10 @@ int main()
 			}
 
 			return crow::json::wvalue{ usersJson };
-		}
-	);
+		});
 
 	auto& getSingleQuestions = CROW_ROUTE(app, "/getSingleQuestions").methods(crow::HTTPMethod::POST);
 	getSingleQuestions(DatabaseStorage(storage));
-
-	// Get a specific amount of single choice questions 
-	// * BUG maybe from json : the ID of questions isn't get correctly from DB *
-	/*
-	CROW_ROUTE(app, "/getAmountOfSingleQuestions")(
-		[&storage, &amountOfQuestions, &m_selectedSingleChoiceQuestions, &m_randomSingleChoiceQuestionsVector]
-		()
-		{
-			auto countSingleQuestions = storage.count<QuestionSingleChoice>();
-
-			if(m_selectedSingleChoiceQuestions.size() != countSingleQuestions)
-				m_selectedSingleChoiceQuestions.resize(countSingleQuestions + 1);
-
-			if (m_randomSingleChoiceQuestionsVector.size() <= countSingleQuestions - amountOfQuestions)
-			{
-				for (uint8_t index = 0; index < amountOfQuestions; index++)
-				{
-					uint8_t randomID = rand() % countSingleQuestions + 1;
-
-					//can we use std::find ? (maybe needs to change bool to int)
-					while (m_selectedSingleChoiceQuestions[randomID] == true)
-					{
-						randomID = rand() % countSingleQuestions + 1;
-					}
-
-					m_randomSingleChoiceQuestionsVector.push_back(storage.get<QuestionSingleChoice>(randomID));
-
-					m_selectedSingleChoiceQuestions[randomID] = true;
-				}
-
-				std::vector<crow::json::wvalue> usersJson;
-
-				for (const auto& question : m_randomSingleChoiceQuestionsVector)
-				{
-					usersJson.push_back(crow::json::wvalue
-						{
-							{"question", question.GetQuestionText()},
-							{"correctAnswer", question.GetAnswer()}
-						});
-				}
-
-				return crow::response(crow::json::wvalue{ usersJson });
-			}
-			else
-			{
-				return crow::response(404, "No more single choice questions found! You have selected all the single choice questions.");
-			}
-		}
-		);
-
-	auto& getAmountOfSingleQuestions = CROW_ROUTE(app, "/getAmountOfSingleQuestions").methods(crow::HTTPMethod::POST);
-	getAmountOfSingleQuestions(DatabaseStorage(storage));
-	*/
 
 	// Get the same single choice question - needed to sync generated questions for players
 	CROW_ROUTE(app, "/getASingleChoiceQuestion")(
@@ -625,39 +575,9 @@ int main()
 	auto& getASingleChoiceQuestion = CROW_ROUTE(app, "/getASingleChoiceQuestion").methods(crow::HTTPMethod::POST);
 	getASingleChoiceQuestion(DatabaseStorage(storage));
 
-	CROW_ROUTE(app, "/getRandomSingleQuestion")(
-		[&storage, &amountOfQuestions, &m_selectedSingleChoiceQuestions, &m_randomSingleChoiceQuestionsVector, &batchOfSingleQuestions]
-		()
-		{
-			//checking if the batch needs repopulating
-			if (batchOfSingleQuestions.size() <= 1)
-			batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
-
-			//after getting / repopulating the batch of questions we select a random one
-
-			//uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
-			uint16_t randomPosition = rand() % batchOfSingleQuestions.size();
-			int index = m_randomSingleChoiceQuestionsVector.size() - randomPosition;
-
-			crow::json::wvalue SCQuestion = (crow::json::wvalue
-				{
-					//{"question",  m_randomSingleChoiceQuestionsVector.at(randomPosition).GetQuestionText()},
-					//{"correctAnswer", m_randomSingleChoiceQuestionsVector.at(randomPosition).GetAnswer()}
-
-					{"question", m_randomSingleChoiceQuestionsVector.at(index).GetQuestionText()},
-					{"correctAnswer", m_randomSingleChoiceQuestionsVector.at(index).GetAnswer()}
-				});
-
-			m_selectedSingleChoiceQuestions[index] = true;
-
-			batchOfSingleQuestions.erase(batchOfSingleQuestions.begin() + randomPosition);
-
-			return crow::response(crow::json::wvalue{ SCQuestion });
-		}
-	);
-
-	auto& getRandomSingleQuestion = CROW_ROUTE(app, "/getRandomSingleQuestion").methods(crow::HTTPMethod::POST);
-	getRandomSingleQuestion(DatabaseStorage(storage));
+	//=========================\\
+	//Multiple choice questions\\
+	//=========================\\
 
 	// Get all multiple choice questions
 	CROW_ROUTE(app, "/getMultipleQuestions")(
@@ -681,68 +601,10 @@ int main()
 			}
 
 			return crow::json::wvalue{ usersJson };
-		}
-	);
+		});
 
 	auto& getMultipleQuestions = CROW_ROUTE(app, "/getMultipleQuestions").methods(crow::HTTPMethod::POST);
 	getMultipleQuestions(DatabaseStorage(storage));
-
-	// Get a specific amount of multiple choice questions 
-	// * BUG maybe from json : the ID of questions isn't get correctly from DB *
-	/*
-	CROW_ROUTE(app, "/getAmountOfMultipleQuestions")(
-		[&storage, &amountOfQuestions, &m_selectedMultiplChoiceQuestions, &m_randomMultipleChoiceQuestionsVector]
-		()
-		{
-			auto countSingleQuestions = storage.count<QuestionSingleChoice>();
-
-			if (m_selectedMultiplChoiceQuestions.size() != countSingleQuestions)
-				m_selectedMultiplChoiceQuestions.resize(countSingleQuestions + 1);
-
-			if (m_randomMultipleChoiceQuestionsVector.size() <= countSingleQuestions - amountOfQuestions)
-			{
-				for (uint8_t index = 0; index < amountOfQuestions; index++)
-				{
-					uint8_t randomID = rand() % countSingleQuestions + 1;
-
-					//can we use std::find ? (maybe needs to change bool to int)
-					while (m_selectedMultiplChoiceQuestions[randomID] == true)
-					{
-						randomID = rand() % countSingleQuestions + 1;
-					}
-
-					m_randomMultipleChoiceQuestionsVector.push_back(storage.get<QuestionMultipleChoice>(randomID));
-
-					m_selectedMultiplChoiceQuestions[randomID] = true;
-				}
-
-				std::vector<crow::json::wvalue> usersJson;
-
-				for (const auto& question : m_randomMultipleChoiceQuestionsVector)
-				{
-					usersJson.push_back(crow::json::wvalue
-						{
-							{"question", question.GetQuestionText()},
-							{"correctAnswer", question.GetCorrectAnswer()},
-							{"answer1", question.GetAnswer1()},
-							{"answer2", question.GetAnswer2()},
-							{"answer3", question.GetAnswer3()},
-							{"answer4", question.GetAnswer4()}
-						});
-				}
-
-				return crow::response(crow::json::wvalue{ usersJson });
-			}
-			else
-			{
-				return crow::response(404, "No more single choice questions found! You have selected all the single choice questions.");
-			}
-		}
-		);
-
-	auto& getAmountOfMultipleQuestions = CROW_ROUTE(app, "/getAmountOfMultipleQuestions").methods(crow::HTTPMethod::POST);
-	getAmountOfMultipleQuestions(DatabaseStorage(storage));
-	*/
 
 	// Get the same multiple choice question - needed to sync generated questions for players
 	CROW_ROUTE(app, "/getAMultipleChoiceQuestion")(
@@ -755,43 +617,12 @@ int main()
 	auto& getAMultipleChoiceQuestion = CROW_ROUTE(app, "/getAMultipleChoiceQuestion").methods(crow::HTTPMethod::POST);
 	getAMultipleChoiceQuestion(DatabaseStorage(storage));
 
-	CROW_ROUTE(app, "/getRandomMultipleQuestion")(
-		[&storage, &amountOfQuestions, &m_selectedMultipleChoiceQuestions, &m_randomMultipleChoiceQuestionsVector, &batchOfMultipleQuestions]
-		()
-		{
-			//checking if the batch needs repopulating
-			if (batchOfMultipleQuestions.size() <= 1)
-			batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
-
-			//after getting / repopulating the batch of questions we select a random one
-			uint16_t randomPosition = rand() % batchOfMultipleQuestions.size();
-			int index = m_randomMultipleChoiceQuestionsVector.size() - randomPosition;
-
-			crow::json::wvalue MCQuestion = (crow::json::wvalue
-				{
-					{"question", m_randomMultipleChoiceQuestionsVector.at(index).GetQuestionText()},
-					{"correctAnswer", m_randomMultipleChoiceQuestionsVector.at(index).GetCorrectAnswer()},
-					{"answer1", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer1()},
-					{"answer2", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer2()},
-					{"answer3", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer3()},
-					{"answer4", m_randomMultipleChoiceQuestionsVector.at(index).GetAnswer4()}
-				});
-
-			m_selectedMultipleChoiceQuestions[index] = true;
-
-			batchOfMultipleQuestions.erase(batchOfMultipleQuestions.begin() + randomPosition);
-
-			return crow::response(crow::json::wvalue{ MCQuestion });
-		}
-	);
-
-	auto& getRandomMultipleQuestion = CROW_ROUTE(app, "/getRandomMultipleQuestion").methods(crow::HTTPMethod::POST);
-	getRandomMultipleQuestion(DatabaseStorage(storage));
+	// Create a route that will return a random question from the database (it can be single or multiple choice
 
 	/*
-	==================
-	=  LOBBY ROUTES  =
-	==================
+	=================
+	=  ROOM ROUTES  =
+	=================
 	*/
 
 	// Get all lobbies details
@@ -801,23 +632,23 @@ int main()
 		{
 			std::vector<crow::json::wvalue> lobbies;
 
-			for (const auto& lobby : storage.iterate<Lobby>())
+			for (const auto& room : storage.iterate<Room>())
 			{
 				lobbies.push_back(crow::json::wvalue
 					{
-						{"lobbyID", lobby.GetRoomID()},
-						{"gameType", lobby.GetGameType()},
-						{"gameStatus", lobby.GetGameStatus()},
-						{"roomNumber", lobby.GetRoomNumber()},
-						{"currentNumberOfPlayers", lobby.GetCurrentNumberOfPlayers()},
-						{"maximNumberOfPlayers", lobby.GetMaximNumberOfPlayers()},
-						{"numberOfReadyPlayers", lobby.GetNumberOfReadyPlayers()},
-						{"player1", lobby.GetPlayer1()},
-						{"player2", lobby.GetPlayer2()},
-						{"player3", lobby.GetPlayer3()},
-						{"player4", lobby.GetPlayer4()},
-						{"player5", lobby.GetPlayer5()},
-						{"player6", lobby.GetPlayer6()}
+						{"roomID", room.GetRoomID()},
+						{"gameType", room.GetGameType()},
+						{"gameStatus", room.GetGameStatus()},
+						{"roomNumber", room.GetRoomNumber()},
+						{"currentNumberOfPlayers", room.GetCurrentNumberOfPlayers()},
+						{"maximNumberOfPlayers", room.GetMaximNumberOfPlayers()},
+						{"numberOfReadyPlayers", room.GetNumberOfReadyPlayers()},
+						{"player1", room.GetPlayer1()},
+						{"player2", room.GetPlayer2()},
+						{"player3", room.GetPlayer3()},
+						{"player4", room.GetPlayer4()},
+						{"player5", room.GetPlayer5()},
+						{"player6", room.GetPlayer6()}
 					});
 			}
 
@@ -827,122 +658,122 @@ int main()
 	auto& getAllLobbiesDetails = CROW_ROUTE(app, "/getAlllobbiesDetails").methods(crow::HTTPMethod::POST);
 	getAllLobbiesDetails(DatabaseStorage(storage));
 
-	// Get the first available lobby for the player by game type
-	CROW_ROUTE(app, "/getAvailableLobby/")(
+	// Get the first available room for the player by game type
+	CROW_ROUTE(app, "/getAvailableRoom/")(
 		[&storage]
 		(const crow::request& req)
 		{
 			std::string game_type = req.url_params.get("gameType");
 
-			auto findLobby = storage.get_all<Lobby>(where(c(&Lobby::GetGameType) == game_type and (c(&Lobby::GetGameStatus) == "Room created" or c(&Lobby::GetGameStatus) == "Waiting for players")));
+			auto foundRoom = storage.get_all<Room>(where(c(&Room::GetGameType) == game_type and (c(&Room::GetGameStatus) == EnumGameStatusToString(ROOM_CREATED) or c(&Room::GetGameStatus) == EnumGameStatusToString(WAITING_FOR_PLAYERS))));
 
-			if(findLobby.size() == 0)
-				return crow::response(404, "No available lobby found!");
+			if (foundRoom.size() == 0)
+				return crow::response(404, "No available room found!");
 			else
 			{
 				bool found = false;
 
-				for (auto& lobby : findLobby)
+				for (auto& room : foundRoom)
 				{
-					if (lobby.GetCurrentNumberOfPlayers() < lobby.GetMaximNumberOfPlayers())
+					if (room.GetCurrentNumberOfPlayers() < room.GetMaximNumberOfPlayers())
 					{
 						found = true;
 						return crow::response(crow::json::wvalue
 							{
-								{"lobbyID", lobby.GetRoomID()},
-								{"gameType", lobby.GetGameType()},
-								{"gameStatus", lobby.GetGameStatus()},
-								{"roomNumber", lobby.GetRoomNumber()},
-								{"currentNumberOfPlayers", lobby.GetCurrentNumberOfPlayers()},
-								{"maximNumberOfPlayers", lobby.GetMaximNumberOfPlayers()},
-								{"numberOfReadyPlayers", lobby.GetNumberOfReadyPlayers()},
-								{"player1", lobby.GetPlayer1()},
-								{"player2", lobby.GetPlayer2()},
-								{"player3", lobby.GetPlayer3()},
-								{"player4", lobby.GetPlayer4()},
-								{"player5", lobby.GetPlayer5()},
-								{"player6", lobby.GetPlayer6()}
+								{"roomID", room.GetRoomID()},
+								{"gameType", room.GetGameType()},
+								{"gameStatus", room.GetGameStatus()},
+								{"roomNumber", room.GetRoomNumber()},
+								{"currentNumberOfPlayers", room.GetCurrentNumberOfPlayers()},
+								{"maximNumberOfPlayers", room.GetMaximNumberOfPlayers()},
+								{"numberOfReadyPlayers", room.GetNumberOfReadyPlayers()},
+								{"player1", room.GetPlayer1()},
+								{"player2", room.GetPlayer2()},
+								{"player3", room.GetPlayer3()},
+								{"player4", room.GetPlayer4()},
+								{"player5", room.GetPlayer5()},
+								{"player6", room.GetPlayer6()}
 							});
 					}
 					else
 						continue;
 				}
-				
+
 				if (!found)
-					return crow::response(404, "No available lobby found!");
+					return crow::response(404, "No available room found!");
 			}
 		});
 
-	auto& getAvailableLobby = CROW_ROUTE(app, "/getAvailableLobby").methods(crow::HTTPMethod::POST);
-	getAvailableLobby(DatabaseStorage(storage));
+	auto& getAvailableRoom = CROW_ROUTE(app, "/getAvailableRoom").methods(crow::HTTPMethod::POST);
+	getAvailableRoom(DatabaseStorage(storage));
 
-	// Get a specific lobby details
-	CROW_ROUTE(app, "/getLobbyDetails/")(
+	// Get a specific room details
+	CROW_ROUTE(app, "/getRoomDetails/")(
 		[&storage]
 		(const crow::request& req)
 		{
-			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string roomID = req.url_params.get("roomID");
 
-			auto lobby = storage.get<Lobby>(lobbyID);
+			auto getRoom = storage.get<Room>(roomID);
 
-			crow::json::wvalue lobbyDetails = crow::json::wvalue
+			crow::json::wvalue roomDetails = crow::json::wvalue
 			{
-				{"lobbyID", lobby.GetRoomID()},
-				{"gameType", lobby.GetGameType()},
-				{"gameStatus", lobby.GetGameStatus()},
-				{"roomNumber", lobby.GetRoomNumber()},
-				{"currentNumberOfPlayers", lobby.GetCurrentNumberOfPlayers()},
-				{"maximNumberOfPlayers", lobby.GetMaximNumberOfPlayers()},
-				{"numberOfReadyPlayers", lobby.GetNumberOfReadyPlayers()},
-				{"player1", lobby.GetPlayer1()},
-				{"player2", lobby.GetPlayer2()},
-				{"player3", lobby.GetPlayer3()},
-				{"player4", lobby.GetPlayer4()},
-				{"player5", lobby.GetPlayer5()},
-				{"player6", lobby.GetPlayer6()}
+				{"roomID", getRoom.GetRoomID()},
+				{"gameType", getRoom.GetGameType()},
+				{"gameStatus", getRoom.GetGameStatus()},
+				{"roomNumber", getRoom.GetRoomNumber()},
+				{"currentNumberOfPlayers", getRoom.GetCurrentNumberOfPlayers()},
+				{"maximNumberOfPlayers", getRoom.GetMaximNumberOfPlayers()},
+				{"numberOfReadyPlayers", getRoom.GetNumberOfReadyPlayers()},
+				{"player1", getRoom.GetPlayer1()},
+				{"player2", getRoom.GetPlayer2()},
+				{"player3", getRoom.GetPlayer3()},
+				{"player4", getRoom.GetPlayer4()},
+				{"player5", getRoom.GetPlayer5()},
+				{"player6", getRoom.GetPlayer6()}
 			};
 
-			return crow::response(crow::json::wvalue{ lobbyDetails });
+			return crow::response(crow::json::wvalue{ roomDetails });
 		});
 
-	auto& getLobbyDetails = CROW_ROUTE(app, "/getLobbyDetails").methods(crow::HTTPMethod::POST);
-	getLobbyDetails(DatabaseStorage(storage));
+	auto& getRoomDetails = CROW_ROUTE(app, "/getRoomDetails").methods(crow::HTTPMethod::POST);
+	getRoomDetails(DatabaseStorage(storage));
 
-	// Create a new lobby by the gameType
-	CROW_ROUTE(app, "/createNewLobby/")(
+	// Create a new room by the gameType
+	CROW_ROUTE(app, "/createNewRoom/")(
 		[&storage]
 		(const crow::request& req)
 		{
 			std::string game_type = req.url_params.get("gameType");
 
-			std::string game_status = "Room created";
+			std::string game_status = EnumGameStatusToString(ROOM_CREATED);
 			//std::string room_number = "RANDOM_GENERATED_NUMBER";
 			std::string room_number = GenerateRoomNumber(game_type);
 
 
 			if (game_type == "2players")
 			{
-				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 2, 0));
+				storage.insert(Room(0, game_type, game_status, room_number, 0, 2, 0, "", "", "", "", "", ""));
 
-				return crow::response(200, "Lobby for '2players' has been created!");
+				return crow::response(200, "Room for '2players' has been created!");
 			}
 			else if (game_type == "3players")
 			{
-				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 3, 0));
+				storage.insert(Room(0, game_type, game_status, room_number, 0, 3, 0, "", "", "", "", "", ""));
 
-				return crow::response(200, "Lobby for '3players' has been created!");
+				return crow::response(200, "Room for '3players' has been created!");
 			}
 			else if (game_type == "4players")
 			{
-				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 4, 0));
+				storage.insert(Room(0, game_type, game_status, room_number, 0, 4, 0, "", "", "", "", "", ""));
 
-				return crow::response(200, "Lobby for '4players' has been created!");
+				return crow::response(200, "Room for '4players' has been created!");
 			}
 			else if (game_type == "customMode")
 			{
-				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 6, 0));
+				storage.insert(Room(0, game_type, game_status, room_number, 0, 6, 0, "", "", "", "", "", ""));
 
-				return crow::response(200, "Lobby for 'custoMode' has been created!");
+				return crow::response(200, "Room for 'custoMode' has been created!");
 			}
 			else
 			{
@@ -950,41 +781,41 @@ int main()
 			}
 		});
 
-	auto& createNewLobby = CROW_ROUTE(app, "/createNewLobby").methods(crow::HTTPMethod::POST);
-	createNewLobby(DatabaseStorage(storage));
+	auto& createNewRoom = CROW_ROUTE(app, "/createNewRoom").methods(crow::HTTPMethod::POST);
+	createNewRoom(DatabaseStorage(storage));
 
-	// Join lobby by lobby ID, firstEmptyPlayerSeatID and playerUsername
-	CROW_ROUTE(app, "/joinLobby/")(
+	// Join room by room ID, firstEmptyPlayerSeatID and playerUsername
+	CROW_ROUTE(app, "/joinRoom/")(
 		[&storage]
 		(const crow::request& req)
 		{
-			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string roomID = req.url_params.get("roomID");
 			std::string firstEmptyPlayerSeatID = req.url_params.get("firstEmptyPlayerSeatID");
 			std::string playerUsername = req.url_params.get("playerUsername");
 
 			try {
-				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+				auto room = storage.get<Room>(std::stoi(roomID));
 
 				if (firstEmptyPlayerSeatID.empty() == false && playerUsername.empty() == false)
 				{
 					if (firstEmptyPlayerSeatID == "1")
-						lobby.SetPlayer1(playerUsername);
+						room.SetPlayer1(playerUsername);
 					else if (firstEmptyPlayerSeatID == "2")
-						lobby.SetPlayer2(playerUsername);
+						room.SetPlayer2(playerUsername);
 					else if (firstEmptyPlayerSeatID == "3")
-						lobby.SetPlayer3(playerUsername);
+						room.SetPlayer3(playerUsername);
 					else if (firstEmptyPlayerSeatID == "4")
-						lobby.SetPlayer4(playerUsername);
+						room.SetPlayer4(playerUsername);
 					else if (firstEmptyPlayerSeatID == "5")
-						lobby.SetPlayer5(playerUsername);
+						room.SetPlayer5(playerUsername);
 					else if (firstEmptyPlayerSeatID == "6")
-						lobby.SetPlayer6(playerUsername);
+						room.SetPlayer6(playerUsername);
 
-					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() + 1);
+					room.SetCurrentNumberOfPlayers(room.GetCurrentNumberOfPlayers() + 1);
 
-					storage.update(lobby);
+					storage.update(room);
 
-					return crow::response(playerUsername + "joined the lobby!");
+					return crow::response(playerUsername + "joined the room!");
 				}
 				else
 				{
@@ -992,44 +823,44 @@ int main()
 				}
 			}
 			catch (std::system_error e) {
-				return crow::response(404, "Lobby not found!");
+				return crow::response(404, "Room not found!");
 			}
 		});
 
-	auto& joinLobby = CROW_ROUTE(app, "/joinLobby").methods(crow::HTTPMethod::POST);
-	joinLobby(DatabaseStorage(storage));
+	auto& joinRoom = CROW_ROUTE(app, "/joinRoom").methods(crow::HTTPMethod::POST);
+	joinRoom(DatabaseStorage(storage));
 
-	// Join lobby by lobby ID and firstEmptyPlayerSeatID
-	CROW_ROUTE(app, "/leaveLobby/")(
+	// Join room by room ID and firstEmptyPlayerSeatID
+	CROW_ROUTE(app, "/leaveRoom/")(
 		[&storage]
 		(const crow::request& req)
 		{
-			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string roomID = req.url_params.get("roomID");
 			std::string firstEmptyPlayerSeatID = req.url_params.get("firstEmptyPlayerSeatID");
 
 			try {
-				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+				auto room = storage.get<Room>(std::stoi(roomID));
 
 				if (firstEmptyPlayerSeatID.empty() == false)
 				{
 					if (firstEmptyPlayerSeatID == "1")
-						lobby.SetPlayer1("");
+						room.SetPlayer1("");
 					else if (firstEmptyPlayerSeatID == "2")
-						lobby.SetPlayer2("");
+						room.SetPlayer2("");
 					else if (firstEmptyPlayerSeatID == "3")
-						lobby.SetPlayer3("");
+						room.SetPlayer3("");
 					else if (firstEmptyPlayerSeatID == "4")
-						lobby.SetPlayer4("");
+						room.SetPlayer4("");
 					else if (firstEmptyPlayerSeatID == "5")
-						lobby.SetPlayer5("");
+						room.SetPlayer5("");
 					else if (firstEmptyPlayerSeatID == "6")
-						lobby.SetPlayer6("");
+						room.SetPlayer6("");
 
-					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
+					room.SetCurrentNumberOfPlayers(room.GetCurrentNumberOfPlayers() - 1);
 
-					storage.update(lobby);
+					storage.update(room);
 
-					return crow::response("Player left the lobby!");
+					return crow::response("Player left the room!");
 				}
 				else
 				{
@@ -1037,59 +868,59 @@ int main()
 				}
 			}
 			catch (std::system_error e) {
-				return crow::response(404, "Lobby not found!");
+				return crow::response(404, "Room not found!");
 			}
 		});
 
-	// Get the first empty player seat ID from a lobby by ID
+	// Get the first empty player seat ID from a room by ID
 	CROW_ROUTE(app, "/getFirstEmptyPlayerSeatID/")(
 		[&storage]
 		(const crow::request& req)
 		{
-			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string roomID = req.url_params.get("roomID");
 
 			try {
-				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+				auto room = storage.get<Room>(std::stoi(roomID));
 
-				if (lobby.GetPlayer1().empty() == true)
+				if (room.GetPlayer1().empty() == true)
 				{
 					return crow::response(200, "1");
 				}
-				else if (lobby.GetPlayer2().empty() == true)
+				else if (room.GetPlayer2().empty() == true)
 				{
 					return crow::response(200, "2");
 				}
-				else if (lobby.GetPlayer3().empty() == true)
+				else if (room.GetPlayer3().empty() == true)
 				{
 					return crow::response(200, "3");
 				}
-				else if (lobby.GetPlayer4().empty() == true)
+				else if (room.GetPlayer4().empty() == true)
 				{
 					return crow::response(200, "4");
 				}
-				else if (lobby.GetPlayer5().empty() == true)
+				else if (room.GetPlayer5().empty() == true)
 				{
 					return crow::response(200, "5");
 				}
-				else if (lobby.GetPlayer6().empty() == true)
+				else if (room.GetPlayer6().empty() == true)
 				{
 					return crow::response(200, "6");
 				}
 				else
 				{
-					return crow::response(401, "Lobby is full!");
+					return crow::response(401, "Room is full!");
 				}
 			}
 			catch (std::system_error e) {
-				return crow::response(404, "Lobby not found!");
+				return crow::response(404, "Room not found!");
 			}
 		});
 
 	auto& getFirstEmptyPlayerSeatID = CROW_ROUTE(app, "/getFirstEmptyPlayerSeatID").methods(crow::HTTPMethod::POST);
 	getFirstEmptyPlayerSeatID(DatabaseStorage(storage));
 
-	// Leave lobby for playerUsername by closing the game
-	CROW_ROUTE(app, "/leaveLobbyForced/")(
+	// Leave room for playerUsername by closing the game
+	CROW_ROUTE(app, "/leaveRoomForced/")(
 		[&storage]
 		(const crow::request& req)
 		{
@@ -1097,40 +928,40 @@ int main()
 
 			try
 			{
-				auto lobbies = storage.get_all<Lobby>(where(
-					c(column<Lobby>(&Lobby::GetPlayer1)) == playerUsername ||
-					c(column<Lobby>(&Lobby::GetPlayer2)) == playerUsername ||
-					c(column<Lobby>(&Lobby::GetPlayer3)) == playerUsername ||
-					c(column<Lobby>(&Lobby::GetPlayer4)) == playerUsername ||
-					c(column<Lobby>(&Lobby::GetPlayer5)) == playerUsername ||
-					c(column<Lobby>(&Lobby::GetPlayer6)) == playerUsername
+				auto lobbies = storage.get_all<Room>(where(
+					c(&Room::GetPlayer1) == playerUsername ||
+					c(&Room::GetPlayer2) == playerUsername ||
+					c(&Room::GetPlayer3) == playerUsername ||
+					c(&Room::GetPlayer4) == playerUsername ||
+					c(&Room::GetPlayer5) == playerUsername ||
+					c(&Room::GetPlayer6) == playerUsername
 					));
 
 				if (lobbies.size() == 1)
 				{
-					auto lobby = lobbies[0];
+					auto room = lobbies[0];
 
-					if (lobby.GetPlayer1() == playerUsername)
-						lobby.SetPlayer1("");
-					else if (lobby.GetPlayer2() == playerUsername)
-						lobby.SetPlayer2("");
-					else if (lobby.GetPlayer3() == playerUsername)
-						lobby.SetPlayer3("");
-					else if (lobby.GetPlayer4() == playerUsername)
-						lobby.SetPlayer4("");
-					else if (lobby.GetPlayer5() == playerUsername)
-						lobby.SetPlayer5("");
-					else if (lobby.GetPlayer6() == playerUsername)
-						lobby.SetPlayer6("");
+					if (room.GetPlayer1() == playerUsername)
+						room.SetPlayer1("");
+					else if (room.GetPlayer2() == playerUsername)
+						room.SetPlayer2("");
+					else if (room.GetPlayer3() == playerUsername)
+						room.SetPlayer3("");
+					else if (room.GetPlayer4() == playerUsername)
+						room.SetPlayer4("");
+					else if (room.GetPlayer5() == playerUsername)
+						room.SetPlayer5("");
+					else if (room.GetPlayer6() == playerUsername)
+						room.SetPlayer6("");
 
-					lobby.SetCurrentNumberOfPlayers(lobby.GetCurrentNumberOfPlayers() - 1);
+					room.SetCurrentNumberOfPlayers(room.GetCurrentNumberOfPlayers() - 1);
 
-					if (lobby.GetNumberOfReadyPlayers() > 0)
-						lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() - 1);
+					if (room.GetNumberOfReadyPlayers() > 0)
+						room.SetNumberOfReadyPlayers(room.GetNumberOfReadyPlayers() - 1);
 
-					storage.update(lobby);
+					storage.update(room);
 
-					return crow::response(playerUsername + " left the lobby by closing the game!");
+					return crow::response(playerUsername + " left the room by closing the game!");
 				}
 				else
 				{
@@ -1138,28 +969,28 @@ int main()
 				}
 			}
 			catch (std::system_error e) {
-				return crow::response(404, "Lobby not found!");
+				return crow::response(404, "Room not found!");
 			}
 		});
 
-	auto& leaveLobbyForced = CROW_ROUTE(app, "/leaveLobbyForced").methods(crow::HTTPMethod::POST);
-	leaveLobbyForced(DatabaseStorage(storage));
+	auto& leaveRoomForced = CROW_ROUTE(app, "/leaveRoomForced").methods(crow::HTTPMethod::POST);
+	leaveRoomForced(DatabaseStorage(storage));
 
 	// Route for increasing the number of ready players
 	CROW_ROUTE(app, "/increaseNumberOfReadyPlayers/")(
 		[&storage]
 		(const crow::request& req)
 		{
-			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string roomID = req.url_params.get("roomID");
 
 			try {
-				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+				auto room = storage.get<Room>(std::stoi(roomID));
 
-				if (lobby.GetMaximNumberOfPlayers() > lobby.GetNumberOfReadyPlayers())
+				if (room.GetMaximNumberOfPlayers() > room.GetNumberOfReadyPlayers())
 				{
-					lobby.SetNumberOfReadyPlayers(lobby.GetNumberOfReadyPlayers() + 1);
+					room.SetNumberOfReadyPlayers(room.GetNumberOfReadyPlayers() + 1);
 
-					storage.update(lobby);
+					storage.update(room);
 
 					return crow::response("Number of ready players increased!");
 				}
@@ -1169,7 +1000,7 @@ int main()
 				}
 			}
 			catch (std::system_error e) {
-				return crow::response(404, "Lobby not found!");
+				return crow::response(404, "Room not found!");
 			}
 		});
 
@@ -1181,64 +1012,64 @@ int main()
 		[&storage]
 		(const crow::request& req)
 		{
-			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string roomID = req.url_params.get("roomID");
 
 			try {
-				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+				auto room = storage.get<Room>(std::stoi(roomID));
 
-				if (lobby.GetNumberOfReadyPlayers() == 0)
+				if (room.GetNumberOfReadyPlayers() == 0)
 					return crow::response(208, "Number of ready players is already 0!");
 				else
 				{
-					lobby.SetNumberOfReadyPlayers(0);
+					room.SetNumberOfReadyPlayers(0);
 
-					storage.update(lobby);
+					storage.update(room);
 
 					return crow::response("Number of ready players has been reset!");
 				}
 			}
 			catch (std::system_error e) {
-				return crow::response(404, "Lobby not found!");
+				return crow::response(404, "Room not found!");
 			}
 		});
 
 	auto& resetNumberOfReadyPlayers = CROW_ROUTE(app, "/resetNumberOfReadyPlayers").methods(crow::HTTPMethod::POST);
 	resetNumberOfReadyPlayers(DatabaseStorage(storage));
 
-	// Route to see if a lobby is ready to begin
-	CROW_ROUTE(app, "/isLobbyReady/")(
+	// Route to see if a room is ready to begin
+	CROW_ROUTE(app, "/isRoomReady/")(
 		[&storage]
 		(const crow::request& req)
 		{
-			std::string lobbyID = req.url_params.get("lobbyID");
+			std::string roomID = req.url_params.get("roomID");
 
 			try {
-				auto lobby = storage.get<Lobby>(std::stoi(lobbyID));
+				auto room = storage.get<Room>(std::stoi(roomID));
 
-				if (lobby.GetCurrentNumberOfPlayers() == lobby.GetNumberOfReadyPlayers() && lobby.GetNumberOfReadyPlayers() == lobby.GetMaximNumberOfPlayers())
+				if (room.GetCurrentNumberOfPlayers() == room.GetNumberOfReadyPlayers() && room.GetNumberOfReadyPlayers() == room.GetMaximNumberOfPlayers())
 				{
-					lobby.SetGameStatus("Ready");
+					room.SetGameStatus(EnumGameStatusToString(READY));
 
-					storage.update(lobby);
+					storage.update(room);
 
 					return crow::response(200, "Game is ready to begin!");
 				}
 				else
 				{
-					lobby.SetGameStatus("Waiting for players");
+					room.SetGameStatus(EnumGameStatusToString(WAITING_FOR_PLAYERS));
 
-					storage.update(lobby);
+					storage.update(room);
 
 					return crow::response(200, "Game is not ready to begin!");
 				}
 			}
 			catch (std::system_error e) {
-				return crow::response(404, "Lobby not found!");
+				return crow::response(404, "Room not found!");
 			}
 		});
 
-	auto& isLobbyReady = CROW_ROUTE(app, "/isLobbyReady").methods(crow::HTTPMethod::POST);
-	isLobbyReady(DatabaseStorage(storage));
+	auto& isRoomReady = CROW_ROUTE(app, "/isRoomReady").methods(crow::HTTPMethod::POST);
+	isRoomReady(DatabaseStorage(storage));
 
 	app.port(18080).multithreaded().run();
 

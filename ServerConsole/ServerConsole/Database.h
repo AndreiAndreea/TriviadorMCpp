@@ -10,8 +10,7 @@
 
 #include "User.h"
 #include "Questions.h"
-#include "Lobby.h"
-#include "Match.h"
+#include "Room.h"
 
 using namespace sqlite_orm;
 
@@ -19,7 +18,7 @@ inline auto createStorage(const std::string& filename)
 {
 	return make_storage(
 		filename,
-		make_table<User>(
+		make_table(
 			"Users",
 			make_column("id", &User::GetID, &User::SetID, autoincrement(), primary_key()),
 			make_column("username", &User::GetUsername, &User::SetUsername),
@@ -47,34 +46,21 @@ inline auto createStorage(const std::string& filename)
 			make_column("answer_3", &QuestionMultipleChoice::GetAnswer3, &QuestionMultipleChoice::SetAnswer3),
 			make_column("answer_4", &QuestionMultipleChoice::GetAnswer4, &QuestionMultipleChoice::SetAnswer4)
 		),
-		make_table<Lobby>(
-			"LobbyDetails",
-			make_column("id_lobby", &Lobby::GetRoomID, &Lobby::SetRoomID, autoincrement(), primary_key()),
-			make_column("game_type", &Lobby::GetGameType, &Lobby::SetGameType),
-			make_column("game_status", &Lobby::GetGameStatus, &Lobby::SetGameStatus),
-			make_column("room_number", &Lobby::GetRoomNumber, &Lobby::SetRoomNumber),
-			make_column("current_numbers_of_players", &Lobby::GetCurrentNumberOfPlayers, &Lobby::SetCurrentNumberOfPlayers),
-			make_column("maxim_numbers_of_players", &Lobby::GetMaximNumberOfPlayers, &Lobby::SetMaximNumberOfPlayers),
-			make_column("number_of_ready_players", &Lobby::GetNumberOfReadyPlayers, &Lobby::SetNumberOfReadyPlayers),
-			make_column("player1", &Lobby::GetPlayer1, &Lobby::SetPlayer1),
-			make_column("player2", &Lobby::GetPlayer2, &Lobby::SetPlayer2),
-			make_column("player3", &Lobby::GetPlayer3, &Lobby::SetPlayer3),
-			make_column("player4", &Lobby::GetPlayer4, &Lobby::SetPlayer4),
-			make_column("player5", &Lobby::GetPlayer5, &Lobby::SetPlayer5),
-			make_column("player6", &Lobby::GetPlayer6, &Lobby::SetPlayer6)
-		),
-		make_table<Match>(
-			"MatchLog",
-			make_column("id_match", &Match::GetRoomID, &Match::SetRoomID, autoincrement(), primary_key()),
-			make_column("match_number", &Match::GetRoomNumber, &Match::SetRoomNumber),
-			make_column("winner", &Match::GetWinner, &Match::SetWinner),
-			make_column("numbers_of_players", &Match::GetCurrentNumberOfPlayers, &Match::SetCurrentNumberOfPlayers),
-			make_column("player1", &Match::GetPlayer1, &Match::SetPlayer1),
-			make_column("player2", &Match::GetPlayer2, &Match::SetPlayer2),
-			make_column("player3", &Match::GetPlayer3, &Match::SetPlayer3),
-			make_column("player4", &Match::GetPlayer4, &Match::SetPlayer4),
-			make_column("player5", &Match::GetPlayer5, &Match::SetPlayer5),
-			make_column("player6", &Match::GetPlayer6, &Match::SetPlayer6)
+		make_table(
+			"RoomDetails",
+			make_column("id_room", &Room::GetRoomID, &Room::SetRoomID, autoincrement(), primary_key()),
+			make_column("game_type", &Room::GetGameType, &Room::SetGameType),
+			make_column("game_status", &Room::GetGameStatus, &Room::SetGameStatus),
+			make_column("room_number", &Room::GetRoomNumber, &Room::SetRoomNumber),
+			make_column("current_numbers_of_players", &Room::GetCurrentNumberOfPlayers, &Room::SetCurrentNumberOfPlayers),
+			make_column("maxim_numbers_of_players", &Room::GetMaximNumberOfPlayers, &Room::SetMaximNumberOfPlayers),
+			make_column("number_of_ready_players", &Room::GetNumberOfReadyPlayers, &Room::SetNumberOfReadyPlayers),
+			make_column("player1", &Room::GetPlayer1, &Room::SetPlayer1),
+			make_column("player2", &Room::GetPlayer2, &Room::SetPlayer2),
+			make_column("player3", &Room::GetPlayer3, &Room::SetPlayer3),
+			make_column("player4", &Room::GetPlayer4, &Room::SetPlayer4),
+			make_column("player5", &Room::GetPlayer5, &Room::SetPlayer5),
+			make_column("player6", &Room::GetPlayer6, &Room::SetPlayer6)
 		)
 	);
 }
@@ -86,7 +72,7 @@ class DatabaseStorage
 public:
 	DatabaseStorage(const std::string& filePathForSingleChoiceQuestion, const std::string& filePathForMultipeChoiceQuestion, Storage& storage);
 	DatabaseStorage(Storage& storage);
-	
+
 private:
 	std::string m_filePathForDatabase = "resources/data_files/database/triviador.sqlite";
 

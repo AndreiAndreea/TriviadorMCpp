@@ -27,7 +27,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="w0_menu">
      <widget class="QPushButton" name="profilePushButton">
@@ -449,7 +449,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="w4_availableLobbies">
+    <widget class="QWidget" name="w4_availableRooms">
      <widget class="QPushButton" name="twoPlayersPushButton">
       <property name="geometry">
        <rect>
@@ -655,7 +655,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="twoPlayersLobbyLabel">
+     <widget class="QLabel" name="twoPlayersRoomLabel">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -665,10 +665,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>2 players lobby</string>
+       <string>2 players room</string>
       </property>
      </widget>
-     <widget class="QLabel" name="threePlayersLobbyLabel">
+     <widget class="QLabel" name="threePlayersRoomLabel">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -678,10 +678,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>3 players lobby</string>
+       <string>3 players room</string>
       </property>
      </widget>
-     <widget class="QLabel" name="fourPlayersLobbyLabel">
+     <widget class="QLabel" name="fourPlayersRoomLabel">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -691,10 +691,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>4 players lobby</string>
+       <string>4 players room</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="joinLobbyPushButton">
+     <widget class="QPushButton" name="joinRoomPushButton">
       <property name="geometry">
        <rect>
         <x>790</x>
@@ -704,7 +704,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Join lobby</string>
+       <string>Join room</string>
       </property>
      </widget>
      <widget class="QPushButton" name="backToMenuPushButton_2">
@@ -824,7 +824,7 @@
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="customModeLobbyLabel">
+     <widget class="QLabel" name="customModeRoomLabel">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -834,12 +834,12 @@
        </rect>
       </property>
       <property name="text">
-       <string>custom mode lobby</string>
+       <string>custom mode room</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="w5_lobbyDetails">
-     <widget class="QPushButton" name="startGameLobbyPushButton">
+    <widget class="QWidget" name="w5_roomDetails">
+     <widget class="QPushButton" name="startGameRoomPushButton">
       <property name="geometry">
        <rect>
         <x>390</x>
@@ -852,7 +852,7 @@
        <string>Start game</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="backToLobbyPushButton">
+     <widget class="QPushButton" name="backToRoomPushButton">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -865,7 +865,7 @@
        <string>Back</string>
       </property>
      </widget>
-     <widget class="QLabel" name="playersDetailsLobbyLabel">
+     <widget class="QLabel" name="playersDetailsRoomLabel">
       <property name="geometry">
        <rect>
         <x>570</x>
@@ -875,7 +875,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;lobby details&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;room details&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QListWidget" name="playersListWidget">
@@ -958,7 +958,7 @@
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Current players&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="readyGameLobbyPushButton">
+     <widget class="QPushButton" name="readyGameRoomPushButton">
       <property name="geometry">
        <rect>
         <x>390</x>
@@ -971,7 +971,7 @@
        <string>Ready</string>
       </property>
      </widget>
-     <widget class="QLabel" name="roomNumberLobbyLabel">
+     <widget class="QLabel" name="roomNumberRoomLabel">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -984,7 +984,7 @@
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;room number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="idLobbyLabel">
+     <widget class="QLabel" name="idRoomLabel">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -994,7 +994,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;lobby ID&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;room ID&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QProgressBar" name="progressBar">

@@ -35,7 +35,7 @@ private:
 	Ui::GameElementsGenerator ui;
 
 public:
-	GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int lobbyID);
+	GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int roomID);
 	~GameElementsGenerator();
     
     //setters and gettters
@@ -104,7 +104,7 @@ private:
     std::string m_ip;
     std::string m_playerUsername;
     
-	int m_lobbyID;
+	int m_roomID;
 
 private:
     bool gotQuestion;

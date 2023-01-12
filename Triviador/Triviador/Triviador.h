@@ -58,15 +58,15 @@ private slots:
 	void on_customModePushButton_released();
 
 	void on_playersSpinBox_valueChanged(int arg1);
-	void on_joinLobbyPushButton_released();
+	void on_joinRoomPushButton_released();
 
 	/*LOBBY DETAILS*/
-	void on_backToLobbyPushButton_released();
+	void on_backToRoomPushButton_released();
 
-	void on_readyGameLobbyPushButton_released();
-	void on_startGameLobbyPushButton_released();
+	void on_readyGameRoomPushButton_released();
+	void on_startGameRoomPushButton_released();
 
-	void TimerMethodToUpdateLobbyDetails();
+	void TimerMethodToUpdateRoomDetails();
 	
 	void StartTransferToGameTimer();
 	void OnTransferToGameTimerTick();
@@ -85,18 +85,18 @@ private:
 
 	/*AVAILABLE LOBBIES*/
 	void TurnAutoExclusiveButtonsForCustomMode(bool state);
-	void SetCheckedButtonsForLobby(bool state);
+	void SetCheckedButtonsForRoom(bool state);
 
 	void ShowCustomModeSettings();
 	void HideCustomModeSettings();
 
 	/*LOBBY DETAILS*/
 	void UpdateLobbiesDetails();
-	void UpdateCurrentLobbyPlayers();
+	void UpdateCurrentRoomPlayers();
 
-	bool CheckIfLobbyIsReadyToBegin();
-	void SetLobbyDetails(const std::string& lobbyType);
-	void CreateNewLobby(const std::string& lobbyType);
+	bool CheckIfRoomIsReadyToBegin();
+	void SetRoomDetails(const std::string& roomType);
+	void CreateNewRoom(const std::string& roomType);
 
 
 private:
@@ -111,15 +111,15 @@ private:
 
 	uint8_t m_firstEmptyPlayerSeatID;
 
-	int m_lobbyID;
+	int m_roomID;
 
-	bool m_isLobbyReadyToBegin;
+	bool m_isRoomReadyToBegin;
 	GameState m_startingGame;
 
 private:
 	QPushButton* buttonSender;
 
-	QTimer* timerToUpdateLobbyDetails = new QTimer(this);
+	QTimer* timerToUpdateRoomDetails = new QTimer(this);
 	QTimer* transferToGameTimer = new QTimer(this);
 
 private:

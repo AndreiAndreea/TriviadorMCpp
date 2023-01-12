@@ -181,6 +181,8 @@ void LoginRegister::backToLoginFromRegisterButton()
 
 void LoginRegister::ServerCrashedDetails()
 {
+	LogoutUserForced();
+	
 	ui.stackedWidget->setCurrentIndex(0);
 	
 	ui.serverErrorLabel->show();
@@ -189,11 +191,18 @@ void LoginRegister::ServerCrashedDetails()
 
 void LoginRegister::closeEvent(QCloseEvent* e)
 {
+	LogoutUserForced();
+
+	e->accept();
+}
+
+void LoginRegister::LogoutUserForced()
+{
 	//update the database with the new credentials of the user before closing the application by pressing the 'X' button or by pressing 'ALT+F4' or by pressing the 'EXIT' button on the window
 	if (LoginWindow->GetUsername().empty() == false && LoginWindow->GetPassword().empty() == false)
 	{
 		m_playerUsername = LoginWindow->GetUsername();
-		
+
 		std::string link = "http://" + m_serverIP + ":" + m_serverPort + "/getuserdata/?username=" + m_playerUsername;
 
 		cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
@@ -206,16 +215,14 @@ void LoginRegister::closeEvent(QCloseEvent* e)
 
 			if (db_status == "Online")
 			{
-				link = "http://" + m_serverIP + ":" + m_serverPort + "/leaveLobbyForced/?playerUsername=" + m_playerUsername;
+				link = "http://" + m_serverIP + ":" + m_serverPort + "/leaveRoomForced/?playerUsername=" + m_playerUsername;
 
 				responseFromServer = cpr::Get(cpr::Url(link));
-				
+
 				link = "http://" + m_serverIP + ":" + m_serverPort + "/logoutuser/?username=" + m_playerUsername;
 
 				responseFromServer = cpr::Get(cpr::Url(link));
 			}
 		}
 	}
-
-	e->accept();
 }

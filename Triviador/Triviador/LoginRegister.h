@@ -44,6 +44,8 @@ private slots:
 
 	void closeEvent(QCloseEvent* e);
 
+	void LogoutUserForced();
+
 private:
 	std::string m_serverIP, m_serverPort;
 	std::string m_playerUsername;
