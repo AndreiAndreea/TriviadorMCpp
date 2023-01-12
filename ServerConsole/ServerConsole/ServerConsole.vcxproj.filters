@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Questions">
       <UniqueIdentifier>{246a0eaa-28d6-4fc0-93a4-21ce8e26f6bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Player Management">
+      <UniqueIdentifier>{df700e13-a871-4e07-908f-f0cf91f68c27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player Management">
+      <UniqueIdentifier>{1a0dd8ca-d979-44c5-8a9c-46e8c6568a6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServerConsole.cpp">
@@ -61,10 +67,13 @@
       <Filter>Source Files\Questions</Filter>
     </ClCompile>
     <ClCompile Include="Lobby.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Player Management</Filter>
     </ClCompile>
     <ClCompile Include="Match.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Player Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Source Files\Player Management</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,10 +96,13 @@
       <Filter>Header Files\Questions</Filter>
     </ClInclude>
     <ClInclude Include="Lobby.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Player Management</Filter>
     </ClInclude>
     <ClInclude Include="Match.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Player Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files\Player Management</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

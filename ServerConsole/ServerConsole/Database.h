@@ -19,7 +19,7 @@ inline auto createStorage(const std::string& filename)
 {
 	return make_storage(
 		filename,
-		make_table(
+		make_table<User>(
 			"Users",
 			make_column("id", &User::GetID, &User::SetID, autoincrement(), primary_key()),
 			make_column("username", &User::GetUsername, &User::SetUsername),
@@ -47,9 +47,9 @@ inline auto createStorage(const std::string& filename)
 			make_column("answer_3", &QuestionMultipleChoice::GetAnswer3, &QuestionMultipleChoice::SetAnswer3),
 			make_column("answer_4", &QuestionMultipleChoice::GetAnswer4, &QuestionMultipleChoice::SetAnswer4)
 		),
-		make_table(
+		make_table<Lobby>(
 			"LobbyDetails",
-			make_column("id_lobby", &Lobby::GetLobbyID, &Lobby::SetLobbyID, autoincrement(), primary_key()),
+			make_column("id_lobby", &Lobby::GetRoomID, &Lobby::SetRoomID, autoincrement(), primary_key()),
 			make_column("game_type", &Lobby::GetGameType, &Lobby::SetGameType),
 			make_column("game_status", &Lobby::GetGameStatus, &Lobby::SetGameStatus),
 			make_column("room_number", &Lobby::GetRoomNumber, &Lobby::SetRoomNumber),
@@ -63,12 +63,12 @@ inline auto createStorage(const std::string& filename)
 			make_column("player5", &Lobby::GetPlayer5, &Lobby::SetPlayer5),
 			make_column("player6", &Lobby::GetPlayer6, &Lobby::SetPlayer6)
 		),
-		make_table(
+		make_table<Match>(
 			"MatchLog",
-			make_column("id_match", &Match::GetMatchID, &Match::SetMatchID, autoincrement(), primary_key()),
-			make_column("match_number", &Match::GetMatchNumber, &Match::SetMatchNumber),
+			make_column("id_match", &Match::GetRoomID, &Match::SetRoomID, autoincrement(), primary_key()),
+			make_column("match_number", &Match::GetRoomNumber, &Match::SetRoomNumber),
 			make_column("winner", &Match::GetWinner, &Match::SetWinner),
-			make_column("numbers_of_players", &Match::GetNumberOfPlayers, &Match::SetNumberOfPlayers),
+			make_column("numbers_of_players", &Match::GetCurrentNumberOfPlayers, &Match::SetCurrentNumberOfPlayers),
 			make_column("player1", &Match::GetPlayer1, &Match::SetPlayer1),
 			make_column("player2", &Match::GetPlayer2, &Match::SetPlayer2),
 			make_column("player3", &Match::GetPlayer3, &Match::SetPlayer3),

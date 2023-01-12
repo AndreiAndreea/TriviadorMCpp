@@ -805,7 +805,7 @@ int main()
 			{
 				lobbies.push_back(crow::json::wvalue
 					{
-						{"lobbyID", lobby.GetLobbyID()},
+						{"lobbyID", lobby.GetRoomID()},
 						{"gameType", lobby.GetGameType()},
 						{"gameStatus", lobby.GetGameStatus()},
 						{"roomNumber", lobby.GetRoomNumber()},
@@ -849,7 +849,7 @@ int main()
 						found = true;
 						return crow::response(crow::json::wvalue
 							{
-								{"lobbyID", lobby.GetLobbyID()},
+								{"lobbyID", lobby.GetRoomID()},
 								{"gameType", lobby.GetGameType()},
 								{"gameStatus", lobby.GetGameStatus()},
 								{"roomNumber", lobby.GetRoomNumber()},
@@ -887,7 +887,7 @@ int main()
 
 			crow::json::wvalue lobbyDetails = crow::json::wvalue
 			{
-				{"lobbyID", lobby.GetLobbyID()},
+				{"lobbyID", lobby.GetRoomID()},
 				{"gameType", lobby.GetGameType()},
 				{"gameStatus", lobby.GetGameStatus()},
 				{"roomNumber", lobby.GetRoomNumber()},
@@ -922,25 +922,25 @@ int main()
 
 			if (game_type == "2players")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 2, 0, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 2, 0));
 
 				return crow::response(200, "Lobby for '2players' has been created!");
 			}
 			else if (game_type == "3players")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 3, 0, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 3, 0));
 
 				return crow::response(200, "Lobby for '3players' has been created!");
 			}
 			else if (game_type == "4players")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 4, 0, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 4, 0));
 
 				return crow::response(200, "Lobby for '4players' has been created!");
 			}
 			else if (game_type == "customMode")
 			{
-				storage.insert(Lobby(0, game_type, game_status, room_number, 0, 6, 0, "", "", "", "", "", ""));
+				storage.insert(Lobby(0, room_number, 0, "", "", "", "", "", "", game_type, game_status, 6, 0));
 
 				return crow::response(200, "Lobby for 'custoMode' has been created!");
 			}
@@ -1098,12 +1098,12 @@ int main()
 			try
 			{
 				auto lobbies = storage.get_all<Lobby>(where(
-					c(&Lobby::GetPlayer1) == playerUsername ||
-					c(&Lobby::GetPlayer2) == playerUsername ||
-					c(&Lobby::GetPlayer3) == playerUsername ||
-					c(&Lobby::GetPlayer4) == playerUsername ||
-					c(&Lobby::GetPlayer5) == playerUsername ||
-					c(&Lobby::GetPlayer6) == playerUsername
+					c(column<Lobby>(&Lobby::GetPlayer1)) == playerUsername ||
+					c(column<Lobby>(&Lobby::GetPlayer2)) == playerUsername ||
+					c(column<Lobby>(&Lobby::GetPlayer3)) == playerUsername ||
+					c(column<Lobby>(&Lobby::GetPlayer4)) == playerUsername ||
+					c(column<Lobby>(&Lobby::GetPlayer5)) == playerUsername ||
+					c(column<Lobby>(&Lobby::GetPlayer6)) == playerUsername
 					));
 
 				if (lobbies.size() == 1)
