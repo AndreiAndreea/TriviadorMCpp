@@ -54,6 +54,16 @@ bool Game::ClickedOnRegion(const QPointF& coordClick, const QPointF& coordRegion
 	return false;
 }
 
+bool Game::CheckIfRegionsAreNeighbors(const QPointF& coordRegion1, const QPointF& coordRegion2)
+{
+	QRect region1(coordRegion1.x(), coordRegion1.y(), 50, 50);
+	QRect region2(coordRegion2.x(), coordRegion2.y(), 50, 50);
+	
+	if (region1.intersects(region2))
+		return true;
+	return false;
+}
+
 void Game::AddNewSelectedRegion(const QPointF& coordPos)
 {
 	m_selectedRegions.push_back(coordPos);
@@ -96,12 +106,29 @@ void Game::paintEvent(QPaintEvent*)
 		painter.setRenderHint(QPainter::Antialiasing, true);
 
 		DrawMap(painter);
-
+		
 		//coloring the selected regions of the map
+		//initially
+		/*
 		for (const auto& coordRegion : m_selectedRegions)
 		{
 			QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
 			painter.fillRect(square, m_usedColor);
+		}*/
+		
+		//now
+		// iterating through the map and coloring only the regions owned by this player - to avoid errors
+		auto base = m_map.GetBaseRegion(m_playerUsername);
+		QRect square(base.first, base.second, 50, 50);
+		painter.fillRect(square, m_usedColor);
+		
+		for (const auto& region : m_map.GetUsedRegions())
+		{
+			if (region.second.first == m_playerUsername)
+			{
+				QRect square(region.first.first, region.first.second, 50, 50);
+				painter.fillRect(square, m_usedColor);
+			}
 		}
 
 		if (ui.stackedWidget->currentIndex() == 1)
@@ -154,7 +181,34 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 					}
 					else
 					{
-						AddNewSelectedRegion(regionCoordinates);
+						if (QuestionsWindow->GetIsBaseSelectionStageActive())
+						{
+							auto coords = std::make_pair(regionCoordinates.x(), regionCoordinates.y());
+							m_map.AddBaseRegion(coords, m_playerUsername);
+							
+							//etapa impartirii bazelor se incheie cand fiecare player a selectat o baza
+							if (m_map.GetNumberOfChosenBases() == m_map.GetNumberOfPlayers())
+							{
+								QuestionsWindow->SetIsBaseSelectionStageActive(false);
+								//daca region selection stage e activ
+								//atunci va trebui sa chemam tot o intrebare de tip numeric de pe server
+								QuestionsWindow->SetIsRegionSelectionStageActive(true);
+							}
+						}
+						if (QuestionsWindow->GetIsRegionSelectionStageActive())
+						{
+							auto coords = std::make_pair(regionCoordinates.x(), regionCoordinates.y());
+							m_map.AddRegion(coords, m_playerUsername, 100);
+							
+							//etapa impartirii regiunilor se incheie cand toate regiunile hartii sunt atribuite
+							if (m_selectedRegions.size() == m_map.GetMapSize().first * m_map.GetMapSize().second)
+							{
+								QuestionsWindow->SetIsRegionSelectionStageActive(false);
+								QuestionsWindow->SetIsDuelStageActive(true);
+							}
+						}
+						
+						//AddNewSelectedRegion(regionCoordinates);
 						ui.existingRegionLabel->hide();
 						QuestionsWindow->SetCanChooseTerritory(false);
 					}

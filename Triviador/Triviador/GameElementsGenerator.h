@@ -39,6 +39,15 @@ public:
 	~GameElementsGenerator();
     
     //setters and gettters
+    bool GetIsBaseSelectionStageActive();
+	void SetIsBaseSelectionStageActive(bool isBaseSelectionStageActive);
+
+	bool GetIsRegionSelectionStageActive();
+	void SetIsRegionSelectionStageActive(bool isRegionSelectionStageActive);
+    
+	bool GetIsDuelStageActive();
+	void SetIsDuelStageActive(bool isDuelStageActive);
+    
     bool GetCanChooseTerritory();
     void SetCanChooseTerritory(bool canChooseTerritory);
     void SetNumberOfPlayers(uint16_t numberOfPlayers);
@@ -85,34 +94,35 @@ private slots:
     void TickMethodToRequestDataFromServer();
 
 private:
-    bool m_answerHasBeenSelected;
-
-    //uint16_t m_amountOfRandomQuestionsFromDatabase;
-
-    Questions m_questions;
-    std::string m_currentAnswer;
-
-    bool m_canChooseTerritory;
-    uint16_t m_numberOfPlayers = 0;
-
-    QTimer* timer;
-    QElapsedTimer elapsedTime;
-
-    //std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
-	//std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
-
-    std::string m_ip;
-    std::string m_playerUsername;
-    
-	int m_roomID;
-
-private:
     bool gotQuestion;
     bool gotSingleQuestion, gotMultipleQuestion;
+    
+    bool m_gotFirstQuestion;
+    bool m_baseSelectionStageActive;
+    bool m_regionSelectionStageActive;
+	bool m_duelStageActive;
+    
+    bool m_answerHasBeenSelected;
+    bool m_canChooseTerritory;
+
+    uint16_t m_numberOfPlayers = 0;
+    //uint16_t m_amountOfRandomQuestionsFromDatabase;
+    
+    int m_roomID;
+    
+    std::string m_ip;
+    std::string m_playerUsername;
+    std::string m_currentAnswer;
+
+    Questions m_questions;
+    
+    QTimer* timer;
+    QTimer* timerToCheckServer = new QTimer(this);
+    QElapsedTimer elapsedTime;
 
     QuestionSingleChoice m_singleChoiceQuestion;
-	QuestionMultipleChoice m_multipleChoiceQuestion;
-
-private:
-	QTimer* timerToCheckServer = new QTimer(this);
+    QuestionMultipleChoice m_multipleChoiceQuestion;
+    
+    //std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
+	//std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
 };

@@ -30,6 +30,7 @@ public:
 
 public:
 	bool ClickedOnRegion(const QPointF& coordClick, const QPointF& coordRegion);
+	bool CheckIfRegionsAreNeighbors(const QPointF& coordRegion1, const QPointF& coordRegion2);
 	void AddNewSelectedRegion(const QPointF& coordPos);
 
 	void StartInitializeQuestionsGeneratorTimer();

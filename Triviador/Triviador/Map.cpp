@@ -74,6 +74,22 @@ bool Map::IsRegionAvailable(Coords coords)
 	return false;*/
 }
 
+void Map::AddBaseRegion(Coords coords, std::string owner)
+{
+	m_bases.insert(std::make_pair(coords, std::make_pair(owner, 300)));
+}
+
+void Map::AddRegion(Coords coords, std::string owner, int score)
+{
+	m_usedRegions.insert(std::make_pair(coords, std::make_pair(owner, score)));
+}
+
+void Map::ModifyRegionAttributes(Coords coords, std::string newOwner, int newScore)
+{
+	m_usedRegions.find(coords)->second.first = newOwner;
+	m_usedRegions.find(coords)->second.second = newScore;
+}
+
 /*
 void Map::RemoveUnusedRegion(uint8_t position)
 {
@@ -88,4 +104,21 @@ uint16_t Map::GetNumberOfPlayers() const
 std::pair<uint16_t, uint16_t> Map::GetMapSize() const
 {
 	return m_mapSize;
+}
+
+int Map::GetNumberOfChosenBases() const
+{
+	return m_bases.size();
+}
+
+Unordered_map Map::GetUsedRegions() const
+{
+	return m_usedRegions;
+}
+
+Coords Map::GetBaseRegion(std::string owner) const
+{
+	for (auto& region : m_usedRegions)
+		if (region.second.first == owner)
+			return region.first;
 }

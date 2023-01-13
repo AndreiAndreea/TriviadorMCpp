@@ -6,6 +6,7 @@
 
 #include <QPainter>
 #include <QPaintEvent>
+#include <QMouseEvent>
 
 #include "ui_Game.h"
 
@@ -18,11 +19,15 @@ struct pair_hash {
 	}
 };
 
+using Coords = std::pair<qreal, qreal>;
+using Unordered_map = std::unordered_map<Coords, std::pair<std::string, int>, pair_hash>;
+
 class Map
 {
 public:
-	using Coords = std::pair<uint8_t, uint8_t>;
-	using Unordered_map = std::unordered_map<Coords, int, pair_hash>;
+	//using Coords = std::pair<uint8_t, uint8_t>;
+	//using Coords = std::pair<qreal, qreal>;
+	//using Unordered_map = std::unordered_map<Coords, std::pair<std::string, int>, pair_hash>;
 	
 public:
 	void SetNumberOfPlayers(uint16_t numberOfPlayers);
@@ -34,10 +39,19 @@ public:
 
 	bool IsRegionAvailable(Coords coords);
 	//void RemoveUnusedRegion(uint8_t position);
+	
+	void AddBaseRegion(Coords coords, std::string owner);
+	void AddRegion(Coords coords, std::string owner, int score);
 
+	void ModifyRegionAttributes(Coords coords, std::string newOwner, int newScore);
+	
 public:
 	uint16_t GetNumberOfPlayers() const;
 	std::pair<uint16_t, uint16_t> GetMapSize() const;
+	
+	int GetNumberOfChosenBases() const;
+	Unordered_map GetUsedRegions() const;
+	Coords GetBaseRegion(std::string owner) const;
 	
 private:
 	uint16_t m_numberOfPlayers;
@@ -45,5 +59,6 @@ private:
 	std::pair<uint16_t, uint16_t> m_mapSize;
 
 	//std::vector<Coords> m_unusedRegions; - in loc sa cautam in regiunile nefolosite
-	Unordered_map m_usedRegions; //avem o mapa cu regiunile utilizate, cand se alege o baza/teriutoriu se va insera
+	Unordered_map m_usedRegions; //avem o mapa cu regiunile utilizate, cand se alege o baza/teritoriu se va insera
+	Unordered_map m_bases;
 };

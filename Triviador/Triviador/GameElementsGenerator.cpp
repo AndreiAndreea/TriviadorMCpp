@@ -46,12 +46,15 @@ GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::s
 	ui.displayAnswerVerdictMultipleChoiceQuestionLabel->hide();
 	ui.multipleChoiceAnswer1Button->setChecked(false);
 
-	m_answerHasBeenSelected = false;
-
-	m_canChooseTerritory = false;
-
 	gotQuestion = false;
 	gotSingleQuestion = false;
+	m_gotFirstQuestion = false;
+	
+	m_answerHasBeenSelected = false;
+	m_canChooseTerritory = false;
+	m_baseSelectionStageActive = false;
+	m_regionSelectionStageActive = false;
+	m_duelStageActive = false;
 
 	m_singleChoiceQuestion = QuestionSingleChoice();
 	m_multipleChoiceQuestion = QuestionMultipleChoice();
@@ -113,6 +116,12 @@ void GameElementsGenerator::GetSingleChoiceQuestion()
 
 		gotSingleQuestion = true;
 		gotQuestion = true;
+		
+		if (m_gotFirstQuestion == false)
+		{
+			m_gotFirstQuestion = true;
+			m_baseSelectionStageActive = true;
+		}
 	}
 }
 
@@ -230,6 +239,36 @@ void GameElementsGenerator::DisableAdvantageOfferedAnswers(bool toggleAnswer)
 	ui.offeredAnswer2Button->setDisabled(toggleAnswer);
 	ui.offeredAnswer3Button->setDisabled(toggleAnswer);
 	ui.offeredAnswer4Button->setDisabled(toggleAnswer);
+}
+
+bool GameElementsGenerator::GetIsBaseSelectionStageActive()
+{
+	return m_baseSelectionStageActive;
+}
+
+void GameElementsGenerator::SetIsBaseSelectionStageActive(bool isBaseSelectionStageActive)
+{
+	m_baseSelectionStageActive = isBaseSelectionStageActive;
+}
+
+bool GameElementsGenerator::GetIsRegionSelectionStageActive()
+{
+	return m_regionSelectionStageActive;
+}
+
+void GameElementsGenerator::SetIsRegionSelectionStageActive(bool isRegionSelectionStageActive)
+{
+	m_regionSelectionStageActive = isRegionSelectionStageActive;
+}
+
+bool GameElementsGenerator::GetIsDuelStageActive()
+{
+	return m_duelStageActive;
+}
+
+void GameElementsGenerator::SetIsDuelStageActive(bool isDuelStageActive)
+{
+	m_duelStageActive = isDuelStageActive;
 }
 
 bool GameElementsGenerator::GetCanChooseTerritory()
