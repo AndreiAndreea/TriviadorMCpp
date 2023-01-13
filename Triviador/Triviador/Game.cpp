@@ -74,12 +74,17 @@ void Game::StartInitializeQuestionsGeneratorTimer()
 }
 
 void Game::GenerateRandomColor()
-{
-	srand(time(0));
+{	
+	std::string link = m_ip + "/getPlayerColor/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername;
 
-	int randomColorIndex = rand() % m_colorList.size();
-
-	m_usedColor = m_colorList[randomColorIndex];
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+	
+	if (responseFromServer.status_code == 200)
+	{
+		auto color = crow::json::load(responseFromServer.text);
+		std::string usedColor = color["color"].s();
+		m_usedColor = QColor(usedColor.c_str());
+	}
 }
 
 void Game::paintEvent(QPaintEvent*)
@@ -145,7 +150,7 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 					if (found)
 					{
 						ui.existingRegionLabel->show();
-						ui.existingRegionLabel->setText("Regiunea deja exista!");
+						ui.existingRegionLabel->setText("Regiunea este deja selectata!");
 					}
 					else
 					{

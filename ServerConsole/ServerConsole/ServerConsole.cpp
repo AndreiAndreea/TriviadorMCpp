@@ -739,6 +739,30 @@ int main()
 	auto& getRoomDetails = CROW_ROUTE(app, "/getRoomDetails").methods(crow::HTTPMethod::POST);
 	getRoomDetails(DatabaseStorage(storage));
 
+	// Get the color used to color territories for a specific player in a specific room
+	CROW_ROUTE(app, "/getPlayerColor/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string roomID = req.url_params.get("roomID");
+		    std::string username = req.url_params.get("username");
+
+			auto getRoom = storage.get<Room>(roomID);
+			
+			crow::json::wvalue findUserColorInRoom = crow::json::wvalue
+			{
+				{"color", getRoom.GetColorForPlayer(username)}
+			};
+
+			if (getRoom.GetColorForPlayer(username) == "Player not found!")
+				return crow::response(404, "Player not found in room!");
+			else
+				return crow::response(crow::json::wvalue{ findUserColorInRoom });
+		});
+
+	auto& getPlayerColor = CROW_ROUTE(app, "/getPlayerColor").methods(crow::HTTPMethod::POST);
+	getPlayerColor(DatabaseStorage(storage));
+	
 	// Create a new room by the gameType
 	CROW_ROUTE(app, "/createNewRoom/")(
 		[&storage]

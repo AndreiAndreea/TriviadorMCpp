@@ -15,6 +15,12 @@ Room::Room()
 	m_player4 = std::string();
 	m_player5 = std::string();
 	m_player6 = std::string();
+	m_color1 = std::string();
+	m_color2 = std::string();
+	m_color3 = std::string();
+	m_color4 = std::string();
+	m_color5 = std::string();
+	m_color6 = std::string();
 }
 
 Room::Room(
@@ -46,7 +52,12 @@ Room::Room(
 	m_player5(player5),
 	m_player6(player6)
 {
-
+	m_color1 = std::string();
+	m_color2 = std::string();
+	m_color3 = std::string();
+	m_color4 = std::string();
+	m_color5 = std::string();
+	m_color6 = std::string();
 }
 
 Room::~Room()
@@ -127,6 +138,7 @@ numberOfPlayers Room::GetNumberOfReadyPlayers() const
 void Room::SetPlayer1(const std::string& player1)
 {
 	m_player1 = player1;
+	SetColor1();
 }
 
 const std::string& Room::GetPlayer1() const
@@ -137,6 +149,7 @@ const std::string& Room::GetPlayer1() const
 void Room::SetPlayer2(const std::string& player2)
 {
 	m_player2 = player2;
+	SetColor2();
 }
 
 const std::string& Room::GetPlayer2() const
@@ -147,6 +160,7 @@ const std::string& Room::GetPlayer2() const
 void Room::SetPlayer3(const std::string& player3)
 {
 	m_player3 = player3;
+	SetColor3();
 }
 
 const std::string& Room::GetPlayer3() const
@@ -157,6 +171,7 @@ const std::string& Room::GetPlayer3() const
 void Room::SetPlayer4(const std::string& player4)
 {
 	m_player4 = player4;
+	SetColor4();
 }
 
 const std::string& Room::GetPlayer4() const
@@ -167,6 +182,7 @@ const std::string& Room::GetPlayer4() const
 void Room::SetPlayer5(const std::string& player5)
 {
 	m_player5 = player5;
+	SetColor5();
 }
 
 const std::string& Room::GetPlayer5() const
@@ -177,9 +193,120 @@ const std::string& Room::GetPlayer5() const
 void Room::SetPlayer6(const std::string& player6)
 {
 	m_player6 = player6;
+	SetColor6();
 }
 
 const std::string& Room::GetPlayer6() const
 {
 	return m_player6;
+}
+
+void Room::SetColor1()
+{
+	if (m_player1 == "")
+		m_color1 = "";
+	else
+		m_color1 = GenerateRandomColorForPlayer();
+}
+
+const std::string& Room::GetColor1() const
+{
+	return m_color1;
+}
+
+void Room::SetColor2()
+{
+	if (m_player2 == "")
+		m_color2 = "";
+	else
+		m_color2 = GenerateRandomColorForPlayer();
+}
+
+const std::string& Room::GetColor2() const
+{
+	return m_color2;
+}
+
+void Room::SetColor3()
+{
+	if (m_player3 == "")
+		m_color3 = "";
+	else
+		m_color3 = GenerateRandomColorForPlayer();
+}
+
+const std::string& Room::GetColor3() const
+{
+	return m_color3;
+}
+
+void Room::SetColor4()
+{
+	if (m_player4 == "")
+		m_color4 = "";
+	else
+		m_color4 = GenerateRandomColorForPlayer();
+}
+
+const std::string& Room::GetColor4() const
+{
+	return m_color4;
+}
+
+void Room::SetColor5()
+{
+	if (m_player5 == "")
+		m_color5 = "";
+	else
+		m_color5 = GenerateRandomColorForPlayer();
+}
+
+const std::string& Room::GetColor5() const
+{
+	return m_color5;
+}
+
+void Room::SetColor6()
+{
+	if (m_player6 == "")
+		m_color6 = "";
+	else
+		m_color6 = GenerateRandomColorForPlayer();
+}
+
+const std::string& Room::GetColor6() const
+{
+	return m_color6;
+}
+
+std::string Room::GenerateRandomColorForPlayer()
+{
+	srand(time(0));
+
+	int randomColorIndex = rand() % m_colorList.size();
+
+	std::string color = m_colorList[randomColorIndex];
+	
+	//scoatem culoarea aleasa din lista de culori disponibile, ca sa nu se repete
+	m_colorList.erase(m_colorList.begin() + randomColorIndex);
+	
+	return color;
+}
+
+std::string Room::GetColorForPlayer(const std::string& player_name)
+{
+	if (player_name == m_player1)
+		return m_color1;
+	else if (player_name == m_player2)
+		return m_color2;
+	else if (player_name == m_player3)
+		return m_color3;
+	else if (player_name == m_player4)
+		return m_color4;
+	else if (player_name == m_player5)
+		return m_color5;
+	else if (player_name == m_player6)
+		return m_color6;
+	else
+		return "Player not found!";
 }

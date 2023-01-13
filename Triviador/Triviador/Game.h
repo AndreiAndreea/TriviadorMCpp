@@ -55,8 +55,6 @@ private:
 
 	QColor m_usedColor;
 	
-	std::vector<QColor> m_colorList = { Qt::yellow, Qt:: blue, Qt::green, Qt::cyan, Qt::magenta, Qt::red, Qt::darkGreen, Qt::darkCyan, Qt::darkMagenta, Qt::darkRed };
-	
 	std::vector<QPointF> m_selectedRegions;
 
 	QTimer* transferTimer;
