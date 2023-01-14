@@ -17,15 +17,14 @@
 #include <string>
 #include <cstdlib>
 
-#include "Questions.h"
-
 #include "QuestionSingleChoice.h"
 #include "QuestionMultipleChoice.h"
 
-#include "DataBase.h"
-
 #include <curl/curl.h>
 #include <cpr/cpr.h>
+#include <crow.h>
+
+#include "Player.h"
 
 class GameElementsGenerator : public QDialog
 {
@@ -113,8 +112,6 @@ private:
     std::string m_ip;
     std::string m_playerUsername;
     std::string m_currentAnswer;
-
-    Questions m_questions;
     
     QTimer* timer;
     QTimer* timerToCheckServer = new QTimer(this);

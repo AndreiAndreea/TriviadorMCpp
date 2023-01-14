@@ -3,9 +3,11 @@
 #include <array>
 #include <iostream>
 
+#include "LibDefine.h"
+
 #define m_numberOfAnswers 5
 
-class QuestionMultipleChoice
+class DLL_API QuestionMultipleChoice
 {
 public:
 	QuestionMultipleChoice();

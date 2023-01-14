@@ -21,6 +21,7 @@ Room::Room()
 	m_color4 = std::string();
 	m_color5 = std::string();
 	m_color6 = std::string();
+	m_winner = std::string();
 }
 
 Room::Room(
@@ -58,6 +59,8 @@ Room::Room(
 	m_color4 = std::string();
 	m_color5 = std::string();
 	m_color6 = std::string();
+
+	m_winner = std::string();
 }
 
 Room::~Room()
@@ -279,6 +282,16 @@ const std::string& Room::GetColor6() const
 	return m_color6;
 }
 
+void Room::SetWinner(const std::string& winner)
+{
+	m_winner = winner;
+}
+
+const std::string& Room::GetWinner() const
+{
+	return m_winner;
+}
+
 std::string Room::GenerateRandomColorForPlayer()
 {
 	srand(time(0));
@@ -297,16 +310,20 @@ std::string Room::GetColorForPlayer(const std::string& player_name)
 {
 	if (player_name == m_player1)
 		return m_color1;
-	else if (player_name == m_player2)
+	
+	if (player_name == m_player2)
 		return m_color2;
-	else if (player_name == m_player3)
+	
+	if (player_name == m_player3)
 		return m_color3;
-	else if (player_name == m_player4)
+	if (player_name == m_player4)
 		return m_color4;
-	else if (player_name == m_player5)
+	
+	if (player_name == m_player5)
 		return m_color5;
-	else if (player_name == m_player6)
+	
+	if (player_name == m_player6)
 		return m_color6;
-	else
-		return "Player not found!";
+
+	return "Player not found!";
 }

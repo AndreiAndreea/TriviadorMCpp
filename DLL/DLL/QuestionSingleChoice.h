@@ -4,7 +4,9 @@
 #include <cstdint>
 #include <iostream>
 
-class QuestionSingleChoice
+#include "LibDefine.h"
+
+class DLL_API QuestionSingleChoice
 {
 public:
 	QuestionSingleChoice();

@@ -60,7 +60,8 @@ inline auto createStorage(const std::string& filename)
 			make_column("player3", &Room::GetPlayer3, &Room::SetPlayer3),
 			make_column("player4", &Room::GetPlayer4, &Room::SetPlayer4),
 			make_column("player5", &Room::GetPlayer5, &Room::SetPlayer5),
-			make_column("player6", &Room::GetPlayer6, &Room::SetPlayer6)
+			make_column("player6", &Room::GetPlayer6, &Room::SetPlayer6),
+			make_column("winner", &Room::GetWinner, &Room::SetWinner)
 		)
 	);
 }

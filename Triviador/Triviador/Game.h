@@ -4,15 +4,8 @@
 
 #include "ui_Game.h"
 
-#include <QFile>
-#include <QTextStream>
-
 #include "Map.h"
 #include "GameElementsGenerator.h"
-
-#include <cstdlib>
-
-#include <cpr/cpr.h>
 
 class Game : public QDialog
 {

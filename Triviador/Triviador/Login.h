@@ -4,14 +4,6 @@
 
 #include "ui_Login.h"
 
-#include <QFile>
-#include <QTextStream>
-
-#include <string>
-
-#include <curl/curl.h>
-#include <cpr/cpr.h>
-
 #include "Triviador.h"
 
 class Login : public QDialog

@@ -4,13 +4,10 @@
 
 #include "Game.h"
 
-#include <QDebug>
 #include <QTableWidgetItem>
 #include <QTableWidget>
 
 #include <regex>
-#include <curl/curl.h>
-#include <cpr/cpr.h>
 
 //declare an enum to store the current state of the game
 enum class GameState

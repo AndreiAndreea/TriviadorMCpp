@@ -7,19 +7,6 @@ GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::s
 	m_ip = ip;
 	m_playerUsername = playerUsername;
 	m_roomID = roomID;
-
-	/*
-	m_amountOfRandomQuestionsFromDatabase = 5;
-
-	DatabaseStorage storage("SingleChoiceQuestions.txt", "MultipleChoiceQuestions.txt");
-	if (!storage.Initialize())
-	{
-		std::cout << "Failed to initialize the database!";
-	}
-
-	m_randomSingleChoiceQuestionsVector = m_questions.GetAFewRandomSingleChoiceQuestions(m_amountOfRandomQuestionsFromDatabase);
-	m_randomMultipleChoiceQuestionsVector = m_questions.GetAFewRandomMultipleChoiceQuestions(m_amountOfRandomQuestionsFromDatabase);
-	*/
 	
 	ui.titleLabel->setText(" ");
 

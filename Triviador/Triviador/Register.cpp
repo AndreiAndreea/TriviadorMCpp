@@ -1,8 +1,4 @@
 #include "Register.h"
-#include "Login.h"
-#include "Game.h"
-
-#include <regex>
 
 Register::Register()
 {

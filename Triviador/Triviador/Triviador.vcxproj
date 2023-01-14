@@ -64,13 +64,29 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\DLL\DLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\DLL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\DLL\$(IntDir)DLL.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\DLL\DLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\DLL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\DLL\$(IntDir)DLL.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -113,27 +129,19 @@
     <QtUic Include="Register.ui" />
     <QtUic Include="Triviador.ui" />
     <QtMoc Include="Triviador.h" />
-    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Duel.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="QuestionMultipleChoice.cpp" />
-    <ClCompile Include="Questions.cpp" />
-    <ClCompile Include="QuestionSingleChoice.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Triviador.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataBase.h" />
     <ClInclude Include="Duel.h" />
     <QtMoc Include="LoginRegister.h" />
     <QtMoc Include="Login.h" />
     <QtMoc Include="Game.h" />
     <QtMoc Include="GameElementsGenerator.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="QuestionMultipleChoice.h" />
-    <ClInclude Include="Questions.h" />
-    <ClInclude Include="QuestionSingleChoice.h" />
     <ClInclude Include="Map.h" />
     <QtMoc Include="Register.h" />
     <ClInclude Include="Utils.h" />

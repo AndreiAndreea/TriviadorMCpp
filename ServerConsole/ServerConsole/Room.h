@@ -85,6 +85,9 @@ public:
 	
 	void SetColor6();
 	const std::string& GetColor6() const;
+
+	void SetWinner(const std::string& winner);
+	const std::string& GetWinner() const;
 	
 public:
 	std::string GenerateRandomColorForPlayer();
@@ -96,6 +99,8 @@ private:
 	std::string m_gameType, m_gameStatus, m_roomNumber;
 
 	numberOfPlayers m_currentNumberOfPlayers, m_maximNumberOfPlayers, m_number_of_ready_players;
+	
+	std::string m_winner;
 
 	std::string m_player1, m_player2, m_player3, m_player4, m_player5, m_player6;
 

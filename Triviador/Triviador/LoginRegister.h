@@ -4,13 +4,8 @@
 
 #include "ui_LoginRegister.h"
 
-#include <QFile>
-#include <QTextStream>
-
 #include "Register.h"
 #include "Login.h"
-
-#include <regex>
 
 class LoginRegister : public QDialog
 {

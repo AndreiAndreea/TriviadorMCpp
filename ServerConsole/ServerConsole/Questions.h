@@ -1,6 +1,7 @@
 #pragma once
-#include "QuestionMultipleChoice.h"
+
 #include "QuestionSingleChoice.h"
+#include "QuestionMultipleChoice.h"
 
 #include <vector>
 #include <fstream>
@@ -31,10 +32,6 @@ public:
 
 	const QuestionSingleChoice& GetRandomSingleChoiceQuestion();
 	const QuestionMultipleChoice& GetRandomMultipleChoiceQuestion();
-
-private:
-	std::string m_filePathForSingleChoiceQuestions = "SingleChoiceQuestions.txt"; //need to be deleted when the server is ready
-	std::string m_filePathForMultipleChoiceQuestions = "MultipleChoiceQuestions.txt"; //need to be deleted when the server is ready
 
 public:
 	void GetSingleChoiceQuestionsFromFile(const std::string& filePathSingleChoiceQuestions);

@@ -45,23 +45,11 @@
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{722d1f14-2a11-43b4-abdd-cba4cd268670}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Database">
-      <UniqueIdentifier>{0d21aaa0-c086-4257-81df-d09df7df1b2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Database">
-      <UniqueIdentifier>{af537f92-50e0-452e-8e98-fe46e72349a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Game">
       <UniqueIdentifier>{354681b6-91bb-4ec9-a0ab-564d23a545be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Questions">
-      <UniqueIdentifier>{83421a44-b871-4ae7-9fa0-927c4a405b46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Questions">
-      <UniqueIdentifier>{7690012f-69d1-4a26-8e6b-717784d1d940}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,15 +60,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Questions.cpp">
-      <Filter>Source Files\Questions</Filter>
-    </ClCompile>
-    <ClCompile Include="QuestionMultipleChoice.cpp">
-      <Filter>Source Files\Questions</Filter>
-    </ClCompile>
-    <ClCompile Include="QuestionSingleChoice.cpp">
-      <Filter>Source Files\Questions</Filter>
     </ClCompile>
     <ClCompile Include="Login.cpp">
       <Filter>Source Files\LoginRegister</Filter>
@@ -106,9 +85,6 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="DataBase.cpp">
-      <Filter>Source Files\Database</Filter>
-    </ClCompile>
     <ClCompile Include="Triviador.cpp">
       <Filter>Source Files\Triviador</Filter>
     </ClCompile>
@@ -117,15 +93,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="QuestionSingleChoice.h">
-      <Filter>Header Files\Questions</Filter>
-    </ClInclude>
-    <ClInclude Include="Questions.h">
-      <Filter>Header Files\Questions</Filter>
-    </ClInclude>
-    <ClInclude Include="QuestionMultipleChoice.h">
-      <Filter>Header Files\Questions</Filter>
-    </ClInclude>
     <ClInclude Include="Duel.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -137,9 +104,6 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="DataBase.h">
-      <Filter>Header Files\Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
