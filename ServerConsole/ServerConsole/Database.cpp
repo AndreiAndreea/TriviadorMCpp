@@ -33,7 +33,7 @@ void DatabaseStorage::Initialize()
 
 crow::response DatabaseStorage::operator()(const crow::request& request) const
 {
-	auto bodyArgs = ParseUrlArgs(request.body); //id=2&quantity=3&...
+	auto bodyArgs = ParseUrlArgs(request.body);
 	auto end = bodyArgs.end();
 
 	auto roomID = bodyArgs.find("room_id");

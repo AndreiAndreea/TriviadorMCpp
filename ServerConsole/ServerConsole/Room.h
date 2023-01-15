@@ -96,7 +96,6 @@ public:
 
 	std::vector<playerData> GetPlayersInfo();
 	
-	//Override the operator == to be able to compare two objects of type Room
 	bool operator==(const Room& room);
 	
 public:

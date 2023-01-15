@@ -1,10 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <ctime>
-#include <vector>
-#include <string>
-#include <regex>
 #include <iostream>
+#include <ctime>
+#include <regex>
 #include <tuple>
+
+#include <random>
+#include <algorithm>
+#include <iterator>
 
 #include "Database.h"
 
@@ -17,104 +19,6 @@ uint8_t amountOfQuestions = 5;
 *
 * https://stackoverflow.com/a/630475/12388382
 */
-
-std::vector<crow::json::wvalue> getASingleChoiceQuestionBatch
-(Storage& storage, uint8_t amountOfQuestions,
-	std::vector<bool>& m_selectedSingleChoiceQuestions,
-	std::vector<QuestionSingleChoice>& m_randomSingleChoiceQuestionsVector)
-{
-	//initializing the question usage check vector
-	auto countSingleQuestions = storage.count<QuestionSingleChoice>();
-
-	if (m_selectedSingleChoiceQuestions.size() != countSingleQuestions)
-		m_selectedSingleChoiceQuestions.resize(countSingleQuestions + 1);
-
-	//if there is an available batch to take
-	if (m_randomSingleChoiceQuestionsVector.size() <= countSingleQuestions - amountOfQuestions)
-	{
-		std::vector<crow::json::wvalue> questionJson;
-
-		for (uint8_t index = 0; index < amountOfQuestions; index++)
-		{
-			uint8_t randomID = rand() % countSingleQuestions + 1;
-
-			while (m_selectedSingleChoiceQuestions[randomID] == true)
-			{
-				randomID = rand() % countSingleQuestions + 1;
-			}
-
-			m_randomSingleChoiceQuestionsVector.push_back(storage.get<QuestionSingleChoice>(randomID));
-
-			auto question = m_randomSingleChoiceQuestionsVector.back();
-
-			questionJson.push_back(crow::json::wvalue
-				{
-					{"question", question.GetQuestionText()},
-					{"correctAnswer", question.GetAnswer()}
-				});
-
-			m_selectedSingleChoiceQuestions[randomID] = true;
-		}
-
-		return questionJson;
-	}
-	else
-	{
-		std::vector<crow::json::wvalue> questionJson;
-		return questionJson;
-	}
-}
-
-std::vector<crow::json::wvalue> getAMultipleChoiceQuestionBatch
-(Storage& storage, uint8_t amountOfQuestions,
-	std::vector<bool>& m_selectedMultiplChoiceQuestions,
-	std::vector<QuestionMultipleChoice>& m_randomMultipleChoiceQuestionsVector)
-{
-	//initializing the question usage check vector
-	auto countMultipleQuestions = storage.count<QuestionMultipleChoice>();
-
-	if (m_selectedMultiplChoiceQuestions.size() != countMultipleQuestions)
-		m_selectedMultiplChoiceQuestions.resize(countMultipleQuestions + 1);
-
-	//if there is an available batch to take
-	if (m_randomMultipleChoiceQuestionsVector.size() <= countMultipleQuestions - amountOfQuestions)
-	{
-		std::vector<crow::json::wvalue> questionJson;
-
-		for (uint8_t index = 0; index < amountOfQuestions; index++)
-		{
-			uint8_t randomID = rand() % countMultipleQuestions + 1;
-
-			while (m_selectedMultiplChoiceQuestions[randomID] == true)
-			{
-				randomID = rand() % countMultipleQuestions + 1;
-			}
-
-			m_randomMultipleChoiceQuestionsVector.push_back(storage.get<QuestionMultipleChoice>(randomID));
-
-			auto question = m_randomMultipleChoiceQuestionsVector.back();
-
-			questionJson.push_back(crow::json::wvalue
-				{
-					{"question", question.GetQuestionText()},
-					{"correctAnswer", question.GetCorrectAnswer()},
-					{"answer1", question.GetAnswer1()},
-					{"answer2", question.GetAnswer2()},
-					{"answer3", question.GetAnswer3()},
-					{"answer4", question.GetAnswer4()}
-				});
-
-			m_selectedMultiplChoiceQuestions[randomID] = true;
-		}
-
-		return questionJson;
-	}
-	else
-	{
-		std::vector<crow::json::wvalue> questionJson;
-		return questionJson;
-	}
-}
 
 bool isValidEmail(const std::string& email)
 {
@@ -174,13 +78,12 @@ std::string GenerateRoomNumber(std::string& game_type)
 
 int main()
 {
-	std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
-	std::vector<bool> m_selectedSingleChoiceQuestions;
-
-	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
-	std::vector<bool> m_selectedMultipleChoiceQuestions;
+	std::random_device rd;
+	std::mt19937 g(rd());
 
 	std::vector<Room> m_savedRooms;
+
+	int indexVectorSingleChoiceQuestions, indexVectorMultipleChoiceQuestions;
 
 	std::string dataFilesPath = "resources/data_files";
 
@@ -191,6 +94,12 @@ int main()
 
 	Storage storage = createStorage(filePathForDatabase);
 	storage.sync_schema();
+
+	std::vector<QuestionSingleChoice> allSingleChoiceQuestions = storage.get_all<QuestionSingleChoice>();
+	std::shuffle(allSingleChoiceQuestions.begin(), allSingleChoiceQuestions.end(), g);
+
+	std::vector<QuestionMultipleChoice> allMultipleChoiceQuestions = storage.get_all<QuestionMultipleChoice>();
+	std::shuffle(allMultipleChoiceQuestions.begin(), allMultipleChoiceQuestions.end(), g);
 
 	std::ifstream databaseFile(filePathForDatabase);
 
@@ -212,10 +121,9 @@ int main()
 
 	std::cout << "\n";
 
-	std::vector<crow::json::wvalue> batchOfSingleQuestions = getASingleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedSingleChoiceQuestions, m_randomSingleChoiceQuestionsVector);
-	std::vector<crow::json::wvalue> batchOfMultipleQuestions = getAMultipleChoiceQuestionBatch(storage, amountOfQuestions, m_selectedMultipleChoiceQuestions, m_randomMultipleChoiceQuestionsVector);
-
 	crow::SimpleApp app;
+
+	indexVectorMultipleChoiceQuestions = indexVectorSingleChoiceQuestions = 0;
 
 	/*
 	==========================
@@ -549,11 +457,11 @@ int main()
 		[&storage]
 		()
 		{
-			std::vector<crow::json::wvalue> usersJson;
+			std::vector<crow::json::wvalue> vectorOfQuestion;
 
 			for (const auto& question : storage.iterate<QuestionSingleChoice>())
 			{
-				usersJson.push_back(crow::json::wvalue
+				vectorOfQuestion.push_back(crow::json::wvalue
 					{
 						{"ID", question.GetID()},
 						{"Question", question.GetQuestionText()},
@@ -561,7 +469,7 @@ int main()
 					});
 			}
 
-			return crow::json::wvalue{ usersJson };
+			return crow::json::wvalue{ vectorOfQuestion };
 		});
 
 	auto& getSingleQuestions = CROW_ROUTE(app, "/getSingleQuestions").methods(crow::HTTPMethod::POST);
@@ -569,10 +477,16 @@ int main()
 
 	// Get the same single choice question - needed to sync generated questions for players
 	CROW_ROUTE(app, "/getASingleChoiceQuestion")(
-		[&storage, &batchOfSingleQuestions]
+		[&storage, &allSingleChoiceQuestions, &indexVectorSingleChoiceQuestions]
 		()
 		{
-			return crow::response(crow::json::wvalue{ batchOfSingleQuestions[batchOfSingleQuestions.size() - 1] });
+			auto question = allSingleChoiceQuestions[indexVectorSingleChoiceQuestions];
+			
+			return crow::response(crow::json::wvalue
+				{
+					{"question", question.GetQuestionText()},
+					{"correctAnswer", question.GetAnswer()}
+				});
 		});
 
 	auto& getASingleChoiceQuestion = CROW_ROUTE(app, "/getASingleChoiceQuestion").methods(crow::HTTPMethod::POST);
@@ -587,11 +501,11 @@ int main()
 		[&storage]
 		()
 		{
-			std::vector<crow::json::wvalue> usersJson;
+			std::vector<crow::json::wvalue> vectorOfQuestions;
 
 			for (const auto& question : storage.iterate<QuestionMultipleChoice>())
 			{
-				usersJson.push_back(crow::json::wvalue
+				vectorOfQuestions.push_back(crow::json::wvalue
 					{
 						{"ID", question.GetID()},
 						{"question", question.GetQuestionText()},
@@ -603,7 +517,7 @@ int main()
 					});
 			}
 
-			return crow::json::wvalue{ usersJson };
+			return crow::json::wvalue{ vectorOfQuestions };
 		});
 
 	auto& getMultipleQuestions = CROW_ROUTE(app, "/getMultipleQuestions").methods(crow::HTTPMethod::POST);
@@ -611,10 +525,20 @@ int main()
 
 	// Get the same multiple choice question - needed to sync generated questions for players
 	CROW_ROUTE(app, "/getAMultipleChoiceQuestion")(
-		[&storage, &batchOfMultipleQuestions]
+		[&storage, &allMultipleChoiceQuestions, &indexVectorMultipleChoiceQuestions]
 		()
 		{
-			return crow::response(crow::json::wvalue{ batchOfMultipleQuestions[batchOfMultipleQuestions.size() - 1] });
+			auto question = allMultipleChoiceQuestions[indexVectorMultipleChoiceQuestions];
+
+			return crow::response(crow::json::wvalue
+				{
+					{"question", question.GetQuestionText()},
+					{"correctAnswer", question.GetCorrectAnswer()},
+					{"answer1", question.GetAnswer1()},
+					{"answer2", question.GetAnswer2()},
+					{"answer3", question.GetAnswer3()},
+					{"answer4", question.GetAnswer4()}
+				});
 		});
 
 	auto& getAMultipleChoiceQuestion = CROW_ROUTE(app, "/getAMultipleChoiceQuestion").methods(crow::HTTPMethod::POST);
