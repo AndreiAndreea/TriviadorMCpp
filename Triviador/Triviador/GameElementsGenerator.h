@@ -36,7 +36,7 @@ private:
 public:
 	GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int roomID);
 	~GameElementsGenerator();
-    
+
     //setters and gettters
     bool GetIsBaseSelectionStageActive();
 	void SetIsBaseSelectionStageActive(bool isBaseSelectionStageActive);
@@ -61,9 +61,9 @@ private:
     bool CheckQStringToAnswer(const QString text);
     
 	void HideOfferedAnswers(bool hide);
-
+    
     void GetSingleChoiceQuestion();
-
+    
 public:
     void TimerMethodToRequestDataFromServer(int time);
 
@@ -86,7 +86,9 @@ private slots:
     void on_offeredAnswer3Button_released();
     void on_offeredAnswer4Button_released();
 
-    void SubmitSingleChoiceAnswer(uint16_t inputAnswer, uint16_t currentAnswer);
+    void DisplayAnswerResult();
+
+    void SubmitSingleChoiceAnswer();
 
     void OnTimerTick();
     
@@ -111,7 +113,9 @@ private:
     
     std::string m_ip;
     std::string m_playerUsername;
-    std::string m_currentAnswer;
+    std::string m_currentPlayerAnswer; //need to be deleted
+
+    int m_inputPlayerAnswer;
     
     QTimer* timer;
     QTimer* timerToCheckServer = new QTimer(this);

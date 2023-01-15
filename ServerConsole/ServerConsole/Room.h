@@ -8,6 +8,9 @@
 
 using numberOfPlayers = uint8_t;
 
+//username, color, player_answer, response_time
+using playerData = std::tuple<std::string, std::string, std::string, float>; 
+
 class Room
 {
 public:
@@ -26,6 +29,12 @@ public:
 		const std::string& player5,
 		const std::string& player6
 	);
+
+	Room(const Room& object); //copy constructor
+	Room(Room&& object); //move constructor
+
+	Room& operator=(const Room& object);
+	Room& operator=(Room&& object);
 
 	~Room();
 
@@ -69,34 +78,30 @@ public:
 	void SetPlayer6(const std::string& player6);
 	const std::string& GetPlayer6() const;
 
-	void SetColor1();
 	const std::string& GetColor1() const;
-	
-	void SetColor2();
 	const std::string& GetColor2() const;
-	
-	void SetColor3();
 	const std::string& GetColor3() const;
-	
-	void SetColor4();
 	const std::string& GetColor4() const;
-	
-	void SetColor5();
 	const std::string& GetColor5() const;
-	
-	void SetColor6();
 	const std::string& GetColor6() const;
 
 	void SetResponseTime(std::string username, float responseTime);
 	float GetResponseTime(std::string username);
+
+	void SetPlayerAnswer(std::string username, std::string answer);
+	std::string GetPlayerAnswer(std::string username);
 	
 	void SetWinner(const std::string& winner);
 	const std::string& GetWinner() const;
+
+	std::vector<playerData> GetPlayersInfo();
+	
+	//Override the operator == to be able to compare two objects of type Room
+	bool operator==(const Room& room);
 	
 public:
-	std::string GenerateRandomColorForPlayer();
 	std::string GetColorForPlayer(const std::string& player_name);
-	std::tuple<std::string, std::string, float> GetPlayerByUsername(std::string username);
+	playerData& GetPlayerByUsername(std::string username);
 	
 private:
 	uint32_t m_roomID;
@@ -108,7 +113,6 @@ private:
 	std::string m_winner;
 
 	std::vector<std::string> m_colorList = { "yellow", "blue", "green", "cyan", "magenta", "red", "darkGreen", "darkCyan", "darkMagenta", "darkRed"};
-	
-	//username, color, response_time
-	std::tuple<std::string, std::string, float> m_player1, m_player2, m_player3, m_player4, m_player5, m_player6;
+
+	playerData m_player1, m_player2, m_player3, m_player4, m_player5, m_player6;
 };

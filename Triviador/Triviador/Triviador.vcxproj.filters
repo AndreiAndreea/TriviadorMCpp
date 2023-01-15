@@ -39,12 +39,6 @@
     <Filter Include="Resource Files\Questions in file">
       <UniqueIdentifier>{5c5b215e-191b-43f8-be43-c082edf39731}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utils">
-      <UniqueIdentifier>{d8e940d9-eb6d-4ee0-b751-c1a585fd28c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Utils">
-      <UniqueIdentifier>{722d1f14-2a11-43b4-abdd-cba4cd268670}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
     </Filter>
@@ -88,9 +82,6 @@
     <ClCompile Include="Triviador.cpp">
       <Filter>Source Files\Triviador</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Duel.h">
@@ -101,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

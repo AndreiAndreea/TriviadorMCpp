@@ -29,7 +29,7 @@ public:
 	void StartInitializeQuestionsGeneratorTimer();
 
 private:
-	void GenerateRandomColor();
+	void ExtractPlayerColor();
 
 	void paintEvent(QPaintEvent*);
 	

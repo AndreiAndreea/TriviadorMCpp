@@ -120,7 +120,6 @@
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="LoginRegister.cpp" />
     <ClCompile Include="Register.cpp" />
-    <ClCompile Include="Utils.cpp" />
     <QtRcc Include="Triviador.qrc" />
     <QtUic Include="Game.ui" />
     <QtUic Include="GameElementsGenerator.ui" />
@@ -144,7 +143,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Map.h" />
     <QtMoc Include="Register.h" />
-    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="MultipleChoiceQuestions.txt" />

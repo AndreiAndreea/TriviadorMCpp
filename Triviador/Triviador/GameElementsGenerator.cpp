@@ -46,6 +46,8 @@ GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::s
 	m_singleChoiceQuestion = QuestionSingleChoice();
 	m_multipleChoiceQuestion = QuestionMultipleChoice();
 
+	m_inputPlayerAnswer = -1;
+
 	GetSingleChoiceQuestion();
 }
 
@@ -74,6 +76,11 @@ void GameElementsGenerator::OnTimerTick()
 
 		gotSingleQuestion = false;
 		gotMultipleQuestion = false;
+
+		if (m_inputPlayerAnswer == -1)
+			SubmitSingleChoiceAnswer();
+
+		DisplayAnswerResult();
 	}
 }
 
@@ -103,6 +110,9 @@ void GameElementsGenerator::GetSingleChoiceQuestion()
 
 		gotSingleQuestion = true;
 		gotQuestion = true;
+
+		//m_currentPlayerAnswer = std::to_string(m_singleChoiceQuestion.GetAnswer());
+		m_currentPlayerAnswer = std::to_string(m_singleChoiceQuestion.GetAnswer());
 		
 		if (m_gotFirstQuestion == false)
 		{
@@ -113,7 +123,7 @@ void GameElementsGenerator::GetSingleChoiceQuestion()
 }
 
 void GameElementsGenerator::TickMethodToRequestDataFromServer()
-{	
+{		
 	if (gotQuestion == true)
 	{
 		if (gotSingleQuestion == true)
@@ -150,7 +160,7 @@ void GameElementsGenerator::TickMethodToRequestDataFromServer()
 
 			//display the question
 			ui.titleLabel->setText(QString::fromStdString(m_singleChoiceQuestion.GetQuestionText()));
-			m_currentAnswer = m_singleChoiceQuestion.GetAnswer();
+			m_currentPlayerAnswer = m_singleChoiceQuestion.GetAnswer();
 
 			StartTimer();
 
@@ -290,8 +300,8 @@ void GameElementsGenerator::StartTimer()
 void GameElementsGenerator::CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& isCorrectAnswer)
 {
 	std::string correctAnswer = chosenAnswer.toStdString();
-	QString text = QString::fromStdString(m_currentAnswer);
-	if (correctAnswer == m_currentAnswer)
+	QString text = QString::fromStdString(m_currentPlayerAnswer);
+	if (correctAnswer == m_currentPlayerAnswer)
 	{
 		if (!m_answerHasBeenSelected)
 		{
@@ -302,6 +312,7 @@ void GameElementsGenerator::CheckMultipleChoiceAnswer(const QString chosenAnswer
 
 		else
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("");
+		
 		isCorrectAnswer = 1;
 	}
 	else
@@ -310,8 +321,10 @@ void GameElementsGenerator::CheckMultipleChoiceAnswer(const QString chosenAnswer
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("The correct answer is: " + text);
 		else
 			ui.displayAnswerVerdictMultipleChoiceQuestionLabel->setText("");
+		
 		isCorrectAnswer = 0;
 	}
+	
 	ui.displayAnswerVerdictMultipleChoiceQuestionLabel->show();
 }
 
@@ -396,7 +409,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 
 					std::string quetionText = questionDetails["question"].s();
 					ui.titleLabel->setText(QString::fromStdString(quetionText));
-					m_currentAnswer = std::to_string(questionDetails["correctAnswer"].i());
+					m_currentPlayerAnswer = std::to_string(questionDetails["correctAnswer"].i());
 				}
 
 				StartTimer();
@@ -427,29 +440,6 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.checkAnswerSelection->setText("");
 				ui.checkAnswerSelection->show();
 				m_answerHasBeenSelected = false;
-
-				/*
-				uint16_t randomPosition = rand() % m_randomMultipleChoiceQuestionsVector.size();
-
-				QuestionMultipleChoice MCQuestion = m_randomMultipleChoiceQuestionsVector.at(randomPosition);
-				m_randomMultipleChoiceQuestionsVector.erase(m_randomMultipleChoiceQuestionsVector.begin() + randomPosition);
-
-				m_currentAnswer = MCQuestion.GetAnswers()[0];
-
-				QString mcq = QString::fromStdString(MCQuestion.GetQuestionText());
-				ui.titleLabel->setText(mcq);
-
-				std::stringstream ss;
-				ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:light;");
-				ui.multipleChoiceAnswer2Button->setStyleSheet("background-color:light;");
-				ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:light;");
-				ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:light;");
-				ui.multipleChoiceAnswer1Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[1]));
-				ui.multipleChoiceAnswer2Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[2]));
-				ui.multipleChoiceAnswer3Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[3]));
-				ui.multipleChoiceAnswer4Button->setText(QString::fromStdString(MCQuestion.GetAnswers()[4]));
-				QString answers = QString::fromStdString(ss.str());
-				*/
 				
 				std::string link = m_ip + "/getRandomMultipleQuestion";
 
@@ -462,7 +452,7 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 					std::string quetionText = questionDetails["question"].s();
 					ui.titleLabel->setText(QString::fromStdString(quetionText));
 					
-					m_currentAnswer = questionDetails["correctAnswer"].s();
+					m_currentPlayerAnswer = questionDetails["correctAnswer"].s();
 
 					std::stringstream ss;
 					ui.multipleChoiceAnswer1Button->setStyleSheet("background-color:light;");
@@ -519,10 +509,9 @@ void GameElementsGenerator::on_submitAnswerButton_released()
 			}
 			else
 			{
-				uint16_t inputAnswer = text.split(" ")[0].toInt();
-				uint16_t currentAnswer = std::stoi(m_currentAnswer);
+				m_inputPlayerAnswer = text.split(" ")[0].toInt();
 
-				SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+				SubmitSingleChoiceAnswer();
 			}
 		}
 	}
@@ -685,7 +674,7 @@ void GameElementsGenerator::on_multipleChoiceAnswer4Button_released()
 
 bool GameElementsGenerator::CheckQStringToAnswer(QString text)
 {
-	QString answer = QString::fromStdString(m_currentAnswer);
+	QString answer = QString::fromStdString(m_currentPlayerAnswer);
 	
 	if (answer == text)
 		return true;
@@ -752,7 +741,7 @@ void GameElementsGenerator::on_fifty_fiftyAdvantageButton_released()
 void GameElementsGenerator::on_suggestAnswerAdvantageButton_released()
 {
 	srand(time(0));
-	uint16_t randomValue = std::stoi(m_currentAnswer) + rand() % 10 - rand() % 10;
+	uint16_t randomValue = m_singleChoiceQuestion.GetAnswer() + rand() % 10 - rand() % 10;
 
 	ui.suggestAnswerAdvantageLabel->setText(QString::number(randomValue));
 	ui.suggestAnswerAdvantageLabel->show();
@@ -765,16 +754,16 @@ void GameElementsGenerator::on_offerAnswersAdvantageButton_released()
 	uint16_t randomValue;
 	ui.suggestAnswerAdvantageButton->setDisabled(true);
 
-	randomValue = std::stoi(m_currentAnswer) - rand() % 80;
+	randomValue =  m_singleChoiceQuestion.GetAnswer() - rand() % 80;
 	ui.offeredAnswer1Button->setText(QString::number(randomValue));
 
-	randomValue = std::stoi(m_currentAnswer) - rand() % 20;
+	randomValue =  m_singleChoiceQuestion.GetAnswer() - rand() % 20;
 	ui.offeredAnswer2Button->setText(QString::number(randomValue));
 
-	randomValue = std::stoi(m_currentAnswer) + rand() % 20;
+	randomValue =  m_singleChoiceQuestion.GetAnswer() + rand() % 20;
 	ui.offeredAnswer3Button->setText(QString::number(randomValue));
 
-	randomValue = std::stoi(m_currentAnswer) + rand() % 80;
+	randomValue =  m_singleChoiceQuestion.GetAnswer() + rand() % 80;
 	ui.offeredAnswer4Button->setText(QString::number(randomValue));
 
 	HideOfferedAnswers(false);
@@ -783,70 +772,86 @@ void GameElementsGenerator::on_offerAnswersAdvantageButton_released()
 void GameElementsGenerator::on_offeredAnswer1Button_released()
 {
 	uint16_t inputAnswer = ui.offeredAnswer1Button->text().toInt();
-	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+	uint16_t currentAnswer =  m_singleChoiceQuestion.GetAnswer();
 
-	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	SubmitSingleChoiceAnswer();
 	DisableAdvantageOfferedAnswers(true);
 }
 
 void GameElementsGenerator::on_offeredAnswer2Button_released()
 {
 	uint16_t inputAnswer = ui.offeredAnswer2Button->text().toInt();
-	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+	uint16_t currentAnswer =  m_singleChoiceQuestion.GetAnswer();
 
-	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	SubmitSingleChoiceAnswer();
 	DisableAdvantageOfferedAnswers(true);
 }
 
 void GameElementsGenerator::on_offeredAnswer3Button_released()
 {
 	uint16_t inputAnswer = ui.offeredAnswer3Button->text().toInt();
-	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+	uint16_t currentAnswer =  m_singleChoiceQuestion.GetAnswer();
 
-	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	SubmitSingleChoiceAnswer();
 	DisableAdvantageOfferedAnswers(true);
 }
 
 void GameElementsGenerator::on_offeredAnswer4Button_released()
 {
 	uint16_t inputAnswer = ui.offeredAnswer4Button->text().toInt();
-	uint16_t currentAnswer = std::stoi(m_currentAnswer);
+	uint16_t currentAnswer =  m_singleChoiceQuestion.GetAnswer();
 
-	SubmitSingleChoiceAnswer(inputAnswer, currentAnswer);
+	SubmitSingleChoiceAnswer();
 	DisableAdvantageOfferedAnswers(true);
 }
 
-void GameElementsGenerator::SubmitSingleChoiceAnswer(uint16_t inputAnswer, uint16_t currentAnswer)
-{
-	std::stringstream ss;
-	ss << "Correct answer is: " << m_currentAnswer << "\n"
-		<< "close by: " << abs(currentAnswer - inputAnswer) << "\n";
-
-	if (abs(currentAnswer - inputAnswer) == 0)
+void GameElementsGenerator::DisplayAnswerResult()
+{ 
+	if (m_inputPlayerAnswer == -1)
 	{
-		ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"green\">The answer is correct!</font></b>");
-		ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
-		m_canChooseTerritory = true;
-		ui.chooseTerritoryLabel->setText("Now you can choose a territory!");
-		ui.chooseTerritoryLabel->show();
+		ui.errorLabel->setText("You have not chosen an answer!");
+		ui.errorLabel->show();
 	}
 	else
 	{
-		ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"red\">The answer is wrong!</font></b>");
-		ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+		int closedBy = m_singleChoiceQuestion.GetAnswer() - m_inputPlayerAnswer;
+
+		std::stringstream ss;
+		ss << "Correct answer is: " << m_singleChoiceQuestion.GetAnswer() << "\n"
+			<< "close by: " << abs(closedBy) << "\n";
+
+		if (abs(closedBy) == 0)
+		{
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"green\">The answer is correct!</font></b>");
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+			m_canChooseTerritory = true;
+			ui.chooseTerritoryLabel->setText("Now you can choose a territory!");
+			ui.chooseTerritoryLabel->show();
+		}
+		else
+		{
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->setText("<b><font color=\"red\">The answer is wrong!</font></b>");
+			ui.displayAnswerVerdictSingleChoiceQuestionLabel->show();
+		}
+
+		QString displayAnswer = QString::fromStdString(ss.str());
+		ui.displayProximityCorrectAnswerLabel->setText(displayAnswer);
+		ui.displayProximityCorrectAnswerLabel->show();
 	}
+}
 
-	QString displayAnswer = QString::fromStdString(ss.str());
-	ui.displayProximityCorrectAnswerLabel->setText(displayAnswer);
-	ui.displayProximityCorrectAnswerLabel->show();
-
+void GameElementsGenerator::SubmitSingleChoiceAnswer()
+{
 	ui.submitAnswerButton->setDisabled(true);
 	ui.inputAnswerLineEdit->setDisabled(true);
 
-	ui.elapsedTimeLabel->show();
-	ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+	if (m_inputPlayerAnswer != -1)
+	{
+		ui.elapsedTimeLabel->show();
+		ui.elapsedTimeLabel->setText("Response time " + QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+	}
 	
-	std::string link = m_ip + "/setResponseTime/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername + "&responseTime=" + std::to_string(elapsedTime.elapsed());
+	std::string link = m_ip + "/setAnswerDetails/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername + "&playerAnswer=" + std::to_string(m_inputPlayerAnswer) + "&responseTime=" + std::to_string(elapsedTime.elapsed());
 
 	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 

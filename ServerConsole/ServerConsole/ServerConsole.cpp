@@ -180,6 +180,8 @@ int main()
 	std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
 	std::vector<bool> m_selectedMultipleChoiceQuestions;
 
+	std::vector<Room> m_savedRooms;
+
 	std::string dataFilesPath = "resources/data_files";
 
 	std::string filePathForSingleChoiceQuestion = dataFilesPath + "/questions/SingleChoiceQuestions.txt";
@@ -840,32 +842,74 @@ int main()
 	getResponseTime(DatabaseStorage(storage));
 	
 	// Set a player's from a specific room response time
-	CROW_ROUTE(app, "/setResponseTime/")(
-		[&storage]
+	CROW_ROUTE(app, "/setAnswerDetails/")(
+		[&storage, &m_savedRooms]
 		(const crow::request& req)
 		{
 			std::string roomID = req.url_params.get("roomID");
 			std::string username = req.url_params.get("username");
+			std::string playerAnswer = req.url_params.get("playerAnswer");
 			std::string responseTime = req.url_params.get("responseTime");
-
+			
 			auto room = storage.get<Room>(roomID);
-			auto userFoundInRoom = room.GetPlayerByUsername(username);
 
-			if (std::get<0>(userFoundInRoom) != "")
+			auto it = std::find(m_savedRooms.begin(), m_savedRooms.end(), room);
+
+			if (it == m_savedRooms.end())
 			{
-				std::get<2>(userFoundInRoom) = std::stof(responseTime);
-				storage.update(room);
+				room.SetPlayerAnswer(username, playerAnswer);
+				room.SetResponseTime(username, std::stof(responseTime));
 
-				return crow::response(200, "Response time updated!");
+				m_savedRooms.push_back(room);
 			}
 			else
 			{
-				return crow::response(404, "User not found!");
+				it->SetPlayerAnswer(username, playerAnswer);
+				it->SetResponseTime(username, std::stof(responseTime));
+			}
+
+			return crow::response(200, "Response time updated!");
+		});
+
+	auto& setAnswerDetails = CROW_ROUTE(app, "/setAnswerDetails").methods(crow::HTTPMethod::POST);
+	setAnswerDetails(DatabaseStorage(storage));
+
+	// Get a player's from a specific room response time
+	CROW_ROUTE(app, "/getAnswerDetails/")(
+		[&storage, &m_savedRooms]
+		(const crow::request& req)
+		{
+			std::string roomID = req.url_params.get("roomID");
+
+			auto room = storage.get<Room>(roomID);
+
+			auto foundRoom = std::find(m_savedRooms.begin(), m_savedRooms.end(), room);
+
+			std::vector<crow::json::wvalue> playerDataVector;
+
+			if (foundRoom != m_savedRooms.end())
+			{
+				for (auto& player : (*foundRoom).GetPlayersInfo())
+				{
+					playerDataVector.push_back(crow::json::wvalue
+						{
+							{"username", std::get<0>(player)},
+							{"color", std::get<1>(player)},
+							{"playerAnswer", std::get<2>(player)},
+							{"responseTime", std::get<3>(player)}
+						});
+				}
+
+				return crow::response(crow::json::wvalue{ playerDataVector });
+			}
+			else
+			{
+				return crow::response(404, "Room not found!");
 			}
 		});
 
-	auto& setResponseTime = CROW_ROUTE(app, "/setResponseTime").methods(crow::HTTPMethod::POST);
-	setResponseTime(DatabaseStorage(storage));
+	auto& getAnswerDetails = CROW_ROUTE(app, "/getAnswerDetails").methods(crow::HTTPMethod::POST);
+	getAnswerDetails(DatabaseStorage(storage));
 	
 	// Create a new room by the gameType
 	CROW_ROUTE(app, "/createNewRoom/")(
@@ -1065,7 +1109,7 @@ int main()
 					c(&Room::GetPlayer6) == playerUsername
 					));
 
-				if (lobbies.size() == 1)
+				if (lobbies.size())
 				{
 					auto room = lobbies[0];
 
@@ -1093,7 +1137,7 @@ int main()
 				}
 				else
 				{
-					return crow::response(404, "No data to update!");
+					return crow::response(405, "No data to update!");
 				}
 			}
 			catch (std::system_error e) {

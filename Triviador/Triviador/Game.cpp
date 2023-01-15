@@ -35,7 +35,7 @@ Game::Game(const std::string& ip, const std::string& username, const uint16_t nu
 	ui.progressBar->show();
 	ui.progressBarLabel->show();
 
-	GenerateRandomColor();
+	ExtractPlayerColor();
 
 	StartInitializeQuestionsGeneratorTimer();
 
@@ -83,7 +83,7 @@ void Game::StartInitializeQuestionsGeneratorTimer()
 	initializeQuestionsGeneratorTimer->start();
 }
 
-void Game::GenerateRandomColor()
+void Game::ExtractPlayerColor()
 {	
 	std::string link = m_ip + "/getPlayerColor/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername;
 
