@@ -545,6 +545,16 @@ void GameElementsGenerator::on_multipleChoiceAnswer1Button_released()
 
 				ui.elapsedTimeLabel->show();
 				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+			
+				std::string link = m_ip + "/setResponseTime/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername + "&responseTime=" + std::to_string(elapsedTime.elapsed());
+				
+				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+				
+				if (responseFromServer.status_code != 200)
+				{
+					ui.errorLabel->setText("Player's response time could not be updated!");
+					ui.errorLabel->show();
+				}
 			}
 			else
 			{
@@ -573,6 +583,16 @@ void GameElementsGenerator::on_multipleChoiceAnswer2Button_released()
 
 				ui.elapsedTimeLabel->show();
 				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+			
+				std::string link = m_ip + "/setResponseTime/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername + "&responseTime=" + std::to_string(elapsedTime.elapsed());
+				
+				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+				if (responseFromServer.status_code != 200)
+				{
+					ui.errorLabel->setText("Player's response time could not be updated!");
+					ui.errorLabel->show();
+				}
 			}
 			else
 			{
@@ -602,6 +622,16 @@ void GameElementsGenerator::on_multipleChoiceAnswer3Button_released()
 
 				ui.elapsedTimeLabel->show();
 				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+			
+				std::string link = m_ip + "/setResponseTime/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername + "&responseTime=" + std::to_string(elapsedTime.elapsed());
+				
+				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+				if (responseFromServer.status_code != 200)
+				{
+					ui.errorLabel->setText("Player's response time could not be updated!");
+					ui.errorLabel->show();
+				}
 			}
 			else
 			{
@@ -631,6 +661,16 @@ void GameElementsGenerator::on_multipleChoiceAnswer4Button_released()
 
 				ui.elapsedTimeLabel->show();
 				ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+			
+				std::string link = m_ip + "/setResponseTime/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername + "&responseTime=" + std::to_string(elapsedTime.elapsed());
+			
+				cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+				if (responseFromServer.status_code != 200)
+				{
+					ui.errorLabel->setText("Player's response time could not be updated!");
+					ui.errorLabel->show();
+				}
 			}
 			else
 			{
@@ -805,4 +845,14 @@ void GameElementsGenerator::SubmitSingleChoiceAnswer(uint16_t inputAnswer, uint1
 
 	ui.elapsedTimeLabel->show();
 	ui.elapsedTimeLabel->setText(QString::number(elapsedTime.elapsed() / 1000) + "," + QString::number(elapsedTime.elapsed() % 1000) + " s");
+	
+	std::string link = m_ip + "/setResponseTime/?roomID=" + std::to_string(m_roomID) + "&username=" + m_playerUsername + "&responseTime=" + std::to_string(elapsedTime.elapsed());
+
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
+
+	if (responseFromServer.status_code != 200)
+	{
+		ui.errorLabel->setText("Player's response time could not be updated!");
+		ui.errorLabel->show();
+	}
 }

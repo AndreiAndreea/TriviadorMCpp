@@ -4,6 +4,7 @@
 #include <string>
 #include <regex>
 #include <iostream>
+#include <tuple>
 
 #include "Database.h"
 
@@ -536,7 +537,7 @@ int main()
 	=  QUESTIONS ROUTES  =
 	======================
 	*/
-
+	
 	//=======================\\
 	//Single choice questions\\
 	//=======================\\
@@ -813,6 +814,58 @@ int main()
 
 	auto& getPlayerColor = CROW_ROUTE(app, "/getPlayerColor").methods(crow::HTTPMethod::POST);
 	getPlayerColor(DatabaseStorage(storage));
+	
+	// Get a player's from a specific room response time
+	CROW_ROUTE(app, "/getResponseTime/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string roomID = req.url_params.get("roomID");
+			std::string username = req.url_params.get("username");
+
+			auto room = storage.get<Room>(roomID);
+
+			crow::json::wvalue findUserResponseTimeInRoom = crow::json::wvalue
+			{
+				{"responseTime", room.GetResponseTime(username)}
+			};
+
+			if (room.GetResponseTime(username) == float())
+				return crow::response(404, "Player not found in room!");
+			else
+				return crow::response(crow::json::wvalue{ findUserResponseTimeInRoom });
+		});
+	
+	auto& getResponseTime = CROW_ROUTE(app, "/getResponseTime").methods(crow::HTTPMethod::POST);
+	getResponseTime(DatabaseStorage(storage));
+	
+	// Set a player's from a specific room response time
+	CROW_ROUTE(app, "/setResponseTime/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string roomID = req.url_params.get("roomID");
+			std::string username = req.url_params.get("username");
+			std::string responseTime = req.url_params.get("responseTime");
+
+			auto room = storage.get<Room>(roomID);
+			auto userFoundInRoom = room.GetPlayerByUsername(username);
+
+			if (std::get<0>(userFoundInRoom) != "")
+			{
+				std::get<2>(userFoundInRoom) = std::stof(responseTime);
+				storage.update(room);
+
+				return crow::response(200, "Response time updated!");
+			}
+			else
+			{
+				return crow::response(404, "User not found!");
+			}
+		});
+
+	auto& setResponseTime = CROW_ROUTE(app, "/setResponseTime").methods(crow::HTTPMethod::POST);
+	setResponseTime(DatabaseStorage(storage));
 	
 	// Create a new room by the gameType
 	CROW_ROUTE(app, "/createNewRoom/")(

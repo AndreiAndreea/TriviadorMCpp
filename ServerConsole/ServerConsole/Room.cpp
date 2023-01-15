@@ -9,18 +9,12 @@ Room::Room()
 	m_currentNumberOfPlayers = 0;
 	m_maximNumberOfPlayers = 0;
 	m_number_of_ready_players = 0;
-	m_player1 = std::string();
-	m_player2 = std::string();
-	m_player3 = std::string();
-	m_player4 = std::string();
-	m_player5 = std::string();
-	m_player6 = std::string();
-	m_color1 = std::string();
-	m_color2 = std::string();
-	m_color3 = std::string();
-	m_color4 = std::string();
-	m_color5 = std::string();
-	m_color6 = std::string();
+	m_player1 = { std::string(), std::string(), float() };
+	m_player2 = { std::string(), std::string(), float() };
+	m_player3 = { std::string(), std::string(), float() };
+	m_player4 = { std::string(), std::string(), float() };
+	m_player5 = { std::string(), std::string(), float() };
+	m_player6 = { std::string(), std::string(), float() };
 	m_winner = std::string();
 }
 
@@ -45,21 +39,32 @@ Room::Room(
 	m_roomNumber(room_number),
 	m_currentNumberOfPlayers(current_number_of_players),
 	m_maximNumberOfPlayers(maxim_number_of_players),
-	m_number_of_ready_players(number_of_ready_players),
-	m_player1(player1),
-	m_player2(player2),
-	m_player3(player3),
-	m_player4(player4),
-	m_player5(player5),
-	m_player6(player6)
+	m_number_of_ready_players(number_of_ready_players)
 {
-	m_color1 = std::string();
-	m_color2 = std::string();
-	m_color3 = std::string();
-	m_color4 = std::string();
-	m_color5 = std::string();
-	m_color6 = std::string();
-
+	std::get<0>(m_player1) = player1;
+	std::get<1>(m_player1) = std::string();
+	std::get<2>(m_player1) = float();
+	
+	std::get<0>(m_player2) = player2;
+	std::get<1>(m_player2) = std::string();
+	std::get<2>(m_player2) = float();
+	
+	std::get<0>(m_player3) = player3;
+	std::get<1>(m_player3) = std::string();
+	std::get<2>(m_player3) = float();
+	
+	std::get<0>(m_player4) = player4;
+	std::get<1>(m_player4) = std::string();
+	std::get<2>(m_player4) = float();
+	
+	std::get<0>(m_player5) = player5;
+	std::get<1>(m_player5) = std::string();
+	std::get<2>(m_player5) = float();
+	
+	std::get<0>(m_player6) = player6;
+	std::get<1>(m_player6) = std::string();
+	std::get<2>(m_player6) = float();
+	
 	m_winner = std::string();
 }
 
@@ -140,146 +145,178 @@ numberOfPlayers Room::GetNumberOfReadyPlayers() const
 
 void Room::SetPlayer1(const std::string& player1)
 {
-	m_player1 = player1;
+	std::get<0>(m_player1) = player1;
 	SetColor1();
 }
 
 const std::string& Room::GetPlayer1() const
 {
-	return m_player1;
+	return std::get<0>(m_player1);
 }
 
 void Room::SetPlayer2(const std::string& player2)
 {
-	m_player2 = player2;
+	std::get<0>(m_player2) = player2;
 	SetColor2();
 }
 
 const std::string& Room::GetPlayer2() const
 {
-	return m_player2;
+	return std::get<0>(m_player2);
 }
 
 void Room::SetPlayer3(const std::string& player3)
 {
-	m_player3 = player3;
+	std::get<0>(m_player3) = player3;
 	SetColor3();
 }
 
 const std::string& Room::GetPlayer3() const
 {
-	return m_player3;
+	return std::get<0>(m_player3);
 }
 
 void Room::SetPlayer4(const std::string& player4)
 {
-	m_player4 = player4;
+	std::get<0>(m_player4) = player4;
 	SetColor4();
 }
 
 const std::string& Room::GetPlayer4() const
 {
-	return m_player4;
+	return std::get<0>(m_player4);
 }
 
 void Room::SetPlayer5(const std::string& player5)
 {
-	m_player5 = player5;
+	std::get<0>(m_player5) = player5;
 	SetColor5();
 }
 
 const std::string& Room::GetPlayer5() const
 {
-	return m_player5;
+	return std::get<0>(m_player5);
 }
 
 void Room::SetPlayer6(const std::string& player6)
 {
-	m_player6 = player6;
+	std::get<0>(m_player6) = player6;
 	SetColor6();
 }
 
 const std::string& Room::GetPlayer6() const
 {
-	return m_player6;
+	return std::get<0>(m_player6);
 }
 
 void Room::SetColor1()
 {
-	if (m_player1 == "")
-		m_color1 = "";
+	if (std::get<0>(m_player1) == "")
+		std::get<1>(m_player1) = "";
 	else
-		m_color1 = GenerateRandomColorForPlayer();
+		std::get<1>(m_player1) = GenerateRandomColorForPlayer();
 }
 
 const std::string& Room::GetColor1() const
 {
-	return m_color1;
+	return std::get<1>(m_player1);
 }
 
 void Room::SetColor2()
 {
-	if (m_player2 == "")
-		m_color2 = "";
+	if (std::get<0>(m_player2) == "")
+		std::get<1>(m_player2) = "";
 	else
-		m_color2 = GenerateRandomColorForPlayer();
+		std::get<1>(m_player2) = GenerateRandomColorForPlayer();
 }
 
 const std::string& Room::GetColor2() const
 {
-	return m_color2;
+	return std::get<1>(m_player2);
 }
 
 void Room::SetColor3()
 {
-	if (m_player3 == "")
-		m_color3 = "";
+	if (std::get<0>(m_player3) == "")
+		std::get<1>(m_player3) = "";
 	else
-		m_color3 = GenerateRandomColorForPlayer();
+		std::get<1>(m_player3) = GenerateRandomColorForPlayer();
 }
 
 const std::string& Room::GetColor3() const
 {
-	return m_color3;
+	return std::get<1>(m_player3);
 }
 
 void Room::SetColor4()
 {
-	if (m_player4 == "")
-		m_color4 = "";
+	if (std::get<0>(m_player4) == "")
+		std::get<1>(m_player4) = "";
 	else
-		m_color4 = GenerateRandomColorForPlayer();
+		std::get<1>(m_player4) = GenerateRandomColorForPlayer();
 }
 
 const std::string& Room::GetColor4() const
 {
-	return m_color4;
+	return std::get<1>(m_player4);
 }
 
 void Room::SetColor5()
 {
-	if (m_player5 == "")
-		m_color5 = "";
+	if (std::get<0>(m_player5) == "")
+		std::get<1>(m_player5) = "";
 	else
-		m_color5 = GenerateRandomColorForPlayer();
+		std::get<1>(m_player5) = GenerateRandomColorForPlayer();
 }
 
 const std::string& Room::GetColor5() const
 {
-	return m_color5;
+	return std::get<1>(m_player5);
 }
 
 void Room::SetColor6()
 {
-	if (m_player6 == "")
-		m_color6 = "";
+	if (std::get<0>(m_player6) == "")
+		std::get<1>(m_player6) = "";
 	else
-		m_color6 = GenerateRandomColorForPlayer();
+		std::get<1>(m_player6) = GenerateRandomColorForPlayer();
 }
 
 const std::string& Room::GetColor6() const
 {
-	return m_color6;
+	return std::get<1>(m_player6);
+}
+
+void Room::SetResponseTime(std::string username, float responseTime)
+{
+	if (std::get<0>(m_player1) == username)
+		std::get<2>(m_player1) = responseTime;
+	else if (std::get<0>(m_player2) == username)
+		std::get<2>(m_player2) = responseTime;
+	else if (std::get<0>(m_player3) == username)
+		std::get<2>(m_player3) = responseTime;
+	else if (std::get<0>(m_player4) == username)
+		std::get<2>(m_player4) = responseTime;
+	else if (std::get<0>(m_player5) == username)
+		std::get<2>(m_player5) = responseTime;
+	else if (std::get<0>(m_player6) == username)
+		std::get<2>(m_player6) = responseTime;
+}
+
+float Room::GetResponseTime(std::string username)
+{
+	if (std::get<0>(m_player1) == username)
+		return std::get<2>(m_player1);
+	else if (std::get<0>(m_player2) == username)
+		return std::get<2>(m_player2);
+	else if (std::get<0>(m_player3) == username)
+		return std::get<2>(m_player3);
+	else if (std::get<0>(m_player4) == username)
+		return std::get<2>(m_player4);
+	else if (std::get<0>(m_player5) == username)
+		return std::get<2>(m_player5);
+	else if (std::get<0>(m_player6) == username)
+		return std::get<2>(m_player6);
 }
 
 void Room::SetWinner(const std::string& winner)
@@ -308,22 +345,39 @@ std::string Room::GenerateRandomColorForPlayer()
 
 std::string Room::GetColorForPlayer(const std::string& player_name)
 {
-	if (player_name == m_player1)
-		return m_color1;
+	if (player_name == std::get<0>(m_player1))
+		return std::get<1>(m_player1);
 	
-	if (player_name == m_player2)
-		return m_color2;
+	if (player_name == std::get<0>(m_player2))
+		return std::get<1>(m_player2);
 	
-	if (player_name == m_player3)
-		return m_color3;
-	if (player_name == m_player4)
-		return m_color4;
+	if (player_name == std::get<0>(m_player3))
+		return std::get<1>(m_player3);
 	
-	if (player_name == m_player5)
-		return m_color5;
+	if (player_name == std::get<0>(m_player4))
+		return std::get<1>(m_player4);
 	
-	if (player_name == m_player6)
-		return m_color6;
+	if (player_name == std::get<0>(m_player5))
+		return std::get<1>(m_player5);
+	
+	if (player_name == std::get<0>(m_player6))
+		return std::get<1>(m_player6);
 
 	return "Player not found!";
+}
+
+std::tuple<std::string, std::string, float> Room::GetPlayerByUsername(std::string username)
+{
+	if (std::get<0>(m_player1) == username)
+		return m_player1;
+	else if (std::get<0>(m_player2) == username)
+		return m_player2;
+	else if (std::get<0>(m_player3) == username)
+		return m_player3;
+	else if (std::get<0>(m_player4) == username)
+		return m_player4;
+	else if (std::get<0>(m_player5) == username)
+		return m_player5;
+	else if (std::get<0>(m_player6) == username)
+		return m_player6;
 }
