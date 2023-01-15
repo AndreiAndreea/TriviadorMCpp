@@ -18,6 +18,22 @@ LoginRegister::LoginRegister()
 	ui.serverIPLineEdit->setFocus();
 
 	LoginWindow = new Login("","");//temp fix for reading invalid memory location in Login UI
+
+	ui.greetingLabel->setFont(QFont("OldEnglish", 20, QFont::Bold));
+	
+	QPixmap background;
+	background.load("resources/img/icons/papyrus_background.jpg");
+	background = background.scaled(this->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+	QPalette palette;
+	palette.setBrush(QPalette::Window, background);
+	this->setPalette(palette);
+
+	QPixmap pixmap("resources/img/icons/button.jpg");
+	int w = ui.connectButton->width();
+	int h = ui.connectButton->height();
+	ui.connectButton->setIcon(pixmap);	
+	ui.connectButton->setFixedSize(w, h);
 }
 
 LoginRegister::~LoginRegister()
