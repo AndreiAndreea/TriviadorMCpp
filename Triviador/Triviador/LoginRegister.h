@@ -17,7 +17,6 @@ public:
 	explicit LoginRegister();
 	~LoginRegister();
 
-	//explicit Login(QWidget* parent); - Cosmin
 private:
 	std::vector<std::string> SplitIP();
 	bool IsNumber(const std::string& str);

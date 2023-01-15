@@ -25,11 +25,6 @@ using Unordered_map = std::unordered_map<Coords, std::pair<std::string, int>, pa
 class Map
 {
 public:
-	//using Coords = std::pair<uint8_t, uint8_t>;
-	//using Coords = std::pair<qreal, qreal>;
-	//using Unordered_map = std::unordered_map<Coords, std::pair<std::string, int>, pair_hash>;
-	
-public:
 	void SetNumberOfPlayers(uint16_t numberOfPlayers);
 	void SetNumberOfRounds(uint16_t numberOfRounds);
 	void SetMapSize(uint16_t height, uint16_t width);
@@ -38,7 +33,6 @@ public:
 	void CreateMapCustomMode(uint16_t mapHeight, uint16_t mapWidth, uint16_t numberOfPlayers, uint16_t numberOfRounds);
 
 	bool IsRegionAvailable(Coords coords);
-	//void RemoveUnusedRegion(uint8_t position);
 	
 	void AddBaseRegion(Coords coords, std::string owner);
 	void AddRegion(Coords coords, std::string owner, int score);
@@ -58,7 +52,6 @@ private:
 	uint16_t m_numberOfRounds;
 	std::pair<uint16_t, uint16_t> m_mapSize;
 
-	//std::vector<Coords> m_unusedRegions; - in loc sa cautam in regiunile nefolosite
-	Unordered_map m_usedRegions; //avem o mapa cu regiunile utilizate, cand se alege o baza/teritoriu se va insera
+	Unordered_map m_usedRegions;
 	Unordered_map m_bases;
 };

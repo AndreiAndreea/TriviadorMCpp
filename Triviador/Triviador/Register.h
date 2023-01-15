@@ -22,8 +22,6 @@ public:
 
 	~Register();
 
-	//explicit Login(QWidget* parent);
-
 private:
 	std::string GetCurrentDate();
 

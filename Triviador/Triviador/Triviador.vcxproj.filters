@@ -33,12 +33,6 @@
     <Filter Include="Header Files\Triviador">
       <UniqueIdentifier>{cc5d01d4-b422-49ca-b1a8-270ec9f93606}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Database">
-      <UniqueIdentifier>{5620a0e7-6a40-45a2-b419-abe10f44822a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Questions in file">
-      <UniqueIdentifier>{5c5b215e-191b-43f8-be43-c082edf39731}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{4356d9b8-348c-429a-88ce-b94e6ed63b60}</UniqueIdentifier>
     </Filter>
@@ -95,14 +89,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="SingleChoiceQuestions.txt">
-      <Filter>Resource Files\Questions in file</Filter>
-    </Text>
-    <Text Include="MultipleChoiceQuestions.txt">
-      <Filter>Resource Files\Questions in file</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="Login.ui">
       <Filter>Form Files</Filter>
     </QtUic>
@@ -143,9 +129,6 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <None Include="triviador.sqlite">
-      <Filter>Resource Files\Database</Filter>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,6 @@
 
 #include <regex>
 
-//declare an enum to store the current state of the game
 enum class GameState
 {
 	NotStarted,
@@ -61,7 +60,6 @@ private slots:
 	void on_backToRoomPushButton_released();
 
 	void on_readyGameRoomPushButton_released();
-	void on_startGameRoomPushButton_released();
 
 	void TimerMethodToUpdateRoomDetails();
 	

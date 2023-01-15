@@ -107,17 +107,6 @@ void Game::paintEvent(QPaintEvent*)
 
 		DrawMap(painter);
 		
-		//coloring the selected regions of the map
-		//initially
-		/*
-		for (const auto& coordRegion : m_selectedRegions)
-		{
-			QRect square(coordRegion.x(), coordRegion.y(), 50, 50);
-			painter.fillRect(square, m_usedColor);
-		}*/
-		
-		//now
-		// iterating through the map and coloring only the regions owned by this player - to avoid errors
 		auto base = m_map.GetBaseRegion(m_playerUsername);
 		QRect square(base.first, base.second, 50, 50);
 		painter.fillRect(square, m_usedColor);
@@ -134,7 +123,6 @@ void Game::paintEvent(QPaintEvent*)
 		if (ui.stackedWidget->currentIndex() == 1)
 			painter.setOpacity(0.5);
 	}
-
 }
 
 void Game::DrawMap(QPainter& painter)
@@ -153,6 +141,7 @@ void Game::DrawMap(QPainter& painter)
 			painter.drawRect(square);
 		}
 	}
+	
 	update();
 }
 
@@ -208,7 +197,6 @@ void Game::mouseReleaseEvent(QMouseEvent* ev)
 							}
 						}
 						
-						//AddNewSelectedRegion(regionCoordinates);
 						ui.existingRegionLabel->hide();
 						QuestionsWindow->SetCanChooseTerritory(false);
 					}
@@ -233,7 +221,6 @@ void Game::OnIinitializeQuestionsGeneratorTimerTick()
 	
 		QuestionsWindow->TimerMethodToRequestDataFromServer(100);
 	}
-
 }
 
 void Game::closeEvent(QCloseEvent* e)

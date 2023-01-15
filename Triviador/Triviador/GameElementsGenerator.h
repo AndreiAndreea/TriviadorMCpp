@@ -37,7 +37,6 @@ public:
 	GameElementsGenerator(const std::string& ip, const std::string& playerUsername, int roomID);
 	~GameElementsGenerator();
 
-    //setters and gettters
     bool GetIsBaseSelectionStageActive();
 	void SetIsBaseSelectionStageActive(bool isBaseSelectionStageActive);
 
@@ -107,13 +106,12 @@ private:
     bool m_canChooseTerritory;
 
     uint16_t m_numberOfPlayers = 0;
-    //uint16_t m_amountOfRandomQuestionsFromDatabase;
     
     int m_roomID;
     
     std::string m_ip;
     std::string m_playerUsername;
-    std::string m_currentPlayerAnswer; //need to be deleted
+    std::string m_currentPlayerAnswer;
 
     int m_inputPlayerAnswer;
     
@@ -123,7 +121,4 @@ private:
 
     QuestionSingleChoice m_singleChoiceQuestion;
     QuestionMultipleChoice m_multipleChoiceQuestion;
-    
-    //std::vector<QuestionSingleChoice> m_randomSingleChoiceQuestionsVector;
-	//std::vector<QuestionMultipleChoice> m_randomMultipleChoiceQuestionsVector;
 };

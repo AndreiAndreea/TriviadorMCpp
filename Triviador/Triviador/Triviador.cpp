@@ -19,8 +19,6 @@ Triviador::Triviador(const std::string& ip, const std::string& playerUsername)
 
 	m_startingGame = GameState::NotStarted;
 
-	ui.startGameRoomPushButton->hide();
-
 	ui.changeUsernameLineEdit->hide();
 	ui.changePasswordLineEdit->hide();
 	ui.changeEmailLineEdit->hide();
@@ -671,15 +669,6 @@ void Triviador::on_readyGameRoomPushButton_released()
 	}
 }
 
-void Triviador::on_startGameRoomPushButton_released()
-{
-	//triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth);
-
-	//ui.stackedWidget->insertWidget(5, triviadorGame);
-
-	//ui.stackedWidget->setCurrentIndex(4);
-}
-
 void Triviador::TimerMethodToUpdateRoomDetails()
 {
 	timerToUpdateRoomDetails->setInterval(500);
@@ -705,19 +694,11 @@ void Triviador::TimerMethodToUpdateRoomDetails()
 			{
 				if (CheckIfRoomIsReadyToBegin() == true)
 				{
-					//commented because we have a new method of starting the game
-
 					m_startingGame = GameState::InProgress;
-
-					//if (ui.startGameRoomPushButton->isHidden() == true)
-					//	ui.startGameRoomPushButton->show();
-
-					//ui.startGameRoomPushButton->setEnabled(true);
 
 					m_isRoomReadyToBegin = true;
 				}
 			}
-			/*else if (m_isRoomReadyToBegin == true)*/
 			else
 			{
 				if (CheckIfRoomIsReadyToBegin() == false)
@@ -728,10 +709,6 @@ void Triviador::TimerMethodToUpdateRoomDetails()
 
 					if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
 					{
-						//ui.startGameRoomPushButton->setDisabled(true);
-
-						//ui.startGameRoomPushButton->hide();
-
 						ui.readyGameRoomPushButton->setDisabled(false);
 						ui.backToRoomPushButton->setDisabled(false);
 					}
@@ -775,26 +752,23 @@ void Triviador::StartTransferToGameTimer()
 
 void Triviador::OnTransferToGameTimerTick()
 {
-	//if (CheckIfRoomIsReadyToBegin() == true)
-	//{
-		ui.progressBar->show();
-		ui.gameStartLabel->show();
+	ui.progressBar->show();
+	ui.gameStartLabel->show();
 		
-		if (ui.progressBar->value() < 100)
-			ui.progressBar->setValue(ui.progressBar->value() + 1);
-		else
-		{
-			triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth, m_roomID);
+	if (ui.progressBar->value() < 100)
+		ui.progressBar->setValue(ui.progressBar->value() + 1);
+	else
+	{
+		triviadorGame = new Game(m_ip, m_playerUsername, m_numberOfPlayers, m_numberOfRounds, m_mapHeight, m_mapWidth, m_roomID);
 
-			ui.stackedWidget->insertWidget(5, triviadorGame);
+		ui.stackedWidget->insertWidget(5, triviadorGame);
 
-			ui.stackedWidget->setCurrentIndex(5);
+		ui.stackedWidget->setCurrentIndex(5);
 
-			transferToGameTimer->stop();
+		transferToGameTimer->stop();
 
-			transferToGameTimer->disconnect();
-		}
-	//}
+		transferToGameTimer->disconnect();
+	}
 }
 
 void Triviador::UpdateLobbiesDetails()
@@ -843,8 +817,6 @@ bool Triviador::CheckIfRoomIsReadyToBegin()
 
 	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
 	{
-		//auto isRoomReady = crow::json::load(responseFromServer.text);
-
 		if (responseFromServer.text == "Game is ready to begin!")
 		{
 			return true;

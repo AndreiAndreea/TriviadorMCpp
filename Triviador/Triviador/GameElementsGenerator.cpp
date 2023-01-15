@@ -10,6 +10,8 @@ GameElementsGenerator::GameElementsGenerator(const std::string& ip, const std::s
 	
 	ui.titleLabel->setText(" ");
 
+	ui.getRandomQuestionButton->hide();
+
 	ui.errorLabel->hide();
 	ui.displayProximityCorrectAnswerLabel->hide();
 	ui.displayAnswerVerdictSingleChoiceQuestionLabel->hide();
@@ -110,9 +112,6 @@ void GameElementsGenerator::GetSingleChoiceQuestion()
 
 		gotSingleQuestion = true;
 		gotQuestion = true;
-
-		//m_currentPlayerAnswer = std::to_string(m_singleChoiceQuestion.GetAnswer());
-		m_currentPlayerAnswer = std::to_string(m_singleChoiceQuestion.GetAnswer());
 		
 		if (m_gotFirstQuestion == false)
 		{
@@ -137,7 +136,6 @@ void GameElementsGenerator::TickMethodToRequestDataFromServer()
 			ui.submitAnswerButton->show();
 			ui.inputAnswerLineEdit->show();
 
-			//radio buttons from mc choice are hidden
 			ui.multipleChoiceAnswer1Button->hide();
 			ui.multipleChoiceAnswer2Button->hide();
 			ui.multipleChoiceAnswer3Button->hide();
@@ -158,9 +156,7 @@ void GameElementsGenerator::TickMethodToRequestDataFromServer()
 			ui.offerAnswersAdvantageButton->setDisabled(false);
 			ui.suggestAnswerAdvantageButton->setDisabled(false);
 
-			//display the question
 			ui.titleLabel->setText(QString::fromStdString(m_singleChoiceQuestion.GetQuestionText()));
-			m_currentPlayerAnswer = m_singleChoiceQuestion.GetAnswer();
 
 			StartTimer();
 
@@ -196,7 +192,6 @@ void GameElementsGenerator::TickMethodToRequestDataFromServer()
 			ui.multipleChoiceAnswer3Button->setStyleSheet("background-color:light;");
 			ui.multipleChoiceAnswer4Button->setStyleSheet("background-color:light;");
 
-			//display the question
 			ui.titleLabel->setText(QString::fromStdString(m_multipleChoiceQuestion.GetQuestionText()));
 			
 			ui.multipleChoiceAnswer1Button->setText(QString::fromStdString(m_multipleChoiceQuestion.GetAnswer1()));
@@ -289,7 +284,7 @@ void GameElementsGenerator::StartTimer()
 
 	timer = new QTimer(this);
 
-	timer->setInterval(50);//timer->setInterval(100); - for actual gameplay
+	timer->setInterval(100);
 	timer->setTimerType(Qt::PreciseTimer);
 
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnTimerTick()));
@@ -300,8 +295,8 @@ void GameElementsGenerator::StartTimer()
 void GameElementsGenerator::CheckMultipleChoiceAnswer(const QString chosenAnswer, bool& isCorrectAnswer)
 {
 	std::string correctAnswer = chosenAnswer.toStdString();
-	QString text = QString::fromStdString(m_currentPlayerAnswer);
-	if (correctAnswer == m_currentPlayerAnswer)
+	QString text = QString::fromStdString(m_multipleChoiceQuestion.GetCorrectAnswer());
+	if (correctAnswer == m_multipleChoiceQuestion.GetCorrectAnswer())
 	{
 		if (!m_answerHasBeenSelected)
 		{
@@ -368,7 +363,6 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 				ui.submitAnswerButton->show();
 				ui.inputAnswerLineEdit->show();
 
-				//radio buttons from mc choice are hidden
 				ui.multipleChoiceAnswer1Button->hide();
 				ui.multipleChoiceAnswer2Button->hide();
 				ui.multipleChoiceAnswer3Button->hide();
@@ -388,16 +382,6 @@ void GameElementsGenerator::on_getRandomQuestionButton_released()
 
 				ui.offerAnswersAdvantageButton->setDisabled(false);
 				ui.suggestAnswerAdvantageButton->setDisabled(false);
-
-				/*uint16_t randomPosition = rand() % m_randomSingleChoiceQuestionsVector.size();
-
-				QuestionSingleChoice SCQuestion = m_randomSingleChoiceQuestionsVector.at(randomPosition);
-				m_randomSingleChoiceQuestionsVector.erase(m_randomSingleChoiceQuestionsVector.begin() + randomPosition);
-
-				m_currentAnswer = std::to_string(SCQuestion.GetAnswer());
-
-				QString scq = QString::fromStdString(SCQuestion.GetQuestionText());
-				ui.titleLabel->setText(scq);*/
 
 				std::string link = m_ip + "/getRandomSingleQuestion";
 
@@ -510,6 +494,9 @@ void GameElementsGenerator::on_submitAnswerButton_released()
 			else
 			{
 				m_inputPlayerAnswer = text.split(" ")[0].toInt();
+
+				ui.suggestAnswerAdvantageButton->setDisabled(true);
+				ui.offerAnswersAdvantageButton->setDisabled(true);
 
 				SubmitSingleChoiceAnswer();
 			}
