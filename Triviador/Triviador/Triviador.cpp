@@ -146,63 +146,97 @@ void Triviador::UpdateUserDetails()
 
 void Triviador::UpdateGamesHistory()
 {
-	ui.gamesHistoryTableWidget->setRowCount(6);
-	ui.gamesHistoryTableWidget->setColumnCount(10);
+	ui.gamesHistoryTableWidget->setRowCount(5);
+	ui.gamesHistoryTableWidget->setColumnCount(9);
+	
+	QFont font = ui.gamesHistoryTableWidget->horizontalHeader()->font();
+	font.setBold(true);
+	ui.gamesHistoryTableWidget->horizontalHeader()->setFont(font);
+	ui.gamesHistoryTableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
+	ui.gamesHistoryTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{"
+		"border-top:0px solid #D8D8D8;"
+		"border-left:0px solid #D8D8D8;"
+		"border-right:1px solid #D8D8D8;"
+		"border-bottom: 1px solid #D8D8D8;"
+		"background-color:white;"
+		"padding:4px;}");
+	
+	ui.gamesHistoryTableWidget->verticalHeader()->setFont(font);
+	ui.gamesHistoryTableWidget->verticalHeader()->setStyleSheet("QHeaderView::section {border: 1px solid #6c6c6c;}");
+	
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Room Number"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem("Winner"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem("Number of Players"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem("Player 1"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("Player 2"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(5, new QTableWidgetItem("Player 3"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(6, new QTableWidgetItem("Player 4"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(7, new QTableWidgetItem("Player 5"));
+	ui.gamesHistoryTableWidget->setHorizontalHeaderItem(8, new QTableWidgetItem("Player 6"));
+	ui.gamesHistoryTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-	QTableWidgetItem* item0 = new QTableWidgetItem("game_type");
-	ui.gamesHistoryTableWidget->setItem(0, 0, item0);
-	QTableWidgetItem* item1 = new QTableWidgetItem("room_number");
-	ui.gamesHistoryTableWidget->setItem(0, 1, item1);
-	QTableWidgetItem* item2 = new QTableWidgetItem("number_of_players");
-	ui.gamesHistoryTableWidget->setItem(0, 2, item2);
-	QTableWidgetItem* item3 = new QTableWidgetItem("player1");
-	ui.gamesHistoryTableWidget->setItem(0, 3, item3);
-	QTableWidgetItem* item4 = new QTableWidgetItem("player2");
-	ui.gamesHistoryTableWidget->setItem(0, 4, item4);
-	QTableWidgetItem* item5 = new QTableWidgetItem("player3");
-	ui.gamesHistoryTableWidget->setItem(0, 5, item5);
-	QTableWidgetItem* item6 = new QTableWidgetItem("player4");
-	ui.gamesHistoryTableWidget->setItem(0, 6, item6);
-	QTableWidgetItem* item7 = new QTableWidgetItem("player5");
-	ui.gamesHistoryTableWidget->setItem(0, 7, item7);
-	QTableWidgetItem* item8 = new QTableWidgetItem("player6");
-	ui.gamesHistoryTableWidget->setItem(0, 8, item8);
-	QTableWidgetItem* item9 = new QTableWidgetItem("winner");
-	ui.gamesHistoryTableWidget->setItem(0, 9, item9);
+	std::string link = m_ip + "/getMatchHistory/?username=" + m_playerUsername;
 
-	//the last five games will be displayed
-	for (int i = 1; i < 6; i++) {
-		std::string text = std::to_string(i + 1) + "players";
-		QTableWidgetItem* item0 = new QTableWidgetItem(text.c_str());
-		ui.gamesHistoryTableWidget->setItem(i, 0, item0);
+	cpr::Response responseFromServer = cpr::Get(cpr::Url(link));
 
-		text = std::to_string(i + 1) + "P_" + std::to_string(i);
-		QTableWidgetItem* item1 = new QTableWidgetItem(text.c_str());
-		ui.gamesHistoryTableWidget->setItem(i, 1, item1);
+	if (responseFromServer.status_code >= 200 && responseFromServer.status_code < 300)
+	{
+		auto db = crow::json::load(responseFromServer.text);
+		int row = 0;
+		
+		for (auto& db_user: db)
+		{
+			std::string text = std::string(db_user["room_number"]);
+			QTableWidgetItem* item0 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 0, item0);
 
-		QTableWidgetItem* item2 = new QTableWidgetItem(std::to_string(i + 1).c_str());
-		ui.gamesHistoryTableWidget->setItem(i, 2, item2);
+			text = std::string(db_user["winner"]);
+			QTableWidgetItem* item1 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 1, item1);
 
-		QTableWidgetItem* item3 = new QTableWidgetItem("Ana");
-		ui.gamesHistoryTableWidget->setItem(i, 3, item3);
+			text = std::string(db_user["number_of_players"]);
+			QTableWidgetItem* item2 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 2, item2);
 
-		QTableWidgetItem* item4 = new QTableWidgetItem("Maria");
-		ui.gamesHistoryTableWidget->setItem(i, 4, item4);
+			text = std::string(db_user["player1"]);
+			QTableWidgetItem* item3 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 3, item3);
 
-		QTableWidgetItem* item5 = new QTableWidgetItem("Andreea");
-		ui.gamesHistoryTableWidget->setItem(i, 5, item5);
+			text = std::string(db_user["player2"]);
+			QTableWidgetItem* item4 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 4, item4);
 
-		QTableWidgetItem* item6 = new QTableWidgetItem("Theo");
-		ui.gamesHistoryTableWidget->setItem(i, 6, item6);
+			text = std::string(db_user["player3"]);
+			QTableWidgetItem* item5 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 5, item5);
 
-		QTableWidgetItem* item7 = new QTableWidgetItem("Cosmin");
-		ui.gamesHistoryTableWidget->setItem(i, 7, item7);
+			text = std::string(db_user["player4"]);
+			QTableWidgetItem* item6 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 6, item6);
 
-		QTableWidgetItem* item8 = new QTableWidgetItem("-");
-		ui.gamesHistoryTableWidget->setItem(i, 8, item8);
+			text = std::string(db_user["player5"]);
+			QTableWidgetItem* item7 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 7, item7);
 
-		QTableWidgetItem* item9 = new QTableWidgetItem("Maria");
-		ui.gamesHistoryTableWidget->setItem(i, 9, item9);
+			text = std::string(db_user["player6"]);
+			QTableWidgetItem* item8 = new QTableWidgetItem(QString::fromStdString(text.c_str()));
+			ui.gamesHistoryTableWidget->setItem(row, 8, item8);
+			
+			ui.gamesHistoryTableWidget->resizeColumnsToContents();
+			for (int i = 0; i < 9; i++)
+				ui.gamesHistoryTableWidget->item(row, i)->setTextAlignment(Qt::AlignCenter);
+
+			row++;
+		}
+	}
+	else if (responseFromServer.status_code >= 400 && responseFromServer.status_code < 500)
+	{
+		ui.userErrorLabel->setText("Error: " + QString::fromStdString(std::to_string(responseFromServer.status_code)) + "\n" + QString::fromStdString(responseFromServer.text));
+		ui.userErrorLabel->show();
+	}
+	else
+	{
+		emit ServerCrashedSignalTriviador();
 	}
 }
 

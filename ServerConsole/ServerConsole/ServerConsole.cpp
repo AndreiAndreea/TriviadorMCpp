@@ -739,6 +739,57 @@ int main()
 	auto& getRoomDetails = CROW_ROUTE(app, "/getRoomDetails").methods(crow::HTTPMethod::POST);
 	getRoomDetails(DatabaseStorage(storage));
 
+	// Get user's lats 5 matches history
+	CROW_ROUTE(app, "/getMatchHistory/")(
+		[&storage]
+		(const crow::request& req)
+		{
+			std::string username = req.url_params.get("username");
+			std::vector<crow::json::wvalue> matchHistoryJson;
+
+			if (username.empty() == false)
+			{
+				auto foundMatches = storage.get_all<Room>(where(
+					c(&Room::GetPlayer1) == username or
+					c(&Room::GetPlayer2) == username or
+					c(&Room::GetPlayer3) == username or
+					c(&Room::GetPlayer4) == username or
+					c(&Room::GetPlayer5) == username or
+					c(&Room::GetPlayer6) == username));
+
+				// keep the last 5 matches, if there are more than 5
+				if (foundMatches.size() > 5)
+					foundMatches.erase(foundMatches.begin(), foundMatches.begin() + foundMatches.size() - 5);
+
+				for (auto& findMatchInDatabase : foundMatches)
+				{
+					matchHistoryJson.push_back(crow::json::wvalue
+						{
+							{"room_number", findMatchInDatabase.GetRoomNumber()},
+							{ "winner", findMatchInDatabase.GetWinner() },
+							{ "number_of_players", findMatchInDatabase.GetCurrentNumberOfPlayers() },
+							{ "player1", findMatchInDatabase.GetPlayer1() },
+							{ "player2", findMatchInDatabase.GetPlayer2() },
+							{ "player3", findMatchInDatabase.GetPlayer3() },
+							{ "player4", findMatchInDatabase.GetPlayer4() },
+							{ "player5", findMatchInDatabase.GetPlayer5() },
+							{ "player6", findMatchInDatabase.GetPlayer6() }
+						});
+				}
+				
+				crow::json::wvalue final = std::move(matchHistoryJson);
+
+				return crow::response(std::move(final));
+			}
+			else
+			{
+				return crow::response(404, "Username not found!");
+			}
+		});
+
+	auto& getMatchHistory = CROW_ROUTE(app, "/getMatchHistory").methods(crow::HTTPMethod::POST);
+	getMatchHistory(DatabaseStorage(storage)); 
+	
 	// Get the color used to color territories for a specific player in a specific room
 	CROW_ROUTE(app, "/getPlayerColor/")(
 		[&storage]
@@ -771,7 +822,7 @@ int main()
 			std::string game_type = req.url_params.get("gameType");
 
 			std::string game_status = EnumGameStatusToString(ROOM_CREATED);
-			//std::string room_number = "RANDOM_GENERATED_NUMBER";
+
 			std::string room_number = GenerateRoomNumber(game_type);
 
 

@@ -27,7 +27,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="w0_menu">
      <widget class="QPushButton" name="profilePushButton">
@@ -291,8 +291,8 @@
        <rect>
         <x>120</x>
         <y>240</y>
-        <width>1051</width>
-        <height>301</height>
+        <width>661</width>
+        <height>231</height>
        </rect>
       </property>
      </widget>
@@ -1044,7 +1044,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
